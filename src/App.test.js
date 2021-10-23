@@ -16,4 +16,18 @@ describe("Ganbarometer", () => {
     const difficultyGauge = screen.getByRole("heading", { name: "Difficulty" });
     expect(difficultyGauge).toBeInTheDocument();
   });
+  it("has a Reviews/Day gauge", () => {
+    render(App);
+    const difficultyGauge = screen.getByRole("heading", {
+      name: "Reviews/Day",
+    });
+    expect(difficultyGauge).toBeInTheDocument();
+  });
+  it("Has a Review Intervals bar chart", () => {
+    render(App);
+    const intervalChart = screen.getByRole("heading", {
+      name: "Review Intervals",
+    });
+    expect(intervalChart).toBeInTheDocument();
+  });
 });
