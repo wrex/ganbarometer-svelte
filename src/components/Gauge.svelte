@@ -1,26 +1,22 @@
 <script lang="ts">
-  export let value: number | null;
+  export let value: number = 0.5;
   export let label: string = '';
 
-  let rotation = value ? value / 2 : 0.25;
+  let rotate = `transform: rotate(${value / 2}turn)`;
 </script>
 
-<div class="gauge">
+<div class="gauge" data-testid="gauge">
   <div class="gauge__body">
-    <div class="gauge__fill"></div>
+    <div class="gauge__fill" style="{rotate}"></div>
     {#if value && label}
       <div class="gauge__cover">{label}</div>
-    {:else if value}
-      <div class="gauge__cover">{value * 100}%</div>
     {:else}
-      <div class="gauge__cover">25%</div>
+      <div class="gauge__cover">{value * 100}%</div>
     {/if}
   </div>
 </div>
 
 <style>
-  
-  
   div.gauge {
     display: flex;
     flex-direction: column;
