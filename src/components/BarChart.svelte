@@ -1,5 +1,4 @@
 <script lang="ts">
-  import BarGraph from './bar-graph.js';
   export let heading="Title";
 </script>
 
