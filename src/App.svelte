@@ -5,9 +5,22 @@
 
 
 <section data-testid="ganbarometer">
-  <Gauge class="difficulty" heading="Difficulty" />
-  <Gauge class="reviews-per-day" valueLabel="83" heading="Reviews/Day" />
-  <BarChart class="review-intervals" heading="Review Intervals" />
+  <div class="difficulty">
+    <h1>Difficulty</h1>
+    <Gauge value="0.25" />
+    <p>Difficulty footer</p>
+  </div>
+
+  <div class="reviews-per-day">
+    <h1>Reviews/Day</h1>
+    <Gauge value="0.65" label="127" />
+    <p>Reviews/day footer</p>
+  </div>
+
+  <div class="review-intervals">
+    <h1>Review Intervals</h1>
+    <BarChart />
+  </div>
 </section>
 
 <style>
@@ -21,6 +34,20 @@
     gap: 30px 20px;
     margin: 0 0 20px;
     align-items: center;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+    margin: 0 0 5px;
+    text-align: center;
+    display: inline-block;
+    color: var(--text-color, #004033);
+  }
+
+  p {
+    font-size: 10px;
+    margin: 5px 0 0 0;
+    color: var(--text-color, #004033);
   }
 
   :global(.difficulty) {

@@ -1,19 +1,77 @@
 <script lang="ts">
-  import ProgressBar from '@okrad/svelte-progressbar';
+  export let value: number | null;
+  export let label: string = '';
 
-  export let heading="Title";
-  export let series = [20];
-  export let valueLabel: string = "";
+  let rotation = value ? value / 2 : 0.25;
 </script>
 
-<div class={$$props.class}>
-  <h1>{heading}</h1>
-  <ProgressBar width="50%" valueLabel={valueLabel} style="semicircle" series={series} />
+<div class="gauge">
+  <div class="gauge__body">
+    <div class="gauge__fill"></div>
+    {#if value && label}
+      <div class="gauge__cover">{label}</div>
+    {:else if value}
+      <div class="gauge__cover">{value * 100}%</div>
+    {:else}
+      <div class="gauge__cover">25%</div>
+    {/if}
+  </div>
 </div>
 
 <style>
-  h1 {
-    font-size: 1.25rem;
+  
+  
+  div.gauge {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    min-width: 120px;
+    max-width: 150px;
+    padding: 0 10px;
+    margin: 0 auto;
+  }
+
+  .gauge__body {
+    width: 100%;
+    height: 0;
+    padding-bottom: 50%;
+    background: var(--body-color, #b4c0be);
+    position: relative;
+    border-top-left-radius: 100% 200%;
+    border-top-right-radius: 100% 200%;
+    overflow: hidden;
+  }
+  
+  .gauge__fill {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: inherit;
+    height: 100%;
+    background: var(--fill-color, #59c273);
+    transform-origin: center top;
+    transform: rotate(0.25turn);
+  }
+  
+  .gauge__cover {
+    width: 75%;
+    height: 150%;
+    background-color: var(--bg-color, #f4f4f4);
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 25%;
+    box-sizing: border-box;
+    font-size: 25px;
+    color: var(--text-color, #004033);
   }
 </style>
 
