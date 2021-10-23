@@ -1,25 +1,15 @@
 <script lang="ts">
-    import Toast from './components/Toast.svelte'
-    export let name: string;
-
-    let visable: boolean = false;
-
-    let userLogin = document.querySelector('meta[name="user-login"]')?.getAttribute('content');
-    if(userLogin) name = userLogin;
-    
-    setTimeout(() => visable = true, 1000);
-
 </script>
 
-<Toast bind:visable>
-    <div class="body">
-        <strong>Hello, {name}!</strong><br>
-        Do many good things ❤️
-    </div>
-</Toast>
+
+<section data-testid="ganbarometer">
+    <h1>This is the Ganbarometer</h1>
+</section>
 
 <style>
-    .body {
-        text-align: center;
+    section {
+        min-height: 120px;
+        /* background-color: green; */
+        border: 1px solid black;
     }
 </style>

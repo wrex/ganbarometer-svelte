@@ -1,8 +1,9 @@
 {
-    "extends": "@tsconfig/svelte/tsconfig.json",
-    "compilerOptions": {
-        "experimentalDecorators": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules/*", "dist/*"]
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "types": ["jest"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "dist/*"]
 }

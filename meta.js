@@ -22,7 +22,6 @@ let meta = {
   match: ["https://www.wanikani.com/dashboard"],
   grant: ["GM_addStyle", "GM_getResourceText", "GM_xmlhttpRequest"],
   connect: ["github.com"],
-  copyright: "©2021 Rex Robert Walters",
   "run-at": "document-idle",
 };
 
