@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
+  import BarGraph from './bar-graph.js';
   export let heading="Title";
 </script>
 
-<h1 class={$$props.class}>{heading}</h1>
+<div class={$$props.class}>
+  <h1>{heading}</h1>
+</div>
 
 <style>
   h1 {

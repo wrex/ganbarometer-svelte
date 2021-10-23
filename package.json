@@ -55,5 +55,8 @@
     "setupFilesAfterEnv": [
       "@testing-library/jest-dom/extend-expect"
     ]
+  },
+  "dependencies": {
+    "@okrad/svelte-progressbar": "^1.11.2"
   }
 }
