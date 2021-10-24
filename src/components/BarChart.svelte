@@ -15,17 +15,17 @@ import { validate_component } from "svelte/internal";
 <table aria-label="bar-chart">
   <thead>
     <tr>
-    {#each _labels as label}
-      <th aria-label="label">{label}</th>
-    {/each}
+      <th scope="col">Item</th>
+      <th scope="col">Value</th>
     </tr>
   </thead>
   <tbody>
-    <tr aria-label="values">
-      {#each _values as val}
+    {#each _values as val, i}
+      <tr aria-label="values">
+        <th scope="row" aria-label="label">{_labels[i]}</th>
         <td aria-label="value">{val}</td>
-      {/each}
-    </tr>
+      </tr>
+    {/each}
   </tbody>
 </table>
 
