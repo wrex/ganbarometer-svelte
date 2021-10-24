@@ -1,90 +1,31 @@
-# Tampermonkey Svelte Template
-## What is this template?
-This template allows easy creation of UserScripts for [Tampermonkey](https://www.tampermonkey.net/) using [Svelte](https://svelte.dev/).
+# The GanbarOmeter (svelte version)
 
-## Getting Started
-Replace `your-project-name` with whatever you would like the name of your project to be.
+This is intended for people learning to read Japanese kanji characters with
+[Wanikani](https://www.wanikani.com/about).
 
-```bash
-npm degit lpshanley/tampermonkey-svelte your-project-name
-cd your-project-name
-npm i
-npm run dev
-```
+This is installed as a user script using tampermonkey.
 
-If you do not have Tampermonkey installed yet [click here](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) to install from the chrome web store.
+TODO: Installation instructions
 
-*Note:* Allowing an extension access to files can have security risks. Please read and be informed about these risks prior to moving forward.
+I developed this using the [svelte](#TODO) compiler, using [typescript](#TODO) for
+compile-time type checking, [babel](#TODO) to "transpile" from typescript and
+ES6 syntax to ES5 javascript, [jest](#TODO) as a testing framework, and [Testing
+Library](#TODO) for additional testing semantics. I used Lucas Shanley's
+wonderful [tampermonkey-svelte] template to package up my code as a user script.
 
-After you install tampermonkey enable the `"Allow access to file URL's"` setting in the chrome extension settings for tampermonkey.
+It uses two primary widgets: a `Gauge.svelte` to display a dial gauge, and
+`BarChart.svelte` to render a bar chart. Both were hand developed by me using
+Test Driven Development. Shout-out to Basar Buyukkahraman's wonderful course on [TDD
+with Svelte](https://www.udemy.com/course/svelte-with-test-driven-development/).
 
-Copy **only** the header details from `dist/bundle.js`. It should look like this
-```
-// ==UserScript==
-// @name        tampermonkey-svelte-dev
-// @description Tampermonkey template that uses svelte to build UserScripts
-// @namespace   https://github.com
-// @version     1.0.0
-// @homepage    https://github.com/lpshanley/tampermonkey-svelte#readme
-// @author      Lucas Shanley
-// @resource    css file:///D:/tampermonkey-svelte/dist/bundle.css
-// @match       https://*.github.com/*
-// @connect     github.com
-// @run-at      document-idle
-// @require     file:///D:/tampermonkey-svelte/dist/bundle.js
-// @grant       GM_addStyle
-// @grant       GM_getResourceText
-// @grant       GM_xmlhttpRequest
-// ==/UserScript==
-```
+The code leverage rfindley's wonderful WaniKani Open Framework user script to
+retrieve and cache results where possible.
 
-Add this as a new script into tampermonkey. Remember to **only** copy the header details. Once this is done you should be able to reload your webpage and being creating your script. When running `npm run dev` your source will be watched and changes will rebuild automatically, you will need to refresh the browser to pickup the new changes.
+If you want to help with development or simply want to validate that nothing
+nefarious is included in the user script:
 
-***IMPORTANT NOTE*** changes outside of `/src` are not watched. If you make
-changes to files like `meta.js`, `package.json`, etc you will need to stop 
-the dev server and restart it. Changes to the header will need to be copied 
-and pasted into tampermonkey any time a change occurs. Failing to do this
-may cause expected functionality to not behave as expected.
-
-## Files to update
-
-### package.json
-```jsonc
-{
-    "name": "your-project-name",
-    "description": "Your project description...",
-    "author": "Your Name",
-    "homepage": "https://yourhomepage.com"
-    ...
-}
-```
-
-### meta.js
-```javascript
-...
-const distURLBase = `https://yourdisturl.com/dist`;
-...
-let meta = {
-    ...
-    // Namespace of the script (ex: https://example.com)
-    "namespace": "https://example.com",
-    ...
-    // URL's you would like you scripts to run on
-    "match": [],
-    ...
-    // Domains you need to make requests from
-    "connect": [],
-    ...
-}
-```
-By default some of the metadata for your project is shared with `package.json`. This behavior is fine to alter to your needs by changing the values in `meta.js`.
-
-See [Tampermonkey Documentation](https://www.tampermonkey.net/documentation.php) for more details.
-
-## Ready to share?
-You can run `npm run build` and this will change the header details in the dist script so that they are ready to deploy for people to use. This removes the references to local scripts and creates references to web urls.
-
-## Additional References
-- [Svelte](https://svelte.dev/)
-- [Tampermonkey](https://www.tampermonkey.net/documentation.php)
-- [Rollup](https://rollupjs.org/guide/en/)
+1. Download the code from [github](https://github.com/wrex/ganbarometer-svelte).
+2. Run `npm install`;
+3. Run `npm run test` to ensure all the tests are passing.
+4. Run `npm run build` to create the bundle.user.js userscript in the `dist`
+   subdirectory.
