@@ -19,7 +19,7 @@
 
   <div class="review-intervals">
     <h1>Review Intervals</h1>
-    <BarChart />
+    <BarChart values="[1,2,3]" labels='["a", "b", "c"]' />
   </div>
 </section>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let value: number = 0.5;
-  export let label: string = '';
+  export let value = "0.5";
+  export let label = '';
 
   let rotate = `transform: rotate(${value / 2}turn)`;
 </script>
