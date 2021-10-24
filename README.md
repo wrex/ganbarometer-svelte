@@ -15,11 +15,15 @@ wonderful [tampermonkey-svelte] template to package up my code as a user script.
 
 It uses two primary widgets: a `Gauge.svelte` to display a dial gauge, and
 `BarChart.svelte` to render a bar chart. Both were hand developed by me using
-Test Driven Development. Shout-out to Basar Buyukkahraman's wonderful course on [TDD
+Test Driven Development. I stole the layout of the BarChart from this [Codepen
+by Ion Emil Negoita](https://codepen.io/inegoita/pen/YMrJGY).
+
+Shout-out to Basar Buyukkahraman's wonderful course on [TDD
 with Svelte](https://www.udemy.com/course/svelte-with-test-driven-development/).
 
 The code leverage rfindley's wonderful WaniKani Open Framework user script to
-retrieve and cache results where possible.
+retrieve and cache results where possible. He and kumirei from the Wanikani
+community helped me get started with this user script business!
 
 If you want to help with development or simply want to validate that nothing
 nefarious is included in the user script:
@@ -28,4 +32,4 @@ nefarious is included in the user script:
 2. Run `npm install`;
 3. Run `npm run test` to ensure all the tests are passing.
 4. Run `npm run build` to create the bundle.user.js userscript in the `dist`
-   subdirectory.
+   subdirectory. This should be identical to the distributed version.
