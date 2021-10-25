@@ -1,9 +1,9 @@
 <script lang="ts">
-import { validate_component } from "svelte/internal";
-
+  import { validate_component } from "svelte/internal";
 
   export let values: string;
   export let labels = '';
+  export let caption = '';
 
   let _values: number[] = JSON.parse(values);
 
@@ -13,6 +13,7 @@ import { validate_component } from "svelte/internal";
 </script>
 
 <table aria-label="bar-chart">
+  <caption>{caption}</caption>
   <thead>
     <tr>
       <th scope="col">Item</th>
