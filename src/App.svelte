@@ -24,6 +24,9 @@
 </section>
 
 <style>
+
+  /* TODO: media queries to mimic Wanikani */
+
   section {
     /* border: 1px solid black; */
     background-color: #f4f4f4;
