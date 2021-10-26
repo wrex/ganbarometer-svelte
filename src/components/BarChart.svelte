@@ -1,18 +1,14 @@
 <script lang="ts">
 
-  export let values: string;
-  export let labels = '';
+  export let values: number[];
+  export let labels: string[] = [];
   export let onClickHandlers: {(): void}[] = [];
   export let caption = '';
 
-  let _values: number[] = JSON.parse(values);
 
-  let _labels: string[] = [];
-  _labels = labels ? JSON.parse(labels) : [];
-
-	const max = Math.max(..._values);
+	const max = Math.max(...values);
 	const heights: string[] = [];
-	_values.forEach(val => {
+	values.forEach(val => {
 		heights.push(`${Math.round(val/max * 100)}%`)
 	})
 </script>
@@ -26,9 +22,9 @@
     </tr>
   </thead>
   <tbody>
-    {#each _values as val, i}
+    {#each values as val, i}
     <tr aria-label="values" style="height: {heights[i]}">
-      <th scope="row" aria-label="label">{_labels[i] ? _labels[i] : ''}</th>
+      <th scope="row" aria-label="label">{labels[i] ? labels[i] : ''}</th>
 			{#if onClickHandlers[i]}
 				<td aria-label="value" on:click={onClickHandlers[i]} ><span>{val}</span></td>
 			{:else}
