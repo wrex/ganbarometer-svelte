@@ -38,6 +38,7 @@
 <style>
 .graph {
 	margin-bottom:1em;
+	min-width:360px;
 }
 
 .graph caption {
