@@ -30,4 +30,23 @@ describe("BarChart", () => {
     expect(cells[1]).toHaveTextContent("2");
     expect(cells[2]).toHaveTextContent("3");
   });
+  it("styles height appropriate to values passed", () => {
+    render(BarChart, { values: "[40,100,80]" });
+    const rows = screen.getAllByRole("row", { name: "values" });
+    const heights = [];
+    heights.push(window.getComputedStyle(rows[0]).getPropertyValue("height"));
+    heights.push(window.getComputedStyle(rows[1]).getPropertyValue("height"));
+    heights.push(window.getComputedStyle(rows[2]).getPropertyValue("height"));
+    expect(heights[0]).toBe("40%");
+    expect(heights[1]).toBe("100%");
+    expect(heights[2]).toBe("80%");
+  });
+
+  // I don't know how to grab the counter in the pseudo element!
+  it.todo("Labels the top bar with the max value"); //, () => {
+  //   render(BarChart, { values: "[10,30,20]" });
+  //   const tbody = screen.getByTestId("chart-body");
+  //   const before = window.getComputedStyle(tbody, ":before");
+  //   expect(before["content"]).toBe("0");
+  // });
 });

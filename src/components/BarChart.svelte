@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { validate_component } from "svelte/internal";
 
   export let values: string;
   export let labels = '';
@@ -10,9 +9,14 @@
   let _labels: string[] = [];
   _labels = labels ? JSON.parse(labels) : [];
 
+	const max = Math.max(..._values);
+	const heights: string[] = [];
+	_values.forEach(val => {
+		heights.push(`${Math.round(val/max * 100)}%`)
+	})
 </script>
 
-<table class="graph" aria-label="bar-chart">
+<table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
   <caption>{caption}</caption>
   <thead>
     <tr>
@@ -22,7 +26,7 @@
   </thead>
   <tbody>
     {#each _values as val, i}
-    <tr aria-label="values">
+    <tr aria-label="values" style="height: {heights[i]}">
       <th scope="row" aria-label="label">{_labels[i]}</th>
       <td aria-label="value"><span>{val}</span></td>
     </tr>
@@ -93,12 +97,13 @@
 		}
 
 		.graph tbody:before {
-			content:"100%";
+			counter-reset: label var(--max-label);
+			content: counter(label);
 			top:-0.6em;
 		}
 
 		.graph tbody:after {
-			content:"0%";
+			content:"0";
 			bottom:-0.6em;
 		}
 
@@ -137,7 +142,7 @@
 		.graph td {
 			width:100%;
 			height:100%;
-			background:#F63;
+			background:var(--fill-color, #59c273);
 			border-radius:0.5em 0.5em 0 0;
 			transition:background 0.5s;
 		}
