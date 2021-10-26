@@ -55,7 +55,6 @@
 
 		.graph {
 			display:block;
-			padding: 0 10px;
 		}
 
 		.graph caption {

@@ -37,6 +37,7 @@
     gap: 30px 20px;
     margin: 0 0 20px;
     align-items: center;
+    padding: 0 10px;
   }
 
   h1 {
