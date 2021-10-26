@@ -2,6 +2,7 @@
 
   export let values: string;
   export let labels = '';
+  export let onClickHandlers: {(): void}[] = [];
   export let caption = '';
 
   let _values: number[] = JSON.parse(values);
@@ -27,8 +28,12 @@
   <tbody>
     {#each _values as val, i}
     <tr aria-label="values" style="height: {heights[i]}">
-      <th scope="row" aria-label="label">{_labels[i]}</th>
-      <td aria-label="value"><span>{val}</span></td>
+      <th scope="row" aria-label="label">{_labels[i] ? _labels[i] : ''}</th>
+			{#if onClickHandlers[i]}
+				<td aria-label="value" on:click={onClickHandlers[i]} ><span>{val}</span></td>
+			{:else}
+				<td aria-label="value"><span>{val}</span></td>
+			{/if}
     </tr>
     {/each}
   </tbody>
@@ -165,7 +170,7 @@
 			font-weight:bold;
 			opacity:0;
 			transition:opacity 0.5s;
-      color:white;
+      color:#333;
 		}
 
 		.toggleGraph:checked + table td span,
