@@ -41,6 +41,7 @@
 
   h1 {
     font-size: 1.25rem;
+    font-weight: normal;
     margin: 0 0 5px;
     text-align: center;
     display: inline-block;

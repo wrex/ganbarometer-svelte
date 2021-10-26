@@ -38,11 +38,9 @@
 <style>
 .graph {
 	margin-bottom:1em;
-  font:normal 100%/150% arial,helvetica,sans-serif;
 }
 
 .graph caption {
-	font:bold 150%/120% arial,helvetica,sans-serif;
 	padding-bottom:0.33em;
 }
 
@@ -57,8 +55,6 @@
 		.graph {
 			display:block;
 			padding: 0 10px;
-      /* width:600px;
-      height:300px; */
 		}
 
 		.graph caption {
@@ -76,7 +72,6 @@
 			column-gap:2.5%;
 			align-items:end;
 			min-height: 90px;
-			/* margin:3em 0 1em 2.8em; */
 			padding:0 1em;
 			border-bottom:2px solid rgba(0,0,0,0.5);
 			background:repeating-linear-gradient(
@@ -94,7 +89,6 @@
 			left:-3.2em;
 			width:2.8em;
 			text-align:right;
-			font:bold 80%/120% arial,helvetica,sans-serif;
 		}
 
 		.graph tbody:before {
@@ -124,19 +118,20 @@
 		}
 
 		.graph tbody th {
+			color:var(--text-color, #004033);
 			position:absolute;
-/* 			top: -2.5em; */
 			left:0;
 			width:100%;
+			font-size:10px;
 			font-weight:normal;
 			text-align:center;
       white-space:nowrap;
 			text-indent:0;
-      bottom: -1.5em;
-/* 			transform:rotate(-45deg); */
+      bottom: -2em;
 		}
 
 		.graph tbody th:after {
+			font-weight: bold;
 			content:"";
 		}
 
@@ -158,11 +153,10 @@
 			left:50%;
 			top:50%;
 			width:0;
-			padding:0.5em 0;
-			margin:-1em 0 0;
-			font:normal 85%/120% arial,helvetica,sans-serif;
-/* 			background:white; */
-/* 			box-shadow:0 0 0.25em rgba(0,0,0,0.6); */
+			/* padding:0.1em 0; */
+			margin:-1.5em 0 0;
+			background:white;
+			box-shadow:0 0 0.25em rgba(0,0,0,0.6);
 			font-weight:bold;
 			opacity:0;
 			transition:opacity 0.5s;
@@ -175,14 +169,7 @@
 			margin-left:-2em; /* 1/2 the declared width */
 			opacity:1;
 		}
-
-
-
-    
-
-
 	} /* min-width:32em */
-
-} /* grid only */
+}
 
 </style>
