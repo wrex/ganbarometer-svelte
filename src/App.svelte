@@ -55,7 +55,29 @@
     color: var(--text-color, #004033);
   }
 
-  @media (min-width: 980px) {
+  
+
+  /* @media (min-width: 768px) and (max-width: 980px) { */
+    :global(.difficulty) {
+      grid-column: 1 / span 3;
+      grid-row: 1 / 2;
+      text-align: center;
+    }
+    
+    :global(.reviews-per-day) {
+      grid-column: 4 / span 3;
+      grid-row: 1 / 2;
+      text-align: center;
+    }
+    
+    :global(.review-intervals) {
+      grid-column: 1 / span 6;
+      grid-row: 2 / 3;
+      text-align: center;
+    }
+  /* } */
+
+  @media (min-width: 768px) {
     :global(.difficulty) {
       grid-column: 1 / span 2;
       grid-row: 1 / 2;
@@ -74,25 +96,5 @@
       text-align: center;
     }
   }
-
-  /* @media (min-width: 768px) {
-    :global(.difficulty) {
-      grid-column: 1 / span 3;
-      grid-row: 1 / 2;
-      text-align: center;
-    }
-    
-    :global(.reviews-per-day) {
-      grid-column: 4 / span 3;
-      grid-row: 1 / 2;
-      text-align: center;
-    }
-    
-    :global(.review-intervals) {
-      grid-column: 1 / span 6;
-      grid-row: 1 / 2;
-      text-align: center;
-    }
-  } */
 
 </style>

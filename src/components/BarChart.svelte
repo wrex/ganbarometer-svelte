@@ -38,7 +38,7 @@
 <style>
 .graph {
 	margin-bottom:1em;
-	min-width:360px;
+	min-width: 240px;
 }
 
 .graph caption {
@@ -68,7 +68,7 @@
 		.graph tbody {
 			position:relative;
 			display:grid;
-			grid-template-columns:repeat(auto-fit, minmax(2em, 1fr));
+			grid-template-columns:repeat(auto-fit, minmax(1em, 1fr));
 			column-gap:2.5%;
 			align-items:end;
 			min-height: 90px;
@@ -163,10 +163,10 @@
       color:#333;
 		}
 
-		.toggleGraph:checked + table td span,
+		table td span,
 		.graph tr:hover td span {
-			width:4em;
-			margin-left:-2em; /* 1/2 the declared width */
+			width:2em;
+			margin-left:-1em; /* 1/2 the declared width */
 			opacity:1;
 		}
 	} /* min-width:32em */
