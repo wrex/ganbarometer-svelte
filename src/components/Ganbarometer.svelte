@@ -31,8 +31,6 @@
   }
 
   p {
-    font-size: 10px;
-    margin: 5px 0 0 0;
     color: var(--text-color, #004033);
   }
 
@@ -52,6 +50,7 @@
     grid-column: 1 / span 6;
     grid-row: 2 / 3;
     text-align: center;
+    padding-right: 2em;
   }
 
   @media (min-width: 768px) {
@@ -71,6 +70,7 @@
       grid-column: 5 / span 2;
       grid-row: 1 / 2;
       text-align: center;
+      padding-right: 2em;
     }
   }
 </style>

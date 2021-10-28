@@ -1,24 +1,18 @@
 <script lang="ts">
   import Ganbarometer from "./components/Ganbarometer.svelte";
-  import KeyForm from "./components/KeyForm.svelte";
   import Settings from "./components/Settings.svelte";
 
   import * as API from "./API/core";
 
   let apiKey = API.getApiKey();
-
-  let renderSettings = false;
 </script>
 
 <section data-testid="ganbarometer">
-  {#if apiKey}
     <Ganbarometer />
-    {:else if renderSettings}
-    <Settings />
-    {:else }
-    <KeyForm />
-    {/if}
-    <p>The API key is '{apiKey}'</p>
+    <div class="footer">
+      The API key is '{apiKey}'
+      <Settings />
+    </div>
 </section>
 
 
@@ -33,11 +27,10 @@
     gap: 10px 20px;
     margin: 0 0 20px;
     align-items: center;
-    padding: 0 30px 0 0;
+    padding: 0;
   }
-  p {
+  .footer {
     grid-column: 1 / span 6;
-    padding: 0 30px;
     text-align: center;
     margin: 0;
   }
