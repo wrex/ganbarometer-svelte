@@ -8,19 +8,18 @@
 
 </script>
 
-
 <section data-testid="ganbarometer">
 
   {#if apiKey}
     <div class="difficulty">
       <h1>Difficulty</h1>
-      <Gauge value="0.25" />
+      <Gauge value={0.25} />
       <p>Difficulty footer</p>
     </div>
   
     <div class="reviews-per-day">
       <h1>Reviews/Day</h1>
-      <Gauge value="0.65" label="127" />
+      <Gauge value={0.65} label="127" />
       <p>Reviews/day footer</p>
     </div>
   
