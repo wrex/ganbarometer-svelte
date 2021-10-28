@@ -11,15 +11,16 @@
 </script>
 
 <section data-testid="ganbarometer">
-
   {#if apiKey}
     <Ganbarometer />
-  {:else if renderSettings}
+    {:else if renderSettings}
     <Settings />
-  {:else }
+    {:else }
     <KeyForm />
-  {/if}
+    {/if}
+    <p>The API key is '{apiKey}'</p>
 </section>
+
 
 <style>
   section {
@@ -29,9 +30,15 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 150px auto;
-    gap: 30px 20px;
+    gap: 10px 20px;
     margin: 0 0 20px;
     align-items: center;
     padding: 0 30px 0 0;
+  }
+  p {
+    grid-column: 1 / span 6;
+    padding: 0 30px;
+    text-align: center;
+    margin: 0;
   }
 </style>
