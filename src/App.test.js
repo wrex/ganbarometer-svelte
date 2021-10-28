@@ -9,37 +9,23 @@ import * as api from "./API/core";
 api.getApiKey = jest.fn();
 
 describe("App", () => {
-  beforeAll(() => {});
-
-  it("creates a section for the ganbarometer", () => {
-    render(App);
-    const gbSection = screen.getByTestId("ganbarometer");
-    expect(gbSection).toBeInTheDocument();
-  });
-
-  it("has a button to change the settings", () => {
-    render(App);
-    const button = screen.getByRole("button", { name: "settings" });
-    expect(button).toBeInTheDocument();
-  });
-
-  it.todo("displays the settings dialog if settings selected");
-
-  describe("without API key", () => {
-    api.getApiKey.mockReturnValue("");
-
-    it.skip("displays 'enter key' form if not stored", () => {
-      render(App);
-      const keyInput = screen.getByLabelText("Enter API key:");
-      expect(keyInput).toBeInTheDocument();
-    });
-  });
-
-  describe("with API key", () => {
+  describe("renders ganbarometer with an API key", () => {
     beforeAll(() => {
-      api.getApiKey.mockReturnValue("some weird api key");
+      api.getApiKey.mockReset();
+      api.getApiKey.mockReturnValue("some valid token");
     });
 
+    it("creates a section for the ganbarometer", () => {
+      render(App);
+      const gbSection = screen.getByTestId("ganbarometer");
+      expect(gbSection).toBeInTheDocument();
+    });
+
+    it("has a button to change the settings", () => {
+      render(App);
+      const button = screen.getByRole("button", { name: "settings" });
+      expect(button).toBeInTheDocument();
+    });
     it("has a Difficulty gauge", () => {
       render(App);
       const difficultyGauge = screen.getByRole("heading", {
@@ -60,6 +46,18 @@ describe("App", () => {
         name: "Review Intervals",
       });
       expect(intervalChart).toBeInTheDocument();
+    });
+  });
+
+  describe("renders settings form without an API key", () => {
+    beforeAll(() => {
+      api.getApiKey.mockReset();
+      api.getApiKey.mockReturnValue("");
+    });
+    it("renders a form", () => {
+      render(App);
+      const form = screen.getByRole("form");
+      expect(form).toBeInTheDocument();
     });
   });
 });

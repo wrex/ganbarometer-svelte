@@ -8,8 +8,9 @@
     float: right;
     color: transparent;
     background-color: initial;
-    fill: #888;
+    fill: #777;
     padding: 0;
+    filter: drop-shadow(3px 5px 3px rgb(0 0 0 / 0.1));
   }
 
   button:hover,

@@ -1,6 +1,7 @@
 <script lang="ts">
   import Ganbarometer from "./components/Ganbarometer.svelte";
-  import Settings from "./components/Settings.svelte";
+  import SettingsButton from "./components/SettingsButton.svelte";
+  import SettingsForm from "./components/SettingsForm.svelte";
 
   import * as API from "./API/core";
 
@@ -8,11 +9,15 @@
 </script>
 
 <section data-testid="ganbarometer">
+  {#if apiKey}
     <Ganbarometer />
     <div class="footer">
       The API key is '{apiKey}'
-      <Settings />
+      <SettingsButton />
     </div>
+  {:else}
+    <SettingsForm />
+  {/if}
 </section>
 
 

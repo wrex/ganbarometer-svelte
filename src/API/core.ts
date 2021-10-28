@@ -1,3 +1,3 @@
 export const getApiKey = (): string => {
-  return "";
+  return "some truthy value";
 };
