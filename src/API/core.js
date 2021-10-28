@@ -1,3 +1,4 @@
-export function getApiKey() {
-  return "";
-}
+export const getApiKey = () => {
+    return "";
+};
+//# sourceMappingURL=core.js.map
