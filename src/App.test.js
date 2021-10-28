@@ -8,18 +8,20 @@ import * as api from "./API/core";
 
 api.getApiKey = jest.fn();
 
-describe("Ganbarometer", () => {
-  beforeAll(() => {
-    api.getApiKey.mockReturnValue("");
+describe("App", () => {
+  beforeAll(() => {});
+
+  it("creates a section for the ganbarometer", () => {
+    render(App);
+    const gbSection = screen.getByTestId("ganbarometer");
+    expect(gbSection).toBeInTheDocument();
   });
+
+  it.todo("displays the settings dialog if settings selected");
+
   describe("without API key", () => {
     api.getApiKey.mockReturnValue("");
 
-    it("has a section", () => {
-      render(App);
-      const gbSection = screen.getByTestId("ganbarometer");
-      expect(gbSection).toBeInTheDocument();
-    });
     it("displays 'enter key' form if not stored", () => {
       render(App);
       const keyInput = screen.getByLabelText("Enter API key:");
