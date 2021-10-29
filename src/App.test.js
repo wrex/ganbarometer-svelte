@@ -49,22 +49,8 @@ describe("App layout", () => {
     });
   });
 
-  describe("renders settings form without an API key", () => {
-    beforeAll(() => {
-      api.getApiKey.mockReturnValue("");
-    });
-    it("renders a form", () => {
-      render(App);
-      const form = screen.getByRole("form", { name: "Settings Form" });
-      expect(form).toBeInTheDocument();
-    });
-  });
-
   describe("Interaction", () => {
-    beforeAll(() => {
-      api.getApiKey.mockReset();
-      api.getApiKey.mockReturnValue("some valid token");
-    });
+    it.todo("renders a placeholder if nothing cached");
     it("replaces the ganbarometer with settings form when button clicked", async () => {
       render(App);
       const button = screen.getByRole("button", { name: "settings" });

@@ -19,7 +19,7 @@
     display: inline;
   }
   input[type="text"] {
-    display: inline-block;
-    width: 200px;
+    display: block;
+    width: 400px;
   }
 </style>
