@@ -17,5 +17,10 @@ describe("Settings Form", () => {
       const input = screen.getByLabelText(/number of days/i);
       expect(input).toBeInTheDocument();
     });
+    it("has a button to save settings", () => {
+      render(SettingsForm);
+      const button = screen.getByRole("button");
+      expect(button.textContent).toBe("Save");
+    });
   });
 });

@@ -19,6 +19,7 @@
     "@rollup/plugin-typescript": "^8.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/svelte": "^3.0.3",
+    "@testing-library/user-event": "^13.5.0",
     "@tsconfig/svelte": "^2.0.1",
     "@types/jest": "^27.0.2",
     "@types/tampermonkey": "^4.0.0",
@@ -57,6 +58,8 @@
     ]
   },
   "dependencies": {
-    "@okrad/svelte-progressbar": "^1.11.2"
+    "@okrad/svelte-progressbar": "^1.11.2",
+    "svelte-forms-lib": "^1.10.7",
+    "yup": "^0.32.11"
   }
 }
