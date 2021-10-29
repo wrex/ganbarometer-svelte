@@ -50,7 +50,8 @@
     grid-column: 1 / span 6;
     grid-row: 2 / 3;
     text-align: center;
-    padding-right: 2em;
+    margin: 0 2em;
+    /* padding-right: 2em; */
   }
 
   @media (min-width: 768px) {
@@ -70,7 +71,8 @@
       grid-column: 5 / span 2;
       grid-row: 1 / 2;
       text-align: center;
-      padding-right: 2em;
+      /* padding-right: 2em; */
+      margin: 0 2em;
     }
   }
 </style>
