@@ -50,29 +50,25 @@
     grid-column: 1 / span 6;
     grid-row: 2 / 3;
     text-align: center;
-    margin: 0 2em;
-    /* padding-right: 2em; */
+    margin: 0 1em 0 3em;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 980px) {
     :global(.difficulty) {
       grid-column: 1 / span 2;
       grid-row: 1 / 2;
-      text-align: center;
     }
     
     :global(.reviews-per-day) {
       grid-column: 3 / span 2;
       grid-row: 1 / 2;
-      text-align: center;
     }
     
     :global(.review-intervals) {
       grid-column: 5 / span 2;
       grid-row: 1 / 2;
       text-align: center;
-      /* padding-right: 2em; */
-      margin: 0 2em;
+      margin: 0 1em 0 3em;
     }
   }
 </style>

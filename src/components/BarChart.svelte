@@ -38,7 +38,6 @@
 <style>
 .graph {
 	margin-bottom:1em;
-	min-width: 240px;
 }
 
 .graph caption {
@@ -51,7 +50,7 @@
 
 @supports (display:grid) {
 
-	@media (min-width:32em) {
+	@media (min-width:32rem) {
 
 		.graph {
 			display:block;
@@ -153,7 +152,6 @@
 			left:50%;
 			top:50%;
 			width:0;
-			/* padding:0.1em 0; */
 			margin:-1.5em 0 0;
 			background:white;
 			box-shadow:0 0 0.25em rgba(0,0,0,0.6);

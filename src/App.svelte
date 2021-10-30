@@ -49,10 +49,10 @@
     border-radius: 5px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 150px auto;
+    /* grid-template-rows: 150px auto; */
     gap: 10px 20px;
     margin: 0 0 20px;
-    align-items: center;
+    align-items: stretch;
     padding: 0;
   }
   .footer {
