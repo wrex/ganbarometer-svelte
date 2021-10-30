@@ -1,6 +1,37 @@
-<form aria-label="Settings Form">
+<script type="ts">
+  import {createForm} from 'svelte-forms-lib';
+  import * as yup from 'yup';
+  import { settings } from '../store/stores';
+
+  const { form, errors, state, handleChange, handleSubmit } = createForm({
+    initialValues: {
+      apiKey: "",
+    },
+    validationSchema: yup.object().shape({
+      apiKey: yup
+        .string()
+        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+        .required()
+    }),
+    onSubmit: values => {
+      // alert(JSON.stringify(values))
+      settings.set({apiKey: values.apiKey});
+    }
+  });
+</script>
+
+<form on:submit={handleSubmit} aria-label="Settings Form">
   <label for="apiKey">API Key: </label>
-  <input type="text" id="apiKey" />
+  <input 
+    type="text" 
+    id="apiKey" 
+    on:change={handleChange}
+    on:blur={handleChange}
+    bind:value={$form.apiKey}
+  />
+  {#if $errors.apiKey}
+    <small>Invalid token!</small>
+  {/if}
 
   <label for="retrieveDays">
     Number of days to retrieve reviews: 
@@ -58,13 +89,13 @@
   <label for="excessMissWeight">Weighting factor for excess misses</label>
   <input type="number" name="excessMissWeight" id="excessMissWeight">
 
-  <button>Save</button>
+  <button type="submit">Save</button>
 </form>
 
 <style>
   form {
-    /* grid-column: 1 / span 6; */
     box-sizing: border-box;
+    width: 800px;
   }
   label {
     display: inline;

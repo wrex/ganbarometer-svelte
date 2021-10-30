@@ -2,11 +2,14 @@
   import Ganbarometer from "./components/Ganbarometer.svelte";
   import SettingsForm from "./components/SettingsForm.svelte";
   import Modal, {getModal} from './components/Modal.svelte'
-  
+  import {settings} from "./store/stores";
 
-  import * as API from "./API/core";
+  let apiKey = "";
 
-  let apiKey = API.getApiKey();
+  settings.subscribe((state) => {
+    apiKey = state.apiKey;
+  })
+
 </script>
 
 <section data-testid="ganbarometer">

@@ -3,7 +3,14 @@
  */
 
 import SettingsForm from "./SettingsForm.svelte";
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
+import { settings } from "../store/stores";
+
+let apiKey = "";
+settings.subscribe((state) => {
+  apiKey = state.apiKey;
+});
 
 describe("Settings Form", () => {
   describe("layout", () => {
@@ -64,6 +71,28 @@ describe("Settings Form", () => {
       render(SettingsForm);
       const input = screen.getByLabelText(/excess misses/i);
       expect(input).toBeInTheDocument();
+    });
+  });
+  describe("interaction", () => {
+    it("does not allow an invalid API key", async () => {
+      render(SettingsForm);
+      const input = screen.getByLabelText(/api key/i);
+      const button = screen.getByRole("button", { name: "Save" });
+      await userEvent.type(input, "invalid");
+      await userEvent.click(button);
+      const errMessage = await screen.findByText(/invalid token/i);
+      expect(errMessage).toBeInTheDocument();
+    });
+    it("saves a valid API key to settings store", async () => {
+      render(SettingsForm);
+      const input = screen.getByLabelText(/api key/i);
+      const button = screen.getByRole("button", { name: "Save" });
+      await userEvent.type(input, "78ca70da-d268-4100-96ad-696014a53231");
+      await userEvent.click(button);
+      console.log(JSON.stringify(settings));
+      await waitFor(() => {
+        expect(apiKey).toBe("78ca70da-d268-4100-96ad-696014a53231");
+      });
     });
   });
 });
