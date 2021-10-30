@@ -50,7 +50,7 @@
 
 @supports (display:grid) {
 
-	@media (min-width:32rem) {
+	@media (min-width:300px) {
 
 		.graph {
 			display:block;
