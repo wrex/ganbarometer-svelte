@@ -74,18 +74,24 @@ describe("Settings Form", () => {
     let inputs;
     let apiKeyInput;
     let retrieveDaysInput;
+    let reviewsPerInput;
     let saveButton;
+
+    // Setup a form with valid input values
     const setup = async () => {
       render(SettingsForm);
       apiKeyInput = screen.getByLabelText(/api key/i);
       retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
+      reviewsPerInput = screen.getByLabelText(/reviews per/i);
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
+        reviewsPerInput: reviewsPerInput,
       };
       saveButton = screen.getByRole("button", { name: "Save" });
       await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.type(retrieveDaysInput, "3");
+      await userEvent.type(reviewsPer, "150");
     };
 
     it("does not allow an invalid API key", async () => {
@@ -96,10 +102,8 @@ describe("Settings Form", () => {
       expect(errMessage).toBeInTheDocument();
     });
 
-    it("saves a valid API key to settings store", async () => {
-      // Aaaaaaand it's failing again. WHAT IS GOING ON?!!!!
+    it("saves valid form to settings store", async () => {
       setup();
-      await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.click(saveButton);
       await waitFor(() => {
         const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
@@ -113,6 +117,9 @@ describe("Settings Form", () => {
         ${"apiKeyInput"}       | ${"l33th4x0r"} | ${"invalid"}
         ${"retrieveDaysInput"} | ${"-1"}        | ${"between 1 and 7"}
         ${"retrieveDaysInput"} | ${"8"}         | ${"between 1 and 7"}
+        ${"reviewsPerInput"}   | ${"-1"}        | ${"between 10 and 500"}
+        ${"reviewsPerInput"}   | ${"9"}         | ${"between 10 and 500"}
+        ${"reviewsPerInput"}   | ${"501"}       | ${"between 10 and 500"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {

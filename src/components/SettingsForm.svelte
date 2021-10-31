@@ -10,17 +10,23 @@
     initialValues: {
       apiKey: "",
       retrieveDays: "",
+      reviewsPer: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
         .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid API token!")
-        .required(),
+        .required("Required"),
       retrieveDays: yup
         .number()
         .min(1, "Must be between 1 and 7")
         .max(7, "Must be between 1 and 7")
-        .required()
+        .required("Required"),
+      reviewsPer: yup
+        .number()
+        .min(10, "Must be between 10 and 500")
+        .max(500, "Must be between 10 and 500")
+        .required("Required")
     }),
     onSubmit: values => {
       settings.set(values);
@@ -96,7 +102,17 @@
 
 
     <label for="reviewsPer">Desired reviews per day or session</label>
-    <input type="number" name="reviewsPer" id="reviewsPer">
+    <input 
+      type="number" 
+      name="reviewsPer" 
+      id="reviewsPer"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.reviewsPer}
+    />
+    {#if $errors.reviewsPer}
+    <small>{$errors.reviewsPer}</small>
+    {/if}
   </fieldset>
 
 
