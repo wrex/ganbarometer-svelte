@@ -96,7 +96,7 @@ describe("Settings Form", () => {
       expect(errMessage).toBeInTheDocument();
     });
 
-    xit("saves a valid API key to settings store", async () => {
+    it("saves a valid API key to settings store", async () => {
       // Aaaaaaand it's failing again. WHAT IS GOING ON?!!!!
       setup();
       await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
@@ -114,7 +114,7 @@ describe("Settings Form", () => {
         ${"retrieveDaysInput"} | ${"-1"}        | ${"between 1 and 7"}
         ${"retrieveDaysInput"} | ${"8"}         | ${"between 1 and 7"}
       `(
-        "reports '$errorMsg' for '$inputValue'",
+        "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {
           setup();
           await userEvent.type(inputs[input], inputValue);
