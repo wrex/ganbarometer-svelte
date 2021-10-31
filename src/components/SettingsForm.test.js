@@ -69,7 +69,9 @@ describe("Settings Form", () => {
       expect(input).toBeInTheDocument();
     });
   });
+
   describe("interaction", () => {
+    let inputs;
     let apiKeyInput;
     let retrieveDaysInput;
     let saveButton;
@@ -77,6 +79,10 @@ describe("Settings Form", () => {
       render(SettingsForm);
       apiKeyInput = screen.getByLabelText(/api key/i);
       retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
+      inputs = {
+        apiKeyInput: apiKeyInput,
+        retrieveDaysInput: retrieveDaysInput,
+      };
       saveButton = screen.getByRole("button", { name: "Save" });
       await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.type(retrieveDaysInput, "3");
@@ -101,32 +107,17 @@ describe("Settings Form", () => {
       });
     });
 
-    describe("API token validations", () => {
+    describe("Validations", () => {
       test.each`
-        inputValue     | errorMsg
-        ${"l33th4x0r"} | ${"invalid"}
+        input                  | inputValue     | errorMsg
+        ${"apiKeyInput"}       | ${"l33th4x0r"} | ${"invalid"}
+        ${"retrieveDaysInput"} | ${"-1"}        | ${"between 1 and 7"}
+        ${"retrieveDaysInput"} | ${"8"}         | ${"between 1 and 7"}
       `(
         "reports '$errorMsg' for '$inputValue'",
-        async ({ inputValue, errorMsg }) => {
+        async ({ input, inputValue, errorMsg }) => {
           setup();
-          await userEvent.type(apiKeyInput, inputValue);
-          await userEvent.click(saveButton);
-          const errMessage = await screen.findByText(new RegExp(errorMsg, "i"));
-          expect(errMessage).toBeInTheDocument();
-        }
-      );
-    });
-
-    describe("retrieveDay validations", () => {
-      test.each`
-        inputValue | errorMsg
-        ${"-1"}    | ${"between 1 and 7"}
-        ${"8"}     | ${"between 1 and 7"}
-      `(
-        "reports '$errorMsg' for '$inputValue'",
-        async ({ inputValue, errorMsg }) => {
-          setup();
-          await userEvent.type(retrieveDaysInput, inputValue);
+          await userEvent.type(inputs[input], inputValue);
           await userEvent.click(saveButton);
           const errMessage = await screen.findByText(new RegExp(errorMsg, "i"));
           expect(errMessage).toBeInTheDocument();
