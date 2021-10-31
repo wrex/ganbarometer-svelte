@@ -2,13 +2,13 @@
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
   import { settings } from '../store/stores';
-  import * as api from "../API/core";
+  // import * as api from "../API/core";
 
   const storedSettings = JSON.parse(window.localStorage.getItem("gbSettings"));
 
   const { form, errors, state, handleChange, handleSubmit } = createForm({
     initialValues: {
-      apiKey: storedSettings?.apiKey,
+      apiKey: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -16,14 +16,14 @@
         .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
         .required()
     }),
-    onSubmit: state => {
-      settings.set({apiKey: state.apiKey});
+    onSubmit: values => {
+      settings.set(values);
     }
   });
 
 </script>
 
-<form aria-label="Settings Form">
+<form on:click={handleSubmit} aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
     <label class="form-label" for="apiKey">API Key:</label>
@@ -110,7 +110,7 @@
   
 
   <!-- <button on:click={handleSubmit}>Save</button> -->
-  <button on:click|preventDefault={handleSubmit}>Save</button>
+  <button type="submit">Save</button>
 </form>
 
 <style>

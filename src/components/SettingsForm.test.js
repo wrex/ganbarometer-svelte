@@ -80,16 +80,15 @@ describe("Settings Form", () => {
       expect(errMessage).toBeInTheDocument();
     });
     it("saves a valid API key to settings store", async () => {
-      // This **TEST** does not work, but the app behaves correctly.
-      // What am I doing wrong?!!
       render(SettingsForm);
       const input = screen.getByLabelText(/api key/i);
       const button = screen.getByRole("button", { name: "Save" });
       await userEvent.type(input, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.click(button);
-      const json = window.localStorage.getItem("gbSettings");
-      const key = JSON.parse(json).apiKey;
-      expect(key).toEqual("98ca70da-d268-4100-96ad-696014a53231");
+      await waitFor(() => {
+        const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
+        expect(stored.apiKey).toEqual("78ca70da-d268-4100-96ad-696014a53231");
+      });
     });
   });
 });
