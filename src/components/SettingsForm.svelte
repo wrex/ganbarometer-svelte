@@ -9,11 +9,17 @@
   const { form, errors, state, handleChange, handleSubmit } = createForm({
     initialValues: {
       apiKey: "",
+      retrieveDays: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
-        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid API token!")
+        .required(),
+      retrieveDays: yup
+        .number()
+        .min(1, "Must be between 1 and 7")
+        .max(7, "Must be between 1 and 7")
         .required()
     }),
     onSubmit: values => {
@@ -36,14 +42,24 @@
     bind:value={$form.apiKey}
     />
     {#if $errors.apiKey}
-    <small>Invalid token!</small>
+    <small>{$errors.apiKey}</small>
     {/if}
     
     <label for="retrieveDays">
       Number of days to retrieve reviews: 
     </label>
-    <input type="number" id="retrieveDays" />
+    <input 
+      type="number" 
+      id="retrieveDays" 
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.retrieveDays}
+    />
+    {#if $errors.retrieveDays}
+    <small>{$errors.retrieveDays}</small>
+    {/if}
     
+    <br>
     <label for="bgColor">
       Background
     </label>
@@ -104,6 +120,7 @@
     <label for="barStarts">Starting seconds for each bar</label>
     <input type="string" name="barStarts" id="barStarts">
     
+    <br>
     <label for="barLabels">Labels for each bar</label>
     <input type="string" name="barLabels" id="barLabels">
   </fieldset>
@@ -117,12 +134,24 @@
   form {
     display: flex;
     flex-direction: column;
+    width: 600px;
+    height: 80vh;
+    overflow-y: scroll;
   }
-  /* label {
+  label {
+    display: inline-block;
     text-align: right;
-  } */
+  }
   button {
     padding: 0 1em;
+  }
+
+  /* input {
+    display: block;
+  } */
+
+  input[type="radio"] {
+    display: inline-block;
   }
 
   input[type="color"] {
