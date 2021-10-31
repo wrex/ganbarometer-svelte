@@ -13,17 +13,19 @@
         .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
         .required()
     }),
-    onSubmit: values => {
+    onSubmit: state => {
       // alert(JSON.stringify(values))
-      settings.set({apiKey: values.apiKey});
+      settings.set({apiKey: state.apiKey});
     }
   });
+
+  $: whasis = JSON.stringify(state);
 </script>
 
 <form on:submit={handleSubmit} aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
-    <label class="form-label" for="apiKey">API Key: </label>
+    <label class="form-label" for="apiKey">API Key:</label>
     <input 
     class="form-control"
     type="text" 

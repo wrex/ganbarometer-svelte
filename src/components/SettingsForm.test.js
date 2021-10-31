@@ -6,6 +6,7 @@ import SettingsForm from "./SettingsForm.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import { settings } from "../store/stores";
+import "@testing-library/jest-dom";
 
 let apiKey = "";
 settings.subscribe((state) => {
@@ -89,10 +90,9 @@ describe("Settings Form", () => {
       const button = screen.getByRole("button", { name: "Save" });
       await userEvent.type(input, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.click(button);
-      console.log(JSON.stringify(settings));
-      await waitFor(() => {
-        expect(apiKey).toBe("78ca70da-d268-4100-96ad-696014a53231");
-      });
+      const json = window.localStorage.getItem("gbSettings");
+      const settings = JSON.parse(json);
+      expect(settings.apiKey).toEqual("78ca70da-d268-4100-96ad-696014a53231");
     });
   });
 });
