@@ -1,7 +1,9 @@
 import { writable } from "svelte/store";
 
+const storedSettings = JSON.parse(window.localStorage.getItem("gbSettings"));
+
 export const settings = writable({
-  apiKey: "",
+  apiKey: storedSettings?.apiKey,
 });
 
 settings.subscribe((value) => {

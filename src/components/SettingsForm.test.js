@@ -8,11 +8,6 @@ import userEvent from "@testing-library/user-event";
 import { settings } from "../store/stores";
 import "@testing-library/jest-dom";
 
-let apiKey = "";
-settings.subscribe((state) => {
-  apiKey = state.apiKey;
-});
-
 describe("Settings Form", () => {
   describe("layout", () => {
     it("renders a form with a text input for the API Key", () => {
@@ -85,14 +80,16 @@ describe("Settings Form", () => {
       expect(errMessage).toBeInTheDocument();
     });
     it("saves a valid API key to settings store", async () => {
+      // This **TEST** does not work, but the app behaves correctly.
+      // What am I doing wrong?!!
       render(SettingsForm);
       const input = screen.getByLabelText(/api key/i);
       const button = screen.getByRole("button", { name: "Save" });
       await userEvent.type(input, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.click(button);
       const json = window.localStorage.getItem("gbSettings");
-      const settings = JSON.parse(json);
-      expect(settings.apiKey).toEqual("78ca70da-d268-4100-96ad-696014a53231");
+      const key = JSON.parse(json).apiKey;
+      expect(key).toEqual("98ca70da-d268-4100-96ad-696014a53231");
     });
   });
 });

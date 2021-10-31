@@ -2,10 +2,13 @@
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
   import { settings } from '../store/stores';
+  import * as api from "../API/core";
+
+  const storedSettings = JSON.parse(window.localStorage.getItem("gbSettings"));
 
   const { form, errors, state, handleChange, handleSubmit } = createForm({
     initialValues: {
-      apiKey: "",
+      apiKey: storedSettings?.apiKey,
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -14,15 +17,13 @@
         .required()
     }),
     onSubmit: state => {
-      // alert(JSON.stringify(values))
       settings.set({apiKey: state.apiKey});
     }
   });
 
-  $: whasis = JSON.stringify(state);
 </script>
 
-<form on:submit={handleSubmit} aria-label="Settings Form">
+<form aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
     <label class="form-label" for="apiKey">API Key:</label>
@@ -108,7 +109,8 @@
   </fieldset>
   
 
-  <button type="submit">Save</button>
+  <!-- <button on:click={handleSubmit}>Save</button> -->
+  <button on:click|preventDefault={handleSubmit}>Save</button>
 </form>
 
 <style>
