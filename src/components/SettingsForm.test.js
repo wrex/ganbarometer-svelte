@@ -75,6 +75,7 @@ describe("Settings Form", () => {
     let apiKeyInput;
     let retrieveDaysInput;
     let reviewsPerInput;
+    let apprenticeItemsInput;
     let saveButton;
 
     // Setup a form with valid input values
@@ -83,15 +84,18 @@ describe("Settings Form", () => {
       apiKeyInput = screen.getByLabelText(/api key/i);
       retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
       reviewsPerInput = screen.getByLabelText(/reviews per/i);
+      apprenticeItemsInput = screen.getByLabelText(/apprentice items/i);
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
         reviewsPerInput: reviewsPerInput,
+        apprenticeItemsInput: apprenticeItemsInput,
       };
       saveButton = screen.getByRole("button", { name: "Save" });
       await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
       await userEvent.type(retrieveDaysInput, "3");
       await userEvent.type(reviewsPer, "150");
+      await userEvent.type(apprenticeItems, "100");
     };
 
     it("does not allow an invalid API key", async () => {
@@ -113,13 +117,16 @@ describe("Settings Form", () => {
 
     describe("Validations", () => {
       test.each`
-        input                  | inputValue     | errorMsg
-        ${"apiKeyInput"}       | ${"l33th4x0r"} | ${"invalid"}
-        ${"retrieveDaysInput"} | ${"-1"}        | ${"between 1 and 7"}
-        ${"retrieveDaysInput"} | ${"8"}         | ${"between 1 and 7"}
-        ${"reviewsPerInput"}   | ${"-1"}        | ${"between 10 and 500"}
-        ${"reviewsPerInput"}   | ${"9"}         | ${"between 10 and 500"}
-        ${"reviewsPerInput"}   | ${"501"}       | ${"between 10 and 500"}
+        input                     | inputValue     | errorMsg
+        ${"apiKeyInput"}          | ${"l33th4x0r"} | ${"invalid"}
+        ${"retrieveDaysInput"}    | ${"-1"}        | ${"between 1 and 7"}
+        ${"retrieveDaysInput"}    | ${"8"}         | ${"between 1 and 7"}
+        ${"reviewsPerInput"}      | ${"-1"}        | ${"between 10 and 500"}
+        ${"reviewsPerInput"}      | ${"9"}         | ${"between 10 and 500"}
+        ${"reviewsPerInput"}      | ${"501"}       | ${"between 10 and 500"}
+        ${"apprenticeItemsInput"} | ${"-1"}        | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"} | ${"9"}         | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"} | ${"301"}       | ${"between 10 and 300"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {

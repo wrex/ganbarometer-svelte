@@ -11,6 +11,7 @@
       apiKey: "",
       retrieveDays: "",
       reviewsPer: "",
+      apprenticeItems: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -26,6 +27,11 @@
         .number()
         .min(10, "Must be between 10 and 500")
         .max(500, "Must be between 10 and 500")
+        .required("Required"),
+      apprenticeItems: yup
+        .number()
+        .min(10, "Must be between 10 and 300")
+        .max(300, "Must be between 10 and 300")
         .required("Required")
     }),
     onSubmit: values => {
@@ -119,26 +125,36 @@
   <fieldset>
     <legend>Difficulty Gauge</legend>
     <label for="apprenticeItems">Desired number of apprentice items</label>
-    <input type="number" name="apprenticeItems" id="apprenticeItems">
+    <input 
+      type="number" 
+      name="apprenticeItems" 
+      id="apprenticeItems"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.apprenticeItems}
+    />
+    {#if $errors.apprenticeItems}
+    <small>{$errors.apprenticeItems}</small>
+    {/if}
 
     <label for="acceptableMisses">Acceptable percentage of misses</label>
-    <input type="number" name="acceptableMisses" id="acceptableMisses">
+    <input type="number" name="acceptableMisses" id="acceptableMisses"/>
 
     <label for="newKanjiWeight">Weighting factor for new kanji</label>
-    <input type="number" name="newKanjiWeight" id="newKanjiWeight">
+    <input type="number" name="newKanjiWeight" id="newKanjiWeight"/>
 
     <label for="excessMissWeight">Weighting factor for excess misses</label>
-    <input type="number" name="excessMissWeight" id="excessMissWeight">
+    <input type="number" name="excessMissWeight" id="excessMissWeight"/>
   </fieldset>
 
   <fieldset>
     <legend>Interval Chart</legend>
     <label for="barStarts">Starting seconds for each bar</label>
-    <input type="string" name="barStarts" id="barStarts">
+    <input type="string" name="barStarts" id="barStarts"/>
     
     <br>
     <label for="barLabels">Labels for each bar</label>
-    <input type="string" name="barLabels" id="barLabels">
+    <input type="string" name="barLabels" id="barLabels"/>
   </fieldset>
   
 
