@@ -70,30 +70,26 @@ describe("Settings Form", () => {
   });
 
   describe("interaction", () => {
-    let inputs = {
-      apiKey: {},
-      retrieveDays: {},
-      reviewsPer: {},
-      apprenticeItems: {},
-      acceptableMisses: {},
-      newKanjiWeight: {},
-      excessMissWeight: {},
-    };
+    let inputs;
     let saveButton;
     let debug;
 
     // Setup a form with valid input values
     const setup = () => {
-      ({ debug } = render(SettingsForm));
-      inputs.apiKey = screen.getByLabelText(/api key/i);
-      inputs.retrieveDays = screen.getByLabelText(/days to retrieve/i);
-      inputs.reviewsPer = screen.getByLabelText(/reviews per/i);
-      inputs.apprenticeItems = screen.getByLabelText(/apprentice items/i);
-      inputs.acceptableMisses = screen.getByLabelText(
-        /acceptable percentage of misses/i
-      );
-      inputs.newKanjiWeight = screen.getByLabelText(/new kanji/i);
-      inputs.excessMissWeight = screen.getByLabelText(/excess misses/i);
+      const { formDebug } = render(SettingsForm);
+      debug = formDebug;
+
+      inputs = {
+        apiKey: screen.getByLabelText(/api key/i),
+        retrieveDays: screen.getByLabelText(/days to retrieve/i),
+        reviewsPer: screen.getByLabelText(/reviews per/i),
+        apprenticeItems: screen.getByLabelText(/apprentice items/i),
+        acceptableMisses: screen.getByLabelText(
+          /acceptable percentage of misses/i
+        ),
+        newKanjiWeight: screen.getByLabelText(/new kanji/i),
+        excessMissWeight: screen.getByLabelText(/excess misses/i),
+      };
 
       saveButton = screen.getByRole("button", { name: "Save" });
       userEvent.type(inputs.apiKey, "78ca70da-d268-4100-96ad-696014a53231");
