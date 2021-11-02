@@ -9,16 +9,17 @@
   const { form, errors, state, handleChange, handleSubmit } = createForm({
     initialValues: {
       apiKey: "",
-      retrieveDays: "",
-      reviewsPer: "",
-      apprenticeItems: "",
-      acceptableMisses: "",
-      newKanjiWeight: "",
-      excessMissWeight: "",
-      bgColor: "",
-      fillColor: "",
-      warnColor: "",
-      alertColor: "",
+      retrieveDays: "3",
+      reviewsPer: "150",
+      apprenticeItems: "100",
+      acceptableMisses: "20",
+      newKanjiWeight: "0.05",
+      excessMissWeight: "0.03",
+      bgColor: "#cccccc",
+      fillColor: "#00ff00",
+      warnColor: "#ffff00",
+      alertColor: "#ff0000",
+      reviewSessions: "sessions",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -62,6 +63,11 @@
         .nullable()
         .min(0.01, "Must be between 0.01 and 0.1")
         .max(0.1, "Must be between 0.01 and 0.1"),
+      bgColor: yup.string(),
+      fillColor: yup.string(),
+      warnColor: yup.string(),
+      alertColor: yup.string(),
+      reviewSessions: yup.string(),
     }),
     onSubmit: values => {
       settings.set(values);
@@ -70,7 +76,7 @@
 
 </script>
 
-<form on:click={handleSubmit} aria-label="Settings Form">
+<form on:submit={handleSubmit} aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
     <label class="form-label" for="apiKey">API Key:</label>
@@ -156,11 +162,27 @@
       <label for="sessionsPerDay">
         Sessions/day
       </label>
-      <input type="radio" name="reviewSessions" id="sessionsPerDay" value="sessions"/>
+      <input 
+        type="radio" 
+        name="reviewSessions" 
+        id="sessionsPerDay" 
+        bind:group={$form.reviewSessions}
+        on:change={handleChange}
+        on:blur={handleChange}
+        value="sessions"
+      />
       <label for="reviewsPerDay">
         Reviews/day
       </label>
-      <input type="radio" name="reviewSessions" id="reviewsPerDay" value="reviews" />
+      <input 
+        type="radio" 
+        name="reviewSessions" 
+        id="reviewsPerDay" 
+        bind:group={$form.reviewSessions}
+        on:change={handleChange}
+        on:blur={handleChange}
+        value="reviews"
+      />
     </div>
 
 
@@ -275,6 +297,9 @@
 
   input[type="color"] {
     display: inline-block;
-    width: 20px;
+    width: 3rem;
+    min-height: 20px;
+    padding: 0;
+    margin: 5px;
   }
 </style>

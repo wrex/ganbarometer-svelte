@@ -97,12 +97,6 @@ describe("Settings Form", () => {
 
       saveButton = screen.getByRole("button", { name: "Save" });
       userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
-      userEvent.type(reviewsPerInput, "150");
-      userEvent.type(retrieveDaysInput, "3");
-      userEvent.type(apprenticeItemsInput, "100");
-      userEvent.type(acceptableMissesInput, "20");
-      userEvent.type(newKanjiWeightInput, "0.05");
-      userEvent.type(excessMissWeightInput, "0.03");
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
@@ -114,7 +108,7 @@ describe("Settings Form", () => {
       };
     };
 
-    fit("does not allow an invalid API key", async () => {
+    it("does not allow an invalid API key", async () => {
       setup();
       await userEvent.type(apiKeyInput, "invalid");
       await userEvent.click(saveButton);
