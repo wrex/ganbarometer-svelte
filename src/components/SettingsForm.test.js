@@ -80,10 +80,11 @@ describe("Settings Form", () => {
     let newKanjiWeightInput;
     let excessMissWeightInput;
     let saveButton;
+    let debug;
 
     // Setup a form with valid input values
     const setup = () => {
-      render(SettingsForm);
+      ({ debug } = render(SettingsForm));
       apiKeyInput = screen.getByLabelText(/api key/i);
       retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
       reviewsPerInput = screen.getByLabelText(/reviews per/i);
@@ -113,11 +114,12 @@ describe("Settings Form", () => {
       };
     };
 
-    it("does not allow an invalid API key", async () => {
+    fit("does not allow an invalid API key", async () => {
       setup();
       await userEvent.type(apiKeyInput, "invalid");
       await userEvent.click(saveButton);
       const errMessage = await screen.findByText(/invalid api token/i);
+      // debug(errMessage);
       expect(errMessage).toBeInTheDocument();
     });
 

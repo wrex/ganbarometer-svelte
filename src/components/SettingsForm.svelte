@@ -15,6 +15,10 @@
       acceptableMisses: "",
       newKanjiWeight: "",
       excessMissWeight: "",
+      bgColor: "",
+      fillColor: "",
+      warnColor: "",
+      alertColor: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -100,22 +104,50 @@
     <label for="bgColor">
       Background
     </label>
-    <input type="color" name="bgColor" id="bgColor" value="#ff0000" />
+    <input 
+      type="color" 
+      name="bgColor" 
+      id="bgColor" 
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.bgColor}
+    />
 
     <label for="fillColor">
       Fill
     </label>
-    <input type="color" name="fillColor" id="fillColor" value="red"/>
+    <input 
+      type="color" 
+      name="fillColor" 
+      id="fillColor" 
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.fillColor}
+    />
 
     <label for="warnColor">
       Warning
     </label>
-    <input type="color" name="warnColor" id="warnColor" value="red"/>
+    <input 
+      type="color" 
+      name="warnColor" 
+      id="warnColor" 
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.warnColor}
+    />
 
     <label for="alertColor">
       Alert
     </label>
-    <input type="color" name="alertColor" id="alertColor" value="red"/>
+    <input 
+      type="color" 
+      name="alertColor" 
+      id="alertColor"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.alertColor}
+    />
   </fieldset>
 
   <fieldset>
