@@ -78,6 +78,7 @@ describe("Settings Form", () => {
     let apprenticeItemsInput;
     let acceptableMissesInput;
     let newKanjiWeightInput;
+    let excessMissWeightInput;
     let saveButton;
 
     // Setup a form with valid input values
@@ -91,6 +92,7 @@ describe("Settings Form", () => {
         /acceptable percentage of misses/i
       );
       newKanjiWeightInput = screen.getByLabelText(/new kanji/i);
+      excessMissWeightInput = screen.getByLabelText(/excess misses/i);
 
       saveButton = screen.getByRole("button", { name: "Save" });
       userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
@@ -99,6 +101,7 @@ describe("Settings Form", () => {
       userEvent.type(apprenticeItemsInput, "100");
       userEvent.type(acceptableMissesInput, "20");
       userEvent.type(newKanjiWeightInput, "0.05");
+      userEvent.type(excessMissWeightInput, "0.03");
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
@@ -106,6 +109,7 @@ describe("Settings Form", () => {
         apprenticeItemsInput: apprenticeItemsInput,
         acceptableMissesInput: acceptableMissesInput,
         newKanjiWeightInput: newKanjiWeightInput,
+        excessMissWeightInput: excessMissWeightInput,
       };
     };
 
@@ -153,6 +157,11 @@ describe("Settings Form", () => {
         ${"newKanjiWeightInput"}   | ${"0"}         | ${"between 0.01 and 0.1"}
         ${"newKanjiWeightInput"}   | ${"1"}         | ${"between 0.01 and 0.1"}
         ${"newKanjiWeightInput"}   | ${"0.11"}      | ${"between 0.01 and 0.1"}
+        ${"excessMissWeightInput"} | ${"dog"}       | ${"must be a number"}
+        ${"excessMissWeightInput"} | ${"-1"}        | ${"between 0.01 and 0.1"}
+        ${"excessMissWeightInput"} | ${"0"}         | ${"between 0.01 and 0.1"}
+        ${"excessMissWeightInput"} | ${"1"}         | ${"between 0.01 and 0.1"}
+        ${"excessMissWeightInput"} | ${"0.11"}      | ${"between 0.01 and 0.1"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {

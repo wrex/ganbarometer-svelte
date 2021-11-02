@@ -14,6 +14,7 @@
       apprenticeItems: "",
       acceptableMisses: "",
       newKanjiWeight: "",
+      excessMissWeight: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -46,6 +47,12 @@
         .min(0, "Must be between 0 and 30")
         .max(30, "Must be between 0 and 30"),
       newKanjiWeight: yup
+        .number()
+        .typeError("Must be a number")
+        .nullable()
+        .min(0.01, "Must be between 0.01 and 0.1")
+        .max(0.1, "Must be between 0.01 and 0.1"),
+      excessMissWeight: yup
         .number()
         .typeError("Must be a number")
         .nullable()
@@ -182,7 +189,17 @@
     {/if}
 
     <label for="excessMissWeight">Weighting factor for excess misses</label>
-    <input type="number" name="excessMissWeight" id="excessMissWeight"/>
+    <input 
+      type="number" 
+      name="excessMissWeight" 
+      id="excessMissWeight"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.excessMissWeight}
+    />
+    {#if $errors.excessMissWeight}
+    <small>{$errors.excessMissWeight}</small>
+    {/if}
   </fieldset>
 
   <fieldset>
