@@ -12,6 +12,7 @@
       retrieveDays: "",
       reviewsPer: "",
       apprenticeItems: "",
+      acceptableMisses: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -21,22 +22,32 @@
         .required("Required field"),
       retrieveDays: yup
         .number()
+        .typeError("Must be a number")
         .nullable()
-        .required("Required")
+        .required("Required field")
         .min(1, "Must be between 1 and 7")
         .max(7, "Must be between 1 and 7"),
       reviewsPer: yup
         .number()
+        .typeError("Must be a number")
         .nullable()
-        .required("Required")
+        .required("Required field")
         .min(10, "Must be between 10 and 500")
         .max(500, "Must be between 10 and 500"),
       apprenticeItems: yup
         .number()
+        .typeError("Must be a number")
         .nullable()
-        .required("Required")
+        .required("Required field")
         .min(10, "Must be between 10 and 300")
         .max(300, "Must be between 10 and 300"),
+      acceptableMisses: yup
+        .number()
+        .typeError("Must be a number")
+        .nullable()
+        .required("Required field")
+        .min(0, "Must be between 0 and 30")
+        .max(30, "Must be between 0 and 30"),
     }),
     onSubmit: values => {
       settings.set(values);
@@ -142,7 +153,17 @@
     {/if}
 
     <label for="acceptableMisses">Acceptable percentage of misses</label>
-    <input type="number" name="acceptableMisses" id="acceptableMisses"/>
+    <input 
+      type="number" 
+      name="acceptableMisses" 
+      id="acceptableMisses"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.acceptableMisses}
+    />
+    {#if $errors.acceptableMisses}
+    <small>{$errors.acceptableMisses}</small>
+    {/if}
 
     <label for="newKanjiWeight">Weighting factor for new kanji</label>
     <input type="number" name="newKanjiWeight" id="newKanjiWeight"/>

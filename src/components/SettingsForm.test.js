@@ -76,30 +76,36 @@ describe("Settings Form", () => {
     let retrieveDaysInput;
     let reviewsPerInput;
     let apprenticeItemsInput;
+    let acceptableMissesInput;
     let saveButton;
 
     // Setup a form with valid input values
-    const setup = async () => {
+    const setup = () => {
       render(SettingsForm);
       apiKeyInput = screen.getByLabelText(/api key/i);
       retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
       reviewsPerInput = screen.getByLabelText(/reviews per/i);
       apprenticeItemsInput = screen.getByLabelText(/apprentice items/i);
+      acceptableMissesInput = screen.getByLabelText(
+        /acceptable percentage of misses/i
+      );
+      saveButton = screen.getByRole("button", { name: "Save" });
+      userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
+      userEvent.type(reviewsPerInput, "150");
+      userEvent.type(retrieveDaysInput, "3");
+      userEvent.type(apprenticeItemsInput, "100");
+      userEvent.type(acceptableMissesInput, "20");
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
         reviewsPerInput: reviewsPerInput,
         apprenticeItemsInput: apprenticeItemsInput,
+        acceptableMissesInput: acceptableMissesInput,
       };
-      saveButton = screen.getByRole("button", { name: "Save" });
-      await userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
-      await userEvent.type(retrieveDaysInput, "3");
-      await userEvent.type(reviewsPer, "150");
-      await userEvent.type(apprenticeItems, "100");
     };
 
     it("does not allow an invalid API key", async () => {
-      await setup();
+      setup();
       await userEvent.type(apiKeyInput, "invalid");
       await userEvent.click(saveButton);
       const errMessage = await screen.findByText(/invalid api token/i);
@@ -107,7 +113,7 @@ describe("Settings Form", () => {
     });
 
     it("saves valid form to settings store", async () => {
-      await setup();
+      setup();
       await userEvent.click(saveButton);
       await waitFor(() => {
         const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
@@ -117,27 +123,34 @@ describe("Settings Form", () => {
 
     describe("Text and number input field validations", () => {
       test.each`
-        input                     | inputValue     | errorMsg
-        ${"apiKeyInput"}          | ${""}          | ${"required"}
-        ${"apiKeyInput"}          | ${"l33th4x0r"} | ${"invalid"}
-        ${"retrieveDaysInput"}    | ${""}          | ${"required"}
-        ${"retrieveDaysInput"}    | ${"-1"}        | ${"between 1 and 7"}
-        ${"retrieveDaysInput"}    | ${"0"}         | ${"between 1 and 7"}
-        ${"retrieveDaysInput"}    | ${"8"}         | ${"between 1 and 7"}
-        ${"reviewsPerInput"}      | ${""}          | ${"required"}
-        ${"reviewsPerInput"}      | ${"-1"}        | ${"between 10 and 500"}
-        ${"reviewsPerInput"}      | ${"0"}         | ${"between 10 and 500"}
-        ${"reviewsPerInput"}      | ${"9"}         | ${"between 10 and 500"}
-        ${"reviewsPerInput"}      | ${"501"}       | ${"between 10 and 500"}
-        ${"apprenticeItemsInput"} | ${""}          | ${"required"}
-        ${"apprenticeItemsInput"} | ${"-1"}        | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"} | ${"0"}         | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"} | ${"9"}         | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"} | ${"301"}       | ${"between 10 and 300"}
+        input                      | inputValue     | errorMsg
+        ${"apiKeyInput"}           | ${""}          | ${"required"}
+        ${"apiKeyInput"}           | ${"l33th4x0r"} | ${"invalid"}
+        ${"retrieveDaysInput"}     | ${""}          | ${"required"}
+        ${"retrieveDaysInput"}     | ${"dog"}       | ${"must be a number"}
+        ${"retrieveDaysInput"}     | ${"-1"}        | ${"between 1 and 7"}
+        ${"retrieveDaysInput"}     | ${"0"}         | ${"between 1 and 7"}
+        ${"retrieveDaysInput"}     | ${"8"}         | ${"between 1 and 7"}
+        ${"reviewsPerInput"}       | ${""}          | ${"required"}
+        ${"reviewsPerInput"}       | ${"dog"}       | ${"must be a number"}
+        ${"reviewsPerInput"}       | ${"-1"}        | ${"between 10 and 500"}
+        ${"reviewsPerInput"}       | ${"0"}         | ${"between 10 and 500"}
+        ${"reviewsPerInput"}       | ${"9"}         | ${"between 10 and 500"}
+        ${"reviewsPerInput"}       | ${"501"}       | ${"between 10 and 500"}
+        ${"apprenticeItemsInput"}  | ${""}          | ${"required"}
+        ${"apprenticeItemsInput"}  | ${"dog"}       | ${"must be a number"}
+        ${"apprenticeItemsInput"}  | ${"-1"}        | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"}  | ${"0"}         | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"}  | ${"9"}         | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"}  | ${"301"}       | ${"between 10 and 300"}
+        ${"acceptableMissesInput"} | ${""}          | ${"required"}
+        ${"acceptableMissesInput"} | ${"dog"}       | ${"must be a number"}
+        ${"acceptableMissesInput"} | ${"-1"}        | ${"between 0 and 30"}
+        ${"acceptableMissesInput"} | ${"31"}        | ${"between 0 and 30"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {
-          await setup();
+          setup();
           await userEvent.clear(inputs[input]);
           if (inputValue !== "") {
             await userEvent.type(inputs[input], inputValue);
