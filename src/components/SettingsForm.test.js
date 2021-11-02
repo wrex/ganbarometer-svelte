@@ -120,13 +120,16 @@ describe("Settings Form", () => {
         input                     | inputValue     | errorMsg
         ${"apiKeyInput"}          | ${""}          | ${"required"}
         ${"apiKeyInput"}          | ${"l33th4x0r"} | ${"invalid"}
+        ${"retrieveDaysInput"}    | ${""}          | ${"required"}
         ${"retrieveDaysInput"}    | ${"-1"}        | ${"between 1 and 7"}
         ${"retrieveDaysInput"}    | ${"0"}         | ${"between 1 and 7"}
         ${"retrieveDaysInput"}    | ${"8"}         | ${"between 1 and 7"}
+        ${"reviewsPerInput"}      | ${""}          | ${"required"}
         ${"reviewsPerInput"}      | ${"-1"}        | ${"between 10 and 500"}
         ${"reviewsPerInput"}      | ${"0"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}      | ${"9"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}      | ${"501"}       | ${"between 10 and 500"}
+        ${"apprenticeItemsInput"} | ${""}          | ${"required"}
         ${"apprenticeItemsInput"} | ${"-1"}        | ${"between 10 and 300"}
         ${"apprenticeItemsInput"} | ${"0"}         | ${"between 10 and 300"}
         ${"apprenticeItemsInput"} | ${"9"}         | ${"between 10 and 300"}

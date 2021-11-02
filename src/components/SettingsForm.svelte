@@ -21,16 +21,19 @@
         .required("Required field"),
       retrieveDays: yup
         .number()
+        .nullable()
         .required("Required")
         .min(1, "Must be between 1 and 7")
         .max(7, "Must be between 1 and 7"),
       reviewsPer: yup
         .number()
+        .nullable()
         .required("Required")
         .min(10, "Must be between 10 and 500")
         .max(500, "Must be between 10 and 500"),
       apprenticeItems: yup
         .number()
+        .nullable()
         .required("Required")
         .min(10, "Must be between 10 and 300")
         .max(300, "Must be between 10 and 300"),
