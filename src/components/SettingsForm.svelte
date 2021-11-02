@@ -2,11 +2,12 @@
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
   import { settings } from '../store/stores';
+import { getModal } from './Modal.svelte';
   // import * as api from "../API/core";
 
   const storedSettings = JSON.parse(window.localStorage.getItem("gbSettings"));
 
-  const { form, errors, state, handleChange, handleSubmit } = createForm({
+  const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
     initialValues: {
       apiKey: "",
       retrieveDays: "3",
@@ -54,13 +55,11 @@
       newKanjiWeight: yup
         .number()
         .typeError("Must be a number")
-        .nullable()
         .min(0.01, "Must be between 0.01 and 0.1")
         .max(0.1, "Must be between 0.01 and 0.1"),
       excessMissWeight: yup
         .number()
         .typeError("Must be a number")
-        .nullable()
         .min(0.01, "Must be between 0.01 and 0.1")
         .max(0.1, "Must be between 0.01 and 0.1"),
       bgColor: yup.string(),
@@ -71,6 +70,7 @@
     }),
     onSubmit: values => {
       settings.set(values);
+      getModal().close();
     }
   });
 
@@ -234,6 +234,7 @@
       type="number" 
       name="newKanjiWeight" 
       id="newKanjiWeight"
+      step="0.01"
       on:change={handleChange}
       on:blur={handleChange}
       bind:value={$form.newKanjiWeight}
@@ -247,6 +248,7 @@
       type="number" 
       name="excessMissWeight" 
       id="excessMissWeight"
+      step="0.01"
       on:change={handleChange}
       on:blur={handleChange}
       bind:value={$form.excessMissWeight}
@@ -268,7 +270,7 @@
   
 
   <!-- <button on:click={handleSubmit}>Save</button> -->
-  <button type="submit">Save</button>
+  <button disabled={!$isValid} type="submit">Save</button>
 </form>
 
 <style>
@@ -285,6 +287,10 @@
   }
   button {
     padding: 0 1em;
+  }
+  small {
+    display: block;
+    color: red;
   }
 
   /* input {
