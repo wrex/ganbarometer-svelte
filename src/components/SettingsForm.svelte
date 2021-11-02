@@ -16,23 +16,24 @@
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
-        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid API token!")
-        .required("Required"),
+        .nullable()
+        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid API token")
+        .required("Required field"),
       retrieveDays: yup
         .number()
+        .required("Required")
         .min(1, "Must be between 1 and 7")
-        .max(7, "Must be between 1 and 7")
-        .required("Required"),
+        .max(7, "Must be between 1 and 7"),
       reviewsPer: yup
         .number()
+        .required("Required")
         .min(10, "Must be between 10 and 500")
-        .max(500, "Must be between 10 and 500")
-        .required("Required"),
+        .max(500, "Must be between 10 and 500"),
       apprenticeItems: yup
         .number()
-        .min(10, "Must be between 10 and 300")
-        .max(300, "Must be between 10 and 300")
         .required("Required")
+        .min(10, "Must be between 10 and 300")
+        .max(300, "Must be between 10 and 300"),
     }),
     onSubmit: values => {
       settings.set(values);

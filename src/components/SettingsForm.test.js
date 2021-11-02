@@ -99,7 +99,7 @@ describe("Settings Form", () => {
     };
 
     it("does not allow an invalid API key", async () => {
-      setup();
+      await setup();
       await userEvent.type(apiKeyInput, "invalid");
       await userEvent.click(saveButton);
       const errMessage = await screen.findByText(/invalid api token/i);
@@ -107,7 +107,7 @@ describe("Settings Form", () => {
     });
 
     it("saves valid form to settings store", async () => {
-      setup();
+      await setup();
       await userEvent.click(saveButton);
       await waitFor(() => {
         const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
@@ -115,23 +115,30 @@ describe("Settings Form", () => {
       });
     });
 
-    describe("Validations", () => {
+    describe("Text and number input field validations", () => {
       test.each`
         input                     | inputValue     | errorMsg
+        ${"apiKeyInput"}          | ${""}          | ${"required"}
         ${"apiKeyInput"}          | ${"l33th4x0r"} | ${"invalid"}
         ${"retrieveDaysInput"}    | ${"-1"}        | ${"between 1 and 7"}
+        ${"retrieveDaysInput"}    | ${"0"}         | ${"between 1 and 7"}
         ${"retrieveDaysInput"}    | ${"8"}         | ${"between 1 and 7"}
         ${"reviewsPerInput"}      | ${"-1"}        | ${"between 10 and 500"}
+        ${"reviewsPerInput"}      | ${"0"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}      | ${"9"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}      | ${"501"}       | ${"between 10 and 500"}
         ${"apprenticeItemsInput"} | ${"-1"}        | ${"between 10 and 300"}
+        ${"apprenticeItemsInput"} | ${"0"}         | ${"between 10 and 300"}
         ${"apprenticeItemsInput"} | ${"9"}         | ${"between 10 and 300"}
         ${"apprenticeItemsInput"} | ${"301"}       | ${"between 10 and 300"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {
-          setup();
-          await userEvent.type(inputs[input], inputValue);
+          await setup();
+          await userEvent.clear(inputs[input]);
+          if (inputValue !== "") {
+            await userEvent.type(inputs[input], inputValue);
+          }
           await userEvent.click(saveButton);
           const errMessage = await screen.findByText(new RegExp(errorMsg, "i"));
           expect(errMessage).toBeInTheDocument();
