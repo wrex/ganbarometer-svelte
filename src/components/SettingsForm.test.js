@@ -5,7 +5,6 @@
 import SettingsForm from "./SettingsForm.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
-import { settings } from "../store/stores";
 import "@testing-library/jest-dom";
 
 describe("Settings Form", () => {
@@ -71,53 +70,36 @@ describe("Settings Form", () => {
   });
 
   describe("interaction", () => {
-    let inputs;
-    let apiKeyInput;
-    let retrieveDaysInput;
-    let reviewsPerInput;
-    let apprenticeItemsInput;
-    let acceptableMissesInput;
-    let newKanjiWeightInput;
-    let excessMissWeightInput;
+    let inputs = {
+      apiKey: {},
+      retrieveDays: {},
+      reviewsPer: {},
+      apprenticeItems: {},
+      acceptableMisses: {},
+      newKanjiWeight: {},
+      excessMissWeight: {},
+    };
     let saveButton;
     let debug;
 
     // Setup a form with valid input values
     const setup = () => {
       ({ debug } = render(SettingsForm));
-      apiKeyInput = screen.getByLabelText(/api key/i);
-      retrieveDaysInput = screen.getByLabelText(/days to retrieve/i);
-      reviewsPerInput = screen.getByLabelText(/reviews per/i);
-      apprenticeItemsInput = screen.getByLabelText(/apprentice items/i);
-      acceptableMissesInput = screen.getByLabelText(
+      inputs.apiKey = screen.getByLabelText(/api key/i);
+      inputs.retrieveDays = screen.getByLabelText(/days to retrieve/i);
+      inputs.reviewsPer = screen.getByLabelText(/reviews per/i);
+      inputs.apprenticeItems = screen.getByLabelText(/apprentice items/i);
+      inputs.acceptableMisses = screen.getByLabelText(
         /acceptable percentage of misses/i
       );
-      newKanjiWeightInput = screen.getByLabelText(/new kanji/i);
-      excessMissWeightInput = screen.getByLabelText(/excess misses/i);
+      inputs.newKanjiWeight = screen.getByLabelText(/new kanji/i);
+      inputs.excessMissWeight = screen.getByLabelText(/excess misses/i);
 
       saveButton = screen.getByRole("button", { name: "Save" });
-      userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
-      inputs = {
-        apiKeyInput: apiKeyInput,
-        retrieveDaysInput: retrieveDaysInput,
-        reviewsPerInput: reviewsPerInput,
-        apprenticeItemsInput: apprenticeItemsInput,
-        acceptableMissesInput: acceptableMissesInput,
-        newKanjiWeightInput: newKanjiWeightInput,
-        excessMissWeightInput: excessMissWeightInput,
-      };
+      userEvent.type(inputs.apiKey, "78ca70da-d268-4100-96ad-696014a53231");
     };
 
-    it("does not allow an invalid API key", async () => {
-      setup();
-      await userEvent.type(apiKeyInput, "invalid");
-      await userEvent.click(saveButton);
-      const errMessage = await screen.findByText(/invalid api token/i);
-      // debug(errMessage);
-      expect(errMessage).toBeInTheDocument();
-    });
-
-    it("saves valid form to settings store", async () => {
+    it("saves valid API token to settings store", async () => {
       setup();
       await userEvent.click(saveButton);
       await waitFor(() => {
@@ -128,36 +110,36 @@ describe("Settings Form", () => {
 
     describe("Text and number input field validations", () => {
       test.each`
-        input                      | inputValue     | errorMsg
-        ${"apiKeyInput"}           | ${""}          | ${"required"}
-        ${"apiKeyInput"}           | ${"l33th4x0r"} | ${"invalid"}
-        ${"retrieveDaysInput"}     | ${"dog"}       | ${"must be a number"}
-        ${"retrieveDaysInput"}     | ${"-1"}        | ${"between 1 and 7"}
-        ${"retrieveDaysInput"}     | ${"0"}         | ${"between 1 and 7"}
-        ${"retrieveDaysInput"}     | ${"8"}         | ${"between 1 and 7"}
-        ${"reviewsPerInput"}       | ${"dog"}       | ${"must be a number"}
-        ${"reviewsPerInput"}       | ${"-1"}        | ${"between 10 and 500"}
-        ${"reviewsPerInput"}       | ${"0"}         | ${"between 10 and 500"}
-        ${"reviewsPerInput"}       | ${"9"}         | ${"between 10 and 500"}
-        ${"reviewsPerInput"}       | ${"501"}       | ${"between 10 and 500"}
-        ${"apprenticeItemsInput"}  | ${"dog"}       | ${"must be a number"}
-        ${"apprenticeItemsInput"}  | ${"-1"}        | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"}  | ${"0"}         | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"}  | ${"9"}         | ${"between 10 and 300"}
-        ${"apprenticeItemsInput"}  | ${"301"}       | ${"between 10 and 300"}
-        ${"acceptableMissesInput"} | ${"dog"}       | ${"must be a number"}
-        ${"acceptableMissesInput"} | ${"-1"}        | ${"between 0 and 30"}
-        ${"acceptableMissesInput"} | ${"31"}        | ${"between 0 and 30"}
-        ${"newKanjiWeightInput"}   | ${"dog"}       | ${"must be a number"}
-        ${"newKanjiWeightInput"}   | ${"-1"}        | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeightInput"}   | ${"0"}         | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeightInput"}   | ${"1"}         | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeightInput"}   | ${"0.11"}      | ${"between 0.01 and 0.1"}
-        ${"excessMissWeightInput"} | ${"dog"}       | ${"must be a number"}
-        ${"excessMissWeightInput"} | ${"-1"}        | ${"between 0.01 and 0.1"}
-        ${"excessMissWeightInput"} | ${"0"}         | ${"between 0.01 and 0.1"}
-        ${"excessMissWeightInput"} | ${"1"}         | ${"between 0.01 and 0.1"}
-        ${"excessMissWeightInput"} | ${"0.11"}      | ${"between 0.01 and 0.1"}
+        input                 | inputValue     | errorMsg
+        ${"apiKey"}           | ${""}          | ${"required"}
+        ${"apiKey"}           | ${"l33th4x0r"} | ${"invalid"}
+        ${"retrieveDays"}     | ${"dog"}       | ${"must be a number"}
+        ${"retrieveDays"}     | ${"-1"}        | ${"between 1 and 7"}
+        ${"retrieveDays"}     | ${"0"}         | ${"between 1 and 7"}
+        ${"retrieveDays"}     | ${"8"}         | ${"between 1 and 7"}
+        ${"reviewsPer"}       | ${"dog"}       | ${"must be a number"}
+        ${"reviewsPer"}       | ${"-1"}        | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"0"}         | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"9"}         | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"501"}       | ${"between 10 and 500"}
+        ${"apprenticeItems"}  | ${"dog"}       | ${"must be a number"}
+        ${"apprenticeItems"}  | ${"-1"}        | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"0"}         | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"9"}         | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"301"}       | ${"between 10 and 300"}
+        ${"acceptableMisses"} | ${"dog"}       | ${"must be a number"}
+        ${"acceptableMisses"} | ${"-1"}        | ${"between 0 and 30"}
+        ${"acceptableMisses"} | ${"31"}        | ${"between 0 and 30"}
+        ${"newKanjiWeight"}   | ${"dog"}       | ${"must be a number"}
+        ${"newKanjiWeight"}   | ${"-1"}        | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"0"}         | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"1"}         | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"0.11"}      | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"dog"}       | ${"must be a number"}
+        ${"excessMissWeight"} | ${"-1"}        | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"0"}         | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"1"}         | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"0.11"}      | ${"between 0.01 and 0.1"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {
