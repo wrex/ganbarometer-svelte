@@ -77,6 +77,7 @@ describe("Settings Form", () => {
     let reviewsPerInput;
     let apprenticeItemsInput;
     let acceptableMissesInput;
+    let newKanjiWeightInput;
     let saveButton;
 
     // Setup a form with valid input values
@@ -89,18 +90,22 @@ describe("Settings Form", () => {
       acceptableMissesInput = screen.getByLabelText(
         /acceptable percentage of misses/i
       );
+      newKanjiWeightInput = screen.getByLabelText(/new kanji/i);
+
       saveButton = screen.getByRole("button", { name: "Save" });
       userEvent.type(apiKeyInput, "78ca70da-d268-4100-96ad-696014a53231");
       userEvent.type(reviewsPerInput, "150");
       userEvent.type(retrieveDaysInput, "3");
       userEvent.type(apprenticeItemsInput, "100");
       userEvent.type(acceptableMissesInput, "20");
+      userEvent.type(newKanjiWeightInput, "0.05");
       inputs = {
         apiKeyInput: apiKeyInput,
         retrieveDaysInput: retrieveDaysInput,
         reviewsPerInput: reviewsPerInput,
         apprenticeItemsInput: apprenticeItemsInput,
         acceptableMissesInput: acceptableMissesInput,
+        newKanjiWeightInput: newKanjiWeightInput,
       };
     };
 
@@ -126,27 +131,28 @@ describe("Settings Form", () => {
         input                      | inputValue     | errorMsg
         ${"apiKeyInput"}           | ${""}          | ${"required"}
         ${"apiKeyInput"}           | ${"l33th4x0r"} | ${"invalid"}
-        ${"retrieveDaysInput"}     | ${""}          | ${"required"}
         ${"retrieveDaysInput"}     | ${"dog"}       | ${"must be a number"}
         ${"retrieveDaysInput"}     | ${"-1"}        | ${"between 1 and 7"}
         ${"retrieveDaysInput"}     | ${"0"}         | ${"between 1 and 7"}
         ${"retrieveDaysInput"}     | ${"8"}         | ${"between 1 and 7"}
-        ${"reviewsPerInput"}       | ${""}          | ${"required"}
         ${"reviewsPerInput"}       | ${"dog"}       | ${"must be a number"}
         ${"reviewsPerInput"}       | ${"-1"}        | ${"between 10 and 500"}
         ${"reviewsPerInput"}       | ${"0"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}       | ${"9"}         | ${"between 10 and 500"}
         ${"reviewsPerInput"}       | ${"501"}       | ${"between 10 and 500"}
-        ${"apprenticeItemsInput"}  | ${""}          | ${"required"}
         ${"apprenticeItemsInput"}  | ${"dog"}       | ${"must be a number"}
         ${"apprenticeItemsInput"}  | ${"-1"}        | ${"between 10 and 300"}
         ${"apprenticeItemsInput"}  | ${"0"}         | ${"between 10 and 300"}
         ${"apprenticeItemsInput"}  | ${"9"}         | ${"between 10 and 300"}
         ${"apprenticeItemsInput"}  | ${"301"}       | ${"between 10 and 300"}
-        ${"acceptableMissesInput"} | ${""}          | ${"required"}
         ${"acceptableMissesInput"} | ${"dog"}       | ${"must be a number"}
         ${"acceptableMissesInput"} | ${"-1"}        | ${"between 0 and 30"}
         ${"acceptableMissesInput"} | ${"31"}        | ${"between 0 and 30"}
+        ${"newKanjiWeightInput"}   | ${"dog"}       | ${"must be a number"}
+        ${"newKanjiWeightInput"}   | ${"-1"}        | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeightInput"}   | ${"0"}         | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeightInput"}   | ${"1"}         | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeightInput"}   | ${"0.11"}      | ${"between 0.01 and 0.1"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {

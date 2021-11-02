@@ -13,6 +13,7 @@
       reviewsPer: "",
       apprenticeItems: "",
       acceptableMisses: "",
+      newKanjiWeight: "",
     },
     validationSchema: yup.object().shape({
       apiKey: yup
@@ -24,30 +25,32 @@
         .number()
         .typeError("Must be a number")
         .nullable()
-        .required("Required field")
         .min(1, "Must be between 1 and 7")
         .max(7, "Must be between 1 and 7"),
       reviewsPer: yup
         .number()
         .typeError("Must be a number")
         .nullable()
-        .required("Required field")
         .min(10, "Must be between 10 and 500")
         .max(500, "Must be between 10 and 500"),
       apprenticeItems: yup
         .number()
         .typeError("Must be a number")
         .nullable()
-        .required("Required field")
         .min(10, "Must be between 10 and 300")
         .max(300, "Must be between 10 and 300"),
       acceptableMisses: yup
         .number()
         .typeError("Must be a number")
         .nullable()
-        .required("Required field")
         .min(0, "Must be between 0 and 30")
         .max(30, "Must be between 0 and 30"),
+      newKanjiWeight: yup
+        .number()
+        .typeError("Must be a number")
+        .nullable()
+        .min(0.01, "Must be between 0.01 and 0.1")
+        .max(0.1, "Must be between 0.01 and 0.1"),
     }),
     onSubmit: values => {
       settings.set(values);
@@ -166,7 +169,17 @@
     {/if}
 
     <label for="newKanjiWeight">Weighting factor for new kanji</label>
-    <input type="number" name="newKanjiWeight" id="newKanjiWeight"/>
+    <input 
+      type="number" 
+      name="newKanjiWeight" 
+      id="newKanjiWeight"
+      on:change={handleChange}
+      on:blur={handleChange}
+      bind:value={$form.newKanjiWeight}
+    />
+    {#if $errors.newKanjiWeight}
+    <small>{$errors.newKanjiWeight}</small>
+    {/if}
 
     <label for="excessMissWeight">Weighting factor for excess misses</label>
     <input type="number" name="excessMissWeight" id="excessMissWeight"/>
