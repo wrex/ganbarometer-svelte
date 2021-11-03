@@ -75,7 +75,7 @@ describe("Settings Form", () => {
     let saveButton;
     let debug;
 
-    // Setup a form with valid input values
+    // Setup a form with valid input values, and grab the inputs
     const setup = () => {
       const { formDebug } = render(SettingsForm);
       debug = formDebug;
@@ -96,25 +96,29 @@ describe("Settings Form", () => {
       userEvent.type(inputs.apiKey, "78ca70da-d268-4100-96ad-696014a53231");
     };
 
-    it("saves valid API token to settings store", async () => {
-      setup();
-      userEvent.clear(inputs.apiKey);
-      userEvent.type(inputs.apiKey, "ffffffff-d268-4100-96ad-696014a53231");
-      userEvent.click(saveButton);
-      await waitFor(() => {
-        const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
-        expect(stored.apiKey).toEqual("ffffffff-d268-4100-96ad-696014a53231");
+    describe("settings in localstorage", () => {
+      beforeEach(() => {
+        window.localStorage.setItem("gbSettings", "{}");
       });
-    });
 
-    it("saves valid retrieveDays to settings store", async () => {
-      setup();
-      userEvent.clear(inputs.retrieveDays);
-      userEvent.type(inputs.retrieveDays, "5");
-      userEvent.click(saveButton);
-      await waitFor(() => {
-        const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
-        expect(stored.retrieveDays).toEqual("5");
+      test.each`
+        input                 | value
+        ${"apiKey"}           | ${"ffffffff-d268-4100-96ad-696014a53231"}
+        ${"retrieveDays"}     | ${"5"}
+        ${"reviewsPer"}       | ${"123"}
+        ${"apprenticeItems"}  | ${"231"}
+        ${"acceptableMisses"} | ${"17"}
+        ${"newKanjiWeight"}   | ${"0.07"}
+        ${"excessMissWeight"} | ${"0.08"}
+      `("$input stores $value to localstorage", async ({ input, value }) => {
+        setup();
+        userEvent.clear(inputs[input]);
+        userEvent.type(inputs[input], value);
+        userEvent.click(saveButton);
+        await waitFor(() => {
+          const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
+          expect(stored[input]).toEqual(value);
+        });
       });
     });
 
