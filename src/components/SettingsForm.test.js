@@ -6,6 +6,7 @@ import SettingsForm from "./SettingsForm.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { settings } from "../store/stores";
 
 describe("Settings Form", () => {
   describe("layout", () => {
@@ -97,10 +98,23 @@ describe("Settings Form", () => {
 
     it("saves valid API token to settings store", async () => {
       setup();
-      await userEvent.click(saveButton);
+      userEvent.clear(inputs.apiKey);
+      userEvent.type(inputs.apiKey, "ffffffff-d268-4100-96ad-696014a53231");
+      userEvent.click(saveButton);
       await waitFor(() => {
         const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
-        expect(stored.apiKey).toEqual("78ca70da-d268-4100-96ad-696014a53231");
+        expect(stored.apiKey).toEqual("ffffffff-d268-4100-96ad-696014a53231");
+      });
+    });
+
+    it("saves valid retrieveDays to settings store", async () => {
+      setup();
+      userEvent.clear(inputs.retrieveDays);
+      userEvent.type(inputs.retrieveDays, "5");
+      userEvent.click(saveButton);
+      await waitFor(() => {
+        const stored = JSON.parse(window.localStorage.getItem("gbSettings"));
+        expect(stored.retrieveDays).toEqual("5");
       });
     });
 
