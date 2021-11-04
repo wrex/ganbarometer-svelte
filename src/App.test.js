@@ -55,7 +55,7 @@ describe("Interaction", () => {
   it("renders a placeholder if no API token is stored", () => {
     settings.set({ apiKey: "" });
     render(App);
-    const placeHolder = screen.getByText(/enter a valid api token/i);
+    const placeHolder = screen.getByText(/enter a valid token/i);
     expect(placeHolder).toBeInTheDocument();
   });
 

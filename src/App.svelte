@@ -4,22 +4,19 @@
   import Modal, {getModal} from './components/Modal.svelte'
   import {settings, validApiToken } from "./store/stores";
 
-  // let apiKey = "";
-
-  // settings.subscribe((state) => {
-  //   apiKey = state.apiKey;
-  // })
-
+  $: placeholderText = validApiToken($settings.apiKey) 
+      ? ""
+      : "Valid API token not found. Please enter a valid token in settings.";
 </script>
 
 <section data-testid="ganbarometer">
-  {#if validApiToken($settings.apiKey)}
-  <Ganbarometer />
-  {:else}
+  {#if placeholderText}
   <div class="placeholder">
     <h2>GanbarOmeter</h2>  
-    <p>Valid API token not found. Please enter a valid API token in settings.</p>
+    <p>{placeholderText}</p>
   </div>
+  {:else}
+  <Ganbarometer />
   {/if}
   <div class="footer">
     The API key is '{$settings.apiKey}'
