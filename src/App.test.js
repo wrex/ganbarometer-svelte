@@ -5,8 +5,15 @@
 import App from "./App.svelte";
 import { render, screen } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
+import { settings } from "./store/stores";
 
 describe("App layout", () => {
+  beforeAll(() => {
+    settings.set({
+      apiKey: "78ca70da-d268-4100-96ad-696014a53231",
+    });
+  });
+
   it("creates a section for the ganbarometer", () => {
     render(App);
     const gbSection = screen.getByTestId("ganbarometer");
@@ -45,7 +52,12 @@ describe("App layout", () => {
 });
 
 describe("Interaction", () => {
-  it.todo("renders a placeholder if nothing cached");
+  it("renders a placeholder if no API token is stored", () => {
+    settings.set({ apiKey: "" });
+    render(App);
+    const placeHolder = screen.getByText(/enter a valid api token/i);
+    expect(placeHolder).toBeInTheDocument();
+  });
 
   it("replaces the ganbarometer with settings form when button clicked", async () => {
     render(App);

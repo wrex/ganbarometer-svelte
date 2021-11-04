@@ -2,7 +2,7 @@
   import Ganbarometer from "./components/Ganbarometer.svelte";
   import SettingsForm from "./components/SettingsForm.svelte";
   import Modal, {getModal} from './components/Modal.svelte'
-  import {settings} from "./store/stores";
+  import {settings, validApiToken } from "./store/stores";
 
   let apiKey = "";
 
@@ -13,7 +13,15 @@
 </script>
 
 <section data-testid="ganbarometer">
+  {#if validApiToken($settings.apiKey)}
   <Ganbarometer />
+  {:else}
+  <div class="placeholder">
+    <h2>GanbarOmeter</h2>  
+    <p>Please enter a valid API token in the settings.</p>
+    <p>{$settings.apiKey}</p>
+  </div>
+  {/if}
   <div class="footer">
     The API key is '{apiKey}'
     <button aria-label="settings" on:click={() => getModal().open()}>
@@ -55,9 +63,15 @@
     align-items: stretch;
     padding: 0;
   }
-  .footer {
+  .footer, .placeholder {
     grid-column: 1 / span 6;
     text-align: center;
     margin: 0;
+  }
+
+  .placeholder {
+    height: 150px;
+    color: red;
+    align-content: center;
   }
 </style>
