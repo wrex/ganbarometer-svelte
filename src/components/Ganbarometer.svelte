@@ -1,6 +1,7 @@
 <script>
   import Gauge from "../components/Gauge.svelte";
   import BarChart from "../components/BarChart.svelte";
+  import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
 </script>
 
 <div class="difficulty">
@@ -9,11 +10,7 @@
   <p>Difficulty footer</p>
 </div>
 
-<div class="reviews-per-day">
-  <h1>Reviews/Day</h1>
-  <Gauge value={0.65} label="127" />
-  <p>Reviews/day footer</p>
-</div>
+<ReviewsPerDayGauge />
 
 <div class="review-intervals">
   <h1>Review Intervals</h1>
