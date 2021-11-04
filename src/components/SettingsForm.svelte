@@ -1,11 +1,11 @@
 <script type="ts">
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
-  import { settings, defaults, APITOKENREGEX } from '../store/stores';
+  import { settings, APITOKENREGEX } from '../store/stores';
   import { getModal } from './Modal.svelte';
 
   const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
-    initialValues: defaults,
+    initialValues: $settings,
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
