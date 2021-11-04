@@ -27,10 +27,10 @@ interface Settings {
 export const defaults: Settings = {
   apiKey: "",
   retrieveDays: "3",
-  bgColor: "",
-  fillColor: "",
-  warnColor: "",
-  alertColor: "",
+  bgColor: "#000000",
+  fillColor: "#00ff00",
+  warnColor: "#ffff00",
+  alertColor: "#ff0000",
   reviewsPer: "150",
   apprenticeItems: "100",
   acceptableMisses: "20",
@@ -39,6 +39,7 @@ export const defaults: Settings = {
   reviewSessions: "sessions",
 };
 
+// Grab any settings already stored in browser's local storage
 const storedSettings: Settings =
   JSON.parse(window.localStorage.getItem(LOCALSTORAGEKEY)) || {};
 
@@ -48,30 +49,7 @@ if (!storedSettings.apiKey) {
     window.localStorage.getItem("apiv2_key")?.toString() || "";
 }
 
-export const settings = writable({
-  apiKey: storedSettings.apiKey ? storedSettings.apiKey : "",
-  retrieveDays: storedSettings.retrieveDays ? storedSettings.retrieveDays : "",
-  bgColor: storedSettings.bgColor ? storedSettings.bgColor : "",
-  fillColor: storedSettings.fillColor ? storedSettings.fillColor : "",
-  warnColor: storedSettings.warnColor ? storedSettings.warnColor : "",
-  alertColor: storedSettings.alertColor ? storedSettings.alertColor : "",
-  reviewsPer: storedSettings.reviewsPer ? storedSettings.reviewsPer : "",
-  apprenticeItems: storedSettings.apprenticeItems
-    ? storedSettings.apprenticeItems
-    : "",
-  acceptableMisses: storedSettings.acceptableMisses
-    ? storedSettings.acceptableMisses
-    : "",
-  newKanjiWeight: storedSettings.newKanjiWeight
-    ? storedSettings.newKanjiWeight
-    : "",
-  excessMissWeight: storedSettings.excessMissWeight
-    ? storedSettings.excessMissWeight
-    : "",
-  reviewSessions: storedSettings.reviewSessions
-    ? storedSettings.reviewSessions
-    : "",
-});
+export const settings = writable({ ...defaults, ...storedSettings });
 
 settings.subscribe((value) => {
   window.localStorage.setItem(LOCALSTORAGEKEY, JSON.stringify(value));
