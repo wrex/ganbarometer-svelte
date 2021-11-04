@@ -19,7 +19,8 @@ let meta = {
   resource: {
     css: pathToFileURL(path.join(baseUrl, "bundle.css")),
   },
-  match: ["https://www.wanikani.com/dashboard"],
+  // match: ["https://www.wanikani.com/dashboard"],
+  include: ["/^https://(www|preview).wanikani.com/(dashboard)?$/"],
   grant: ["GM_addStyle", "GM_getResourceText", "GM_xmlhttpRequest"],
   connect: ["github.com"],
   "run-at": "document-idle",
