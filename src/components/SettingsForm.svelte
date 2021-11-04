@@ -1,32 +1,16 @@
 <script type="ts">
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
-  import { settings } from '../store/stores';
-import { getModal } from './Modal.svelte';
-  // import * as api from "../API/core";
-
-  const storedSettings = JSON.parse(window.localStorage.getItem("gbSettings"));
+  import { settings, defaults, APITOKENREGEX } from '../store/stores';
+  import { getModal } from './Modal.svelte';
 
   const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
-    initialValues: {
-      apiKey: "",
-      retrieveDays: "3",
-      reviewsPer: "150",
-      apprenticeItems: "100",
-      acceptableMisses: "20",
-      newKanjiWeight: "0.05",
-      excessMissWeight: "0.03",
-      bgColor: "#cccccc",
-      fillColor: "#00ff00",
-      warnColor: "#ffff00",
-      alertColor: "#ff0000",
-      reviewSessions: "sessions",
-    },
+    initialValues: defaults,
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
         .nullable()
-        .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid API token")
+        .matches(APITOKENREGEX, "Invalid API token")
         .required("Required field"),
       retrieveDays: yup
         .number()
