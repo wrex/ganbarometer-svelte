@@ -6,7 +6,6 @@ import SettingsForm from "./SettingsForm.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import { settings } from "../store/stores";
 
 describe("Settings Form", () => {
   describe("layout", () => {
@@ -73,12 +72,10 @@ describe("Settings Form", () => {
   describe("interaction", () => {
     let inputs;
     let saveButton;
-    let debug;
 
     // Setup a form with valid input values, and grab the inputs
     const setup = () => {
-      const { formDebug } = render(SettingsForm);
-      debug = formDebug;
+      const { debug } = render(SettingsForm);
 
       inputs = {
         apiKey: screen.getByLabelText(/api key/i),
@@ -93,12 +90,16 @@ describe("Settings Form", () => {
       };
 
       saveButton = screen.getByRole("button", { name: "Save" });
-      userEvent.type(inputs.apiKey, "78ca70da-d268-4100-96ad-696014a53231");
+      userEvent.type(
+        inputs.apiKey,
+        "{selectall}78ca70da-d268-4100-96ad-696014a53231"
+      );
     };
 
     describe("settings in localstorage", () => {
+      // clear localstorage before each test!
       beforeEach(() => {
-        window.localStorage.setItem("gbSettings", "{}");
+        window.localStorage.removeItem("gbSettings");
       });
 
       test.each`
