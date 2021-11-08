@@ -16,7 +16,7 @@ export const dayStartDaysAgo = (n: number = 0): Date => {
 };
 
 // getReviews(token, n) return n days of reviews
-export const getReviews = async (token: string, daysBack: number = 3) => {
+export const getReviews = (token: string, daysBack: number = 3) => {
   const time = dayStartDaysAgo(daysBack).toISOString();
 
   const requestHeaders = new Headers({

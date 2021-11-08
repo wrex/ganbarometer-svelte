@@ -1,6 +1,9 @@
 import { writable } from "svelte/store";
 
-export const LOCALSTORAGEKEY = "gbSettings";
+// Keys/indexes into localstorage
+export const SETTINGSKEY = "gbSettings";
+export const TOKENKEY = "gbApiToken";
+
 export const APITOKENREGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -12,10 +15,8 @@ export const validApiToken = (token) => {
 const wkofKey = localStorage.getItem("apiv2_key") ?? "";
 
 // Store #1: the API token for https://docs.api.wanikani.com)
-export const gbApiToken = writable(
-  localStorage.getItem("gbApiToken") ?? wkofKey
-);
-gbApiToken.subscribe((val) => localStorage.setItem("gbApiToken", val));
+export const gbApiToken = writable(localStorage.getItem(TOKENKEY) ?? wkofKey);
+gbApiToken.subscribe((val) => localStorage.setItem(TOKENKEY, val));
 
 export const defaultSettings = {
   retrieveDays: "3",
@@ -33,8 +34,8 @@ export const defaultSettings = {
 
 // Store #2: the user settings for Ganbarometer
 export const gbSettings = writable(
-  localStorage.getItem("gbSettings") ?? defaultSettings
+  JSON.parse(localStorage.getItem(SETTINGSKEY)) ?? defaultSettings
 );
 gbSettings.subscribe((val) =>
-  localStorage.setItem("gbSettings", JSON.stringify(val))
+  localStorage.setItem(SETTINGSKEY, JSON.stringify(val))
 );

@@ -1,11 +1,11 @@
 <script type="ts">
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
-  import { settings, APITOKENREGEX } from '../store/stores';
+  import { gbApiToken, gbSettings, APITOKENREGEX } from '../store/stores';
   import { getModal } from './Modal.svelte';
 
   const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
-    initialValues: $settings,
+    initialValues: {apiKey: $gbApiToken, ...$gbSettings},
     validationSchema: yup.object().shape({
       apiKey: yup
         .string()
@@ -53,7 +53,8 @@
       reviewSessions: yup.string(),
     }),
     onSubmit: values => {
-      settings.set(values);
+      gbApiToken.set(values.apiKey);
+      gbSettings.set(values);
       getModal().close();
     }
   });

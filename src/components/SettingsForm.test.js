@@ -6,7 +6,7 @@ import SettingsForm from "./SettingsForm.svelte";
 import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import { LOCALSTORAGEKEY } from "../store/stores";
+import { SETTINGSKEY } from "../store/stores";
 
 describe("Settings Form", () => {
   describe("layout", () => {
@@ -79,7 +79,7 @@ describe("Settings Form", () => {
     describe("settings in localstorage", () => {
       // clear localstorage before each test!
       beforeEach(() => {
-        window.localStorage.removeItem(LOCALSTORAGEKEY);
+        localStorage.removeItem("gbSettings");
       });
 
       test.each`
@@ -97,9 +97,7 @@ describe("Settings Form", () => {
         userEvent.type(inputs[input], value);
         userEvent.click(saveButton);
         await waitFor(() => {
-          const stored = JSON.parse(
-            window.localStorage.getItem(LOCALSTORAGEKEY)
-          );
+          const stored = JSON.parse(localStorage.getItem(SETTINGSKEY));
           expect(stored[input]).toEqual(value);
         });
       });
