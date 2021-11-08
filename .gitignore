@@ -4,3 +4,4 @@ coverage/
 *.js.map
 *.js
 !*.test.js
+!src/store/stores.js
