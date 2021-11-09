@@ -2,8 +2,10 @@
  * @jest-environment jsdom
  */
 
-import { dayStartDaysAgo, getReviews } from "./ReviewCache";
+import { dayStartDaysAgo, fetchReviews } from "./ReviewCache";
 import { jest } from "@jest/globals";
+import { setupServer } from "msw/node";
+import { rest } from "msw";
 
 jest.useFakeTimers("modern");
 
@@ -19,29 +21,34 @@ describe("dayStartDaysAgo()", () => {
   });
 });
 
-// describe("getReviews()", () => {
-//   let requestBody = {};
-//   let requestHeaders = {};
-//   const server = setupServer(
-//     rest.get("https://api.wanikani.com/v2/reviews", (req, res, ctc) => {
-//       requestBody = req.body;
-//       requestHeaders = req.headers;
-//       return res(ctx.status(200));
-//     })
-//   );
+describe("fetchReviews()", () => {
+  const params = {
+    updated_after: 0,
+  };
+  const server = setupServer(
+    rest.get("https://api.wanikani.com/v2/reviews", async (req, res, ctx) => {
+      console.log(JSON.stringify(req.params));
+      params.updated_after = req.url.searchParams.get("updated_after");
+      return res(ctx.status(200));
+    })
+  );
 
-//   beforeAll(() => {
-//     settings.set({
-//       apiKey: "78ca70da-d268-4100-96ad-696014a53231",
-//     });
-//     server.listen();
-//   });
-//   afterAll(() => {
-//     server.close();
-//   });
+  beforeAll(() => {
+    server.listen();
+  });
 
-//   it("requests reviews for past 3 days by default", async () => {
-//     const reviews = await getReviews();
-//     expect(requestHeaders.updated_after).toMatch(/^Wed Oct 02 2019 00:00:00/);
-//   });
-// });
+  beforeEach(() => {
+    jest.setSystemTime(new Date("05 Oct 2019 01:02:03").getTime());
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("requests reviews for past 3 days by default", async () => {
+    const reviews = await fetchReviews("78ca70da-d268-4100-96ad-696014a53231");
+    expect(params.updated_after).toEqual(
+      new Date("Wed Oct 02 2019 00:00:00").toISOString()
+    );
+  });
+});

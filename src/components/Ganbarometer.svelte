@@ -2,12 +2,6 @@
   import Gauge from "../components/Gauge.svelte";
   import BarChart from "../components/BarChart.svelte";
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
-
-  // (async () => {
-  //   const reviews = await getReviews($gbApiToken, 0);
-  //   console.log(reviews);
-  // })();
-  
 </script>
 
 <div class="difficulty">

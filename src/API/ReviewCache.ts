@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /* dayStartDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
  * e.g. if now is 11/5/2021 01:02:03 local time,
@@ -15,22 +17,19 @@ export const dayStartDaysAgo = (n: number = 0): Date => {
   return new Date(midnight - n * 24 * 3600 * 1000);
 };
 
-// getReviews(token, n) return n days of reviews
-export const getReviews = (token: string, daysBack: number = 3) => {
+// fetch raw reviews via the wanikani API
+export const fetchReviews = (token: string, daysBack: number = 3) => {
   const time = dayStartDaysAgo(daysBack).toISOString();
 
-  const requestHeaders = new Headers({
-    "Wanikani-Revision": "20170710",
-    Authorization: `Bearer ${token}`,
+  const endpoint = "https://api.wanikani.com/v2/reviews";
+
+  return axios.get(endpoint, {
+    params: {
+      updated_after: time,
+    },
+    headers: {
+      "Wanikani-Revision": "20170710",
+      Authorization: `Bearer ${token}`,
+    },
   });
-
-  const apiEndpoint = new Request(
-    `https://api.wanikani.com/v2/reviews?updated_after=${time}`,
-    {
-      method: "GET",
-      headers: requestHeaders,
-    }
-  );
-
-  return fetch(apiEndpoint).then((res) => res.json());
 };
