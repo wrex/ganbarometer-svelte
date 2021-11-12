@@ -25,6 +25,7 @@
     "@types/jest": "^27.0.2",
     "@types/tampermonkey": "^4.0.0",
     "babel-jest": "^27.1.0",
+    "fake-indexeddb": "^3.1.7",
     "faker": "^5.5.3",
     "jest": "^27.1.0",
     "magic-string": "^0.25.7",
@@ -58,11 +59,15 @@
     ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-dom/extend-expect"
+    ],
+    "setupFiles": [
+      "fake-indexeddb/auto"
     ]
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",
     "axios": "^0.24.0",
+    "localforage": "^1.10.0",
     "svelte-forms-lib": "^1.10.7",
     "yup": "^0.32.11"
   }
