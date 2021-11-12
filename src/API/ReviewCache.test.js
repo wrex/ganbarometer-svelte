@@ -7,6 +7,8 @@ import { jest } from "@jest/globals";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { wkApiFactory } from "../mocks/reviews";
+import localforage from "localforage";
+import FDBFactory from "fake-indexeddb";
 
 jest.useFakeTimers("modern");
 
@@ -66,14 +68,17 @@ describe("fetchReviews()", () => {
   describe("cacheing behavior", () => {
     beforeAll(() => {
       // Generate 5 reviews with ids 101 - 105
-      for (let i = 3; i > 0; i--) {
+      for (let i = 1; i <= 3; i++) {
         wkApiFactory.review.create({
           id: 100 + i,
           url: `https://api.wanikani.com/v2/reviews/${100 + i}`,
         });
       }
     });
-    fit("caches a single page of return values", async () => {
+    beforeEach(() => {
+      indexedDB = () => new FDBFactory();
+    });
+    it("caches a single page of return values", async () => {
       server.use(
         rest.get("https://api.wanikani.com/v2/reviews", (req, res, ctx) => {
           return res(
@@ -97,46 +102,20 @@ describe("fetchReviews()", () => {
       );
       const reviews = response.data.data;
       expect(reviews.length).toBe(3);
-      expect(response.data.total_count).toBe(reviews.length);
-      const first = wkApiFactory.review.findFirst({
-        where: {
-          id: {
-            equals: 101,
-          },
-        },
-      });
-      console.log(JSON.stringify(first, null, 2));
+      const cachedReviews = await localforage.getItem("gb_review_cache");
+      expect(cachedReviews.length).toBe(3);
+      expect(cachedReviews[0].id).toBe(101);
+      expect(cachedReviews[1].id).toBe(102);
+      expect(cachedReviews[2].id).toBe(103);
+
+      let subjectId = wkApiFactory.review.findFirst({
+        where: { id: { equals: 101 } },
+      }).data.subject_id;
+      expect(cachedReviews[0].data.subject_id).toBe(subjectId);
     });
     it.todo("caches each page of data if paginated");
     it.todo("returns cached values if present and nothing newer");
     it.todo("only retrieves newer values than what is cached");
-    let totalCount;
-    let pages;
-    xit("gets both pages of results if server returns two", async () => {
-      // server.use(
-      //   rest.get(
-      //     "https://api.wanikani.com/v2/reviews",
-      //     async (req, res, ctx) => {
-      //       const review = wkApiV2Factory.review.create();
-      //       return res(
-      //         ctx.status(200),
-      //         ctx.json({
-      //           total_count: 1,
-      //           data: review,
-      //         })
-      //       );
-      //     }
-      //   )
-      // );
-      // const reviews = await fetchReviews(
-      //   "78ca70da-d268-4100-96ad-696014a53231"
-      // );
-
-      // not implemented yet
-      // expect(reviews.data.data).toBe(1);
-      const review = wkApiFactory.review.create();
-      // const review = wkApiV2Factory.review.create();
-      expect(review).toEqual("foo");
-    });
+    it.todo("gets both pages of results if server returns two");
   });
 });

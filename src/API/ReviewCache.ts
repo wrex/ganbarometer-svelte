@@ -1,4 +1,5 @@
 import axios from "axios";
+import localforage from "localforage";
 
 /* dayStartDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
@@ -18,12 +19,12 @@ export const dayStartDaysAgo = (n: number = 0): Date => {
 };
 
 // fetch raw reviews via the wanikani API
-export const fetchReviews = (token: string, daysBack: number = 3) => {
+export const fetchReviews = async (token: string, daysBack: number = 3) => {
   const time = dayStartDaysAgo(daysBack).toISOString();
 
   const endpoint = "https://api.wanikani.com/v2/reviews";
 
-  return axios.get(endpoint, {
+  const response = await axios.get(endpoint, {
     params: {
       updated_after: time,
     },
@@ -32,4 +33,7 @@ export const fetchReviews = (token: string, daysBack: number = 3) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  // Broken super-simple implementation for first green
+  let result = await localforage.setItem("gb_review_cache", response.data.data);
+  return response;
 };
