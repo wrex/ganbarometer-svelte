@@ -66,8 +66,6 @@
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",
-    "axios": "^0.24.0",
-    "localforage": "^1.10.0",
     "svelte-forms-lib": "^1.10.7",
     "yup": "^0.32.11"
   }

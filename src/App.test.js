@@ -26,7 +26,6 @@ describe("App layout", () => {
 
   it("has a Difficulty gauge", () => {
     render(App);
-    gbApiToken.subscribe((val) => console.log(val));
     const difficultyGauge = screen.getByRole("heading", {
       name: "Difficulty",
     });

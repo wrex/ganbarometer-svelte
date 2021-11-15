@@ -3,12 +3,12 @@
   import BarChart from "../components/BarChart.svelte";
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
   import {onMount} from 'svelte';
-  import {fetchReviews} from "../API/ReviewCache";
+  // import {fetchReviews} from "../API/ReviewCache";
   
-  onMount(async() => {
-    console.log(await fetchReviews("78ca70da-d268-4100-96ad-696014a53231"));
-    // debugger;
-  });
+  // onMount(async() => {
+  //   console.log(await fetchReviews("78ca70da-d268-4100-96ad-696014a53231"));
+  //   // debugger;
+  // });
 </script>
 
 <div class="difficulty">
