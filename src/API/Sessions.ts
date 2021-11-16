@@ -103,9 +103,11 @@ const processReviews = (reviews: RawReview[]) => {
     }
   });
 
-  // Just assume the final review took 30 seconds (no way to know)
+  // Just assume the final review took median time (no way to know for sure)
   if (results.length) {
-    results[results.length - 1].duration = 30000;
+    results[results.length - 1].duration = median(
+      results.map((r) => r.duration)
+    );
   }
 
   return results;
@@ -123,7 +125,6 @@ export const getSessions = (n: number = 3) => {
 
   // iterate through reviews, finding sessions closer than 10min apart
   let inSession = false;
-  console.log(JSON.stringify(reviews, null, 2));
   reviews.forEach((r) => {
     if (!inSession) {
       // First review - create a session object
