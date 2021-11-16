@@ -81,7 +81,14 @@ describe("getSessions()", () => {
     expect(sessions[0].reviews.length).toBe(1);
   });
 
-  it.todo("returns a duration of 600 seconds if only one review fetched");
+  it("returns a duration of 30 seconds if only one review fetched", () => {
+    reviews.mockReturnValue([wkApiFactory.review.create()]);
+    const sessions = getSessions();
+    expect(sessions[0].reviews.length).toBe(1);
+    expect(
+      sessions[0].endTime.getTime() - sessions[0].startTime.getTime()
+    ).toBe(30000);
+  });
 
   it("returns one session if two reviews together", () => {
     reviews.mockReturnValue([

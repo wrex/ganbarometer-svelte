@@ -37,8 +37,8 @@ interface Session {
   vocabulary: number;
   reading_incorrect: number;
   meaning_incorrect: number;
-  startTime: Date | number;
-  endTime: Date | number;
+  startTime: Date;
+  endTime: Date;
   reviews: Review[];
 }
 
@@ -144,7 +144,7 @@ export const getSessions = (n: number = 3) => {
     if (!inSequence) {
       // Start of session
       session.startTime = r.started;
-      session.endTime = r.started;
+      session.endTime = new Date(r.started);
       inSequence = true;
     } else if (r.duration >= 600000) {
       // Final review within a session
@@ -157,9 +157,14 @@ export const getSessions = (n: number = 3) => {
   if (inSequence) {
     // final review wasn't added
     if (sessions.length > 1) {
-      session.endTime = sessions[sessions.length - 1].endTime;
+      session.endTime = new Date(sessions[sessions.length - 1].endTime);
     }
     sessions.push(session);
+  }
+  // assume final review took 30s
+  if (sessions.length) {
+    session = sessions[sessions.length - 1];
+    session.endTime.setTime(session.endTime.getTime() + 30000);
   }
 
   return sessions;
