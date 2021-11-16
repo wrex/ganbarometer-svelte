@@ -35,6 +35,11 @@ describe("nDaysAgo()", () => {
 describe("getSessions()", () => {
   const origWkof = window.wkof;
 
+  const mockReview = (values, dataValues) => {
+    const mockData = wkApiFactory.reviewData.create({ ...dataValues });
+    return wkApiFactory.review.create({ ...values, data: mockData });
+  };
+
   let reviews;
   beforeAll(() => {
     // Make all tests start at a known point in time
@@ -70,19 +75,20 @@ describe("getSessions()", () => {
   });
 
   it("returns one session if only one review fetched", () => {
-    reviews.mockReturnValue([wkApiFactory.review.create()]);
+    // reviews.mockReturnValue([wkApiFactory.review.create()]);
+    reviews.mockReturnValue([mockReview()]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
   });
 
   it("returns the number of reviews in the sessions object", () => {
-    reviews.mockReturnValue([wkApiFactory.review.create()]);
+    reviews.mockReturnValue([mockReview()]);
     const sessions = getSessions();
     expect(sessions[0].reviews.length).toBe(1);
   });
 
   it("returns a duration of 30 seconds if only one review fetched", () => {
-    reviews.mockReturnValue([wkApiFactory.review.create()]);
+    reviews.mockReturnValue([mockReview()]);
     const sessions = getSessions();
     expect(sessions[0].reviews.length).toBe(1);
     expect(
@@ -92,10 +98,10 @@ describe("getSessions()", () => {
 
   it("returns one session if two reviews together", () => {
     reviews.mockReturnValue([
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-04T04:24:18.048Z",
       }),
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-04T04:25:18.048Z",
       }),
     ]);
@@ -104,10 +110,10 @@ describe("getSessions()", () => {
   });
   it("returns two sessions if two widely spaced reviews fetched", () => {
     reviews.mockReturnValue([
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-04T04:00:00.000Z",
       }),
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-05T04:00:00.000Z",
       }),
     ]);
@@ -116,13 +122,13 @@ describe("getSessions()", () => {
   });
   it("returns two sessions if string of 2 and 3 reviews", () => {
     reviews.mockReturnValue([
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-04T04:00:00.000Z",
       }),
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-04T04:01:00.000Z",
       }),
-      wkApiFactory.review.create({
+      mockReview({
         data_updated_at: "2019-10-05T04:00:00.000Z",
       }),
     ]);
@@ -130,5 +136,36 @@ describe("getSessions()", () => {
     expect(sessions.length).toBe(2);
     expect(sessions[0].reviews.length).toBe(2);
     expect(sessions[1].reviews.length).toBe(1);
+  });
+
+  it("sets final review to median duration of prior reviews", () => {
+    // durations of 40s, 20s, 30s, 20s, 10s => median 20s
+    reviews.mockReturnValue([
+      mockReview({
+        data_updated_at: "2019-10-04T00:00:00.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:00:40.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:01:00.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:01:30.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:01:50.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:02:10.000Z",
+      }),
+      mockReview({
+        data_updated_at: "2019-10-04T00:03:00.000Z",
+      }),
+    ]);
+    const sessions = getSessions();
+    expect(sessions.length).toBe(1);
+    expect(sessions[0].reviews.length).toBe(7);
+    expect(sessions[0].reviews[6].duration).toBe(20000);
   });
 });
