@@ -102,6 +102,33 @@ describe("getSessions()", () => {
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
   });
-  it.todo("returns two sessions if two widely spaced reviews fetched");
-  it.todo("returns two sessions if string of 2 and 3 reviews");
+  it("returns two sessions if two widely spaced reviews fetched", () => {
+    reviews.mockReturnValue([
+      wkApiFactory.review.create({
+        data_updated_at: "2019-10-04T04:00:00.000Z",
+      }),
+      wkApiFactory.review.create({
+        data_updated_at: "2019-10-05T04:00:00.000Z",
+      }),
+    ]);
+    const sessions = getSessions();
+    expect(sessions.length).toBe(2);
+  });
+  it("returns two sessions if string of 2 and 3 reviews", () => {
+    reviews.mockReturnValue([
+      wkApiFactory.review.create({
+        data_updated_at: "2019-10-04T04:00:00.000Z",
+      }),
+      wkApiFactory.review.create({
+        data_updated_at: "2019-10-04T04:01:00.000Z",
+      }),
+      wkApiFactory.review.create({
+        data_updated_at: "2019-10-05T04:00:00.000Z",
+      }),
+    ]);
+    const sessions = getSessions();
+    expect(sessions.length).toBe(2);
+    expect(sessions[0].reviews.length).toBe(2);
+    expect(sessions[1].reviews.length).toBe(1);
+  });
 });

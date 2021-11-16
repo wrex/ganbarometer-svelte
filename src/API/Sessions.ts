@@ -91,7 +91,7 @@ const processReviews = (reviews: RawReview[]) => {
   });
 
   // Need to look at next review to calculate duration
-  // Note: last review has a duration of 0 mS
+  // Note: last review ends with a duration of 0 mS
   results.forEach((r, i) => {
     if (results[i + 1]) {
       const nextTime = results[i + 1].started.getTime();
@@ -103,58 +103,68 @@ const processReviews = (reviews: RawReview[]) => {
     }
   });
 
-  // Results are ordered in time sequence
-  // Want to create an array of indices where new sessions start
-  // need to know the smallest duration
-  // Define as median + 2 sigma (with max duration clamped at 10 minutes)
-  let durations = results.map((r) => r.duration);
-  let medianInterval = median(durations);
+  // Just assume the final review took 30 seconds (no way to know)
+  if (results.length) {
+    results[results.length - 1].duration = 30000;
+  }
 
-  return { median: medianInterval, reviews: results };
+  return results;
 };
 
 export const getSessions = (n: number = 3) => {
   const rawReviews: RawReview[] = wkof.Apiv2.fetch_endpoint("reviews", {
     last_update: nDaysAgo(n),
   });
-  const { median, reviews } = processReviews(rawReviews);
+  const reviews = processReviews(rawReviews);
 
   const sessions = [] as Session[];
 
-  let session: Session = {
-    startTime: 0,
-    endTime: 0,
-    questions: 0,
-    radicals: 0,
-    kanji: 0,
-    vocabulary: 0,
-    reading_incorrect: 0,
-    meaning_incorrect: 0,
-    reviews: [],
-  };
+  let session: Session;
 
   // iterate through reviews, finding sessions closer than 10min apart
-  let inSequence = false;
+  let inSession = false;
+  console.log(JSON.stringify(reviews, null, 2));
   reviews.forEach((r) => {
-    session.reading_incorrect += r.reading_incorrect;
-    session.meaning_incorrect += r.meaning_incorrect;
-    session.questions += 2 + r.reading_incorrect + r.meaning_incorrect;
-    session.kanji += 1; // TODO
-    session.reviews.push(r);
-    if (!inSequence) {
-      // Start of session
-      session.startTime = r.started;
-      session.endTime = new Date(r.started);
-      inSequence = true;
+    if (!inSession) {
+      // First review - create a session object
+      session = {
+        startTime: r.started,
+        endTime: new Date(r.started),
+        questions: 2,
+        radicals: 0,
+        kanji: 1, // TODO
+        vocabulary: 0,
+        reading_incorrect: r.reading_incorrect,
+        meaning_incorrect: r.meaning_incorrect,
+        reviews: [r],
+      };
+      if (r.duration >= 600000) {
+        // this is only review in the session
+        sessions.push(session);
+        inSession = false;
+      } else {
+        inSession = true; // loop to get other reviews
+      }
     } else if (r.duration >= 600000) {
-      // Final review within a session
+      // This is final review within a session
+      session.reading_incorrect += r.reading_incorrect;
+      session.meaning_incorrect += r.meaning_incorrect;
+      session.questions += 2 + r.reading_incorrect + r.meaning_incorrect;
+      session.kanji += 1; // TODO
+      session.reviews.push(r);
       session.endTime = r.started;
       sessions.push(session);
-      inSequence = false;
+      inSession = false;
+    } else {
+      // In the middle of a sequence
+      session.reading_incorrect += r.reading_incorrect;
+      session.meaning_incorrect += r.meaning_incorrect;
+      session.questions += 2 + r.reading_incorrect + r.meaning_incorrect;
+      session.kanji += 1; // TODO
+      session.reviews.push(r);
     }
-    // In the middle of a sequence, just loop
   });
-  if (inSequence) {
+  if (inSession) {
     // final review wasn't added
     if (sessions.length > 1) {
       session.endTime = new Date(sessions[sessions.length - 1].endTime);
@@ -163,8 +173,9 @@ export const getSessions = (n: number = 3) => {
   }
   // assume final review took 30s
   if (sessions.length) {
-    session = sessions[sessions.length - 1];
-    session.endTime.setTime(session.endTime.getTime() + 30000);
+    let finalSession = sessions[sessions.length - 1];
+    let finalReview = session.reviews[session.reviews.length - 1];
+    finalSession.endTime.setTime(finalReview.started.getTime() + 30000);
   }
 
   return sessions;
