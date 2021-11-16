@@ -6,10 +6,10 @@
   "homepage": "https://github.com/wrex/ganbarometer-svelte#readme",
   "scripts": {
     "build": "tsc && rollup -c",
-    "dev": "tsc && rollup -c -w",
-    "test": "tsc && jest src",
-    "test:watch": "tsc && npm run test -- --watch",
-    "check": "tsc && svelte-check --tsconfig ./tsconfig.json"
+    "dev": "rollup -c -w",
+    "test": "jest src",
+    "test:watch": "npm run test -- --watch",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
