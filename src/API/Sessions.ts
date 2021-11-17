@@ -93,7 +93,7 @@ const processReviews = (reviews: RawReview[]) => {
     const processed = {} as Review;
     processed.subject_id = r.data.subject_id;
 
-    processed.started = new Date(r.data_updated_at);
+    processed.started = new Date(r.data.created_at);
     processed.duration = 0;
     processed.reading_incorrect = +r.data.incorrect_reading_answers;
     processed.meaning_incorrect = +r.data.incorrect_meaning_answers;

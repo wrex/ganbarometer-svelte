@@ -101,39 +101,60 @@ describe("getSessions()", () => {
 
   it("returns one session if two reviews together", () => {
     mockReviewCollection([
-      mockReview({
-        data_updated_at: "2019-10-04T04:24:18.048Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T04:25:18.048Z",
-      }),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T04:24:18.048Z",
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T04:25:18.048Z",
+        }
+      ),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
   });
   it("returns two sessions if two widely spaced reviews fetched", () => {
     mockReviewCollection([
-      mockReview({
-        data_updated_at: "2019-10-04T04:00:00.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-05T04:00:00.000Z",
-      }),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T04:00:00.000Z",
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-05T04:00:00.000Z",
+        }
+      ),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(2);
   });
   it("returns two sessions if string of 2 and 3 reviews", () => {
     mockReviewCollection([
-      mockReview({
-        data_updated_at: "2019-10-04T04:00:00.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T04:01:00.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-05T04:00:00.000Z",
-      }),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T04:00:00.000Z",
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T04:01:00.000Z",
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-05T04:00:00.000Z",
+        }
+      ),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(2);
@@ -144,27 +165,48 @@ describe("getSessions()", () => {
   it("sets final review to median duration of prior reviews", () => {
     // durations of 40s, 20s, 30s, 20s, 10s => median 20s
     mockReviewCollection([
-      mockReview({
-        data_updated_at: "2019-10-04T00:00:00.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:00:40.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:01:00.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:01:30.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:01:50.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:02:10.000Z",
-      }),
-      mockReview({
-        data_updated_at: "2019-10-04T00:03:00.000Z",
-      }),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:00:00.000Z", // 40s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:00:40.000Z", // 20s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:01:00.000Z", // 30s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:01:30.000Z", // 20s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:01:50.000Z", // 20s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:02:10.000Z", // 10s duration
+        }
+      ),
+      mockReview(
+        {},
+        {
+          created_at: "2019-10-04T00:02:20.000Z", // unknown duration
+        }
+      ),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
