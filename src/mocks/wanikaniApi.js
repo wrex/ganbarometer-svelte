@@ -1,0 +1,28 @@
+import { factory, primaryKey, oneOf } from "@mswjs/data";
+import { mersenne, date, datatype } from "faker";
+
+// Randomness seed to ensure faker returns same values every run
+mersenne.seed(12345);
+
+export const wkApiFactory = factory({
+  reviewData: {
+    created_at: primaryKey(() => date.past(3)),
+    assignment_id: () => datatype.number({ max: 999999 }),
+    spaced_repetition_system_id: () => datatype.number({ max: 9 }),
+    subject_id: () => datatype.number({ max: 9000 }),
+    starting_srs_stage: () => datatype.number({ max: 9 }),
+    ending_srs_stage: () => datatype.number({ max: 9 }),
+    incorrect_meaning_answers: () => datatype.number({ max: 3 }),
+    incorrect_reading_answers: () => datatype.number({ max: 3 }),
+  },
+  review: {
+    id: primaryKey(() => datatype.number({ max: 999999 })),
+    object: () => "review",
+    url: () =>
+      `https://api.wanikani.com/v2/reviews/${datatype.number({ max: 999999 })}`,
+    data_updated_at: () => date.past(1),
+    data: oneOf("reviewData"),
+  },
+});
+
+// TODO: reviewCollection, subject, &tc.

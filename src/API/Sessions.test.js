@@ -4,7 +4,7 @@
 
 // import { jest } from "@jest/globals";
 import { getSessions, nDaysAgo } from "./Sessions";
-import { wkApiFactory } from "../mocks/reviews";
+import { wkApiFactory } from "../mocks/wanikaniApi";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
 
