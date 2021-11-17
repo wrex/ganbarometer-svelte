@@ -116,10 +116,11 @@ const processReviews = (reviews: RawReview[]) => {
     }
   });
 
-  // Just assume the final review took median time (no way to know for sure)
+  // Just assume the final review duration was the median of the prior reviews
+  // (no way to know for sure)
   if (results.length) {
     results[results.length - 1].duration = median(
-      results.map((r) => r.duration)
+      results.slice(0, -2).map((r) => r.duration)
     );
   }
 
@@ -130,7 +131,6 @@ export const getSessions = (n: number = 3) => {
   const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
     last_update: nDaysAgo(n),
   });
-  console.log(JSON.stringify(collection, null, 2));
   const reviews = processReviews(collection.data);
 
   const sessions = [] as Session[];
