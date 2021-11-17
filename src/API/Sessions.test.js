@@ -34,8 +34,6 @@ describe("nDaysAgo()", () => {
 });
 
 describe("getSessions()", () => {
-  const origWkof = window.wkof;
-
   const mockReview = (values, dataValues) => {
     const mockData = wkApiFactory.reviewData.create({ ...dataValues });
     return wkApiFactory.review.create({ ...values, data: mockData });
@@ -64,10 +62,6 @@ describe("getSessions()", () => {
 
   afterEach(() => {
     drop(wkApiFactory);
-  });
-
-  afterAll(() => {
-    window.wkof = origWkof;
   });
 
   it("calls wkof.Apiv2.fetch_endpoint with 'reviews' as the first param", () => {
