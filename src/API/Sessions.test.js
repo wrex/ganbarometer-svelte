@@ -34,9 +34,18 @@ describe("nDaysAgo()", () => {
 });
 
 describe("getSessions()", () => {
-  const mockReview = (values, dataValues) => {
-    const mockData = wkApiFactory.reviewData.create({ ...dataValues });
-    return wkApiFactory.review.create({ ...values, data: mockData });
+  const mockReview = (values) => {
+    // const { subject, review, reviewData } = values;
+    const subject = values?.subject ?? {};
+    const review = values?.review ?? {};
+    const reviewData = values?.reviewData ?? {};
+
+    const mockSubject = wkApiFactory.subject.create({ ...subject });
+    const mockData = wkApiFactory.reviewData.create({
+      ...reviewData,
+      subject_id: mockSubject.id,
+    });
+    return wkApiFactory.review.create({ ...review, data: mockData });
   };
 
   let wkofApiv2Mock = jest.fn();
@@ -101,116 +110,57 @@ describe("getSessions()", () => {
 
   it("returns one session if two reviews together", () => {
     mockReviewCollection([
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T04:24:18.048Z",
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T04:25:18.048Z",
-        }
-      ),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
   });
   it("returns two sessions if two widely spaced reviews fetched", () => {
     mockReviewCollection([
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T04:00:00.000Z",
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-05T04:00:00.000Z",
-        }
-      ),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-05T04:25:18.048Z" } }),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(2);
   });
   it("returns two sessions if string of 2 and 3 reviews", () => {
     mockReviewCollection([
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T04:00:00.000Z",
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T04:01:00.000Z",
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-05T04:00:00.000Z",
-        }
-      ),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:01:00.000Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:02:00.000Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T05:01:00.000Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T05:02:00.000Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T05:03:00.000Z" } }),
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(2);
     expect(sessions[0].reviews.length).toBe(2);
-    expect(sessions[1].reviews.length).toBe(1);
+    expect(sessions[1].reviews.length).toBe(3);
   });
 
   it("sets final review to median duration of prior reviews", () => {
-    // durations of 40s, 20s, 30s, 20s, 10s => median 20s
+    // median(1000, 2000, 3000, 4000, 5000, 30000) === 3000
     mockReviewCollection([
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:00:00.000Z", // 40s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:00:40.000Z", // 20s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:01:00.000Z", // 30s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:01:30.000Z", // 20s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:01:50.000Z", // 20s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:02:10.000Z", // 10s duration
-        }
-      ),
-      mockReview(
-        {},
-        {
-          created_at: "2019-10-04T00:02:20.000Z", // unknown duration
-        }
-      ),
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:02.000Z" } }), // 1s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:03.000Z" } }), // 5s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:08.000Z" } }), // 4s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:12.000Z" } }), // 3s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
     ]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
-    expect(sessions[0].reviews.length).toBe(7);
-    expect(sessions[0].reviews[6].duration).toBe(20000);
+    expect(sessions[0].reviews.length).toBe(6);
+    expect(sessions[0].reviews[5].duration).toBe(3000);
+  });
+
+  it("gets only counts one question for radicals", () => {
+    mockReviewCollection([
+      mockReview({
+        subject: { id: "123", object: "radical" },
+      }),
+    ]);
+    const sessions = getSessions();
+    expect(sessions[0].questions).toBe(1);
   });
 });
