@@ -1,4 +1,4 @@
-import { factory, primaryKey, oneOf } from "@mswjs/data";
+import { factory, primaryKey, oneOf, manyOf } from "@mswjs/data";
 import { mersenne, date, datatype } from "faker";
 
 // Randomness seed to ensure faker returns same values every run
@@ -23,6 +23,18 @@ export const wkApiFactory = factory({
     data_updated_at: () => date.past(1),
     data: oneOf("reviewData"),
   },
+  reviewCollection: {
+    object: () => "collection",
+    url: () => "https://api.wanikain.com/v2/reviews",
+    pages: {
+      next_url: () => null,
+      previous_url: () => null,
+      per_page: () => 500,
+    },
+    total_count: () => datatype.number({ max: 500 }),
+    data_updated_at: primaryKey(() => date.past(3)),
+    data: manyOf("review"),
+  },
 });
 
-// TODO: reviewCollection, subject, &tc.
+// TODO: Collections!! subject, assignment, &tc.

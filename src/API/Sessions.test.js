@@ -7,6 +7,7 @@ import { getSessions, nDaysAgo } from "./Sessions";
 import { wkApiFactory } from "../mocks/wanikaniApi";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
+import { drop } from "@mswjs/data";
 
 jest.useFakeTimers("modern");
 
@@ -40,21 +41,29 @@ describe("getSessions()", () => {
     return wkApiFactory.review.create({ ...values, data: mockData });
   };
 
-  let reviews;
+  let wkofApiv2Mock = jest.fn();
+
+  const mockReviewCollection = (reviews) => {
+    return wkofApiv2Mock.mockReturnValue(
+      wkApiFactory.reviewCollection.create({
+        data: reviews,
+        total_count: reviews.length,
+      })
+    );
+  };
+
   beforeAll(() => {
     // Make all tests start at a known point in time
     jest.setSystemTime(new Date("05 Oct 2019 01:02:03").getTime());
     window.wkof = {
       Apiv2: {
-        fetch_endpoint: jest.fn(),
+        fetch_endpoint: wkofApiv2Mock,
       },
     };
-    reviews = window.wkof.Apiv2.fetch_endpoint;
   });
 
   afterEach(() => {
-    wkApiFactory.review.deleteMany({ where: { id: { gte: 0 } } });
-    // wkApiFactory.drop();
+    drop(wkApiFactory);
   });
 
   afterAll(() => {
@@ -62,33 +71,33 @@ describe("getSessions()", () => {
   });
 
   it("calls wkof.Apiv2.fetch_endpoint with 'reviews' as the first param", () => {
-    reviews.mockReturnValue([]);
+    mockReviewCollection([]);
     getSessions();
-    expect(reviews.mock.calls.length).toBe(1);
-    expect(reviews.mock.calls[0][0]).toEqual("reviews");
+    expect(wkofApiv2Mock.mock.calls.length).toBe(1);
+    expect(wkofApiv2Mock.mock.calls[0][0]).toEqual("reviews");
   });
 
   it("returns no session if no review fetched", () => {
-    reviews.mockReturnValue([]);
+    mockReviewCollection([]);
     const sessions = getSessions();
     expect(sessions.length).toBe(0);
   });
 
   it("returns one session if only one review fetched", () => {
     // reviews.mockReturnValue([wkApiFactory.review.create()]);
-    reviews.mockReturnValue([mockReview()]);
+    mockReviewCollection([mockReview()]);
     const sessions = getSessions();
     expect(sessions.length).toBe(1);
   });
 
   it("returns the number of reviews in the sessions object", () => {
-    reviews.mockReturnValue([mockReview()]);
+    mockReviewCollection([mockReview()]);
     const sessions = getSessions();
     expect(sessions[0].reviews.length).toBe(1);
   });
 
   it("returns a duration of 30 seconds if only one review fetched", () => {
-    reviews.mockReturnValue([mockReview()]);
+    mockReviewCollection([mockReview()]);
     const sessions = getSessions();
     expect(sessions[0].reviews.length).toBe(1);
     expect(
@@ -97,7 +106,7 @@ describe("getSessions()", () => {
   });
 
   it("returns one session if two reviews together", () => {
-    reviews.mockReturnValue([
+    mockReviewCollection([
       mockReview({
         data_updated_at: "2019-10-04T04:24:18.048Z",
       }),
@@ -109,7 +118,7 @@ describe("getSessions()", () => {
     expect(sessions.length).toBe(1);
   });
   it("returns two sessions if two widely spaced reviews fetched", () => {
-    reviews.mockReturnValue([
+    mockReviewCollection([
       mockReview({
         data_updated_at: "2019-10-04T04:00:00.000Z",
       }),
@@ -121,7 +130,7 @@ describe("getSessions()", () => {
     expect(sessions.length).toBe(2);
   });
   it("returns two sessions if string of 2 and 3 reviews", () => {
-    reviews.mockReturnValue([
+    mockReviewCollection([
       mockReview({
         data_updated_at: "2019-10-04T04:00:00.000Z",
       }),
@@ -140,7 +149,7 @@ describe("getSessions()", () => {
 
   it("sets final review to median duration of prior reviews", () => {
     // durations of 40s, 20s, 30s, 20s, 10s => median 20s
-    reviews.mockReturnValue([
+    mockReviewCollection([
       mockReview({
         data_updated_at: "2019-10-04T00:00:00.000Z",
       }),

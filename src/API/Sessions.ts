@@ -19,6 +19,19 @@ interface RawReview {
   };
 }
 
+interface ReviewCollection {
+  object: string;
+  url: string;
+  pages: {
+    next_url: string | null;
+    previous_url: string | null;
+    per_page: number;
+  };
+  total_count: number;
+  data_updated_at: string;
+  data: RawReview[];
+}
+
 type RKV = "radical" | "kanji" | "vocabulary";
 interface Review {
   subject_id: string;
@@ -114,10 +127,11 @@ const processReviews = (reviews: RawReview[]) => {
 };
 
 export const getSessions = (n: number = 3) => {
-  const rawReviews: RawReview[] = wkof.Apiv2.fetch_endpoint("reviews", {
+  const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
     last_update: nDaysAgo(n),
   });
-  const reviews = processReviews(rawReviews);
+  console.log(JSON.stringify(collection, null, 2));
+  const reviews = processReviews(collection.data);
 
   const sessions = [] as Session[];
 
