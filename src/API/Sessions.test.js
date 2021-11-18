@@ -99,13 +99,13 @@ describe("getSessions()", () => {
     expect(sessions[0].reviews.length).toBe(1);
   });
 
-  it("returns a duration of 30 seconds if only one review fetched", () => {
+  it("returns a duration of 0 seconds if only one review fetched", () => {
     mockReviewCollection([mockReview()]);
     const sessions = getSessions();
     expect(sessions[0].reviews.length).toBe(1);
     expect(
       sessions[0].endTime.getTime() - sessions[0].startTime.getTime()
-    ).toBe(30000);
+    ).toBe(0);
   });
 
   it("returns one session if two reviews together", () => {
@@ -154,7 +154,7 @@ describe("getSessions()", () => {
     expect(sessions[0].reviews[5].duration).toBe(3000);
   });
 
-  it("gets only counts one question for radicals", () => {
+  xit("gets only counts one question for radicals", () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "123", object: "radical" },

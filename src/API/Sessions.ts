@@ -1,59 +1,6 @@
-import type { number } from "yup";
+import type { RawReview, Review, ReviewCollection, Session } from "./API";
 
 declare var wkof: any;
-// API returns strings for everything
-interface RawReview {
-  id: string;
-  object: string;
-  url: string;
-  data_updated_at: string;
-  data: {
-    created_at: string;
-    assignment_id: string;
-    spaced_repetition_system_id: string;
-    subject_id: string;
-    starting_srs_stage: string;
-    ending_srs_stage: string;
-    incorrect_meaning_answers: string;
-    incorrect_reading_answers: string;
-  };
-}
-
-interface ReviewCollection {
-  object: string;
-  url: string;
-  pages: {
-    next_url: string | null;
-    previous_url: string | null;
-    per_page: number;
-  };
-  total_count: number;
-  data_updated_at: string;
-  data: RawReview[];
-}
-
-type RKV = "radical" | "kanji" | "vocabulary";
-interface Review {
-  subject_id: string;
-  started: Date;
-  duration: number; // milliseconds
-  questions: number;
-  reading_incorrect: number;
-  meaning_incorrect: number;
-  type: RKV;
-}
-
-interface Session {
-  questions: number;
-  radicals: number;
-  kanji: number;
-  vocabulary: number;
-  reading_incorrect: number;
-  meaning_incorrect: number;
-  startTime: Date;
-  endTime: Date;
-  reviews: Review[];
-}
 
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
@@ -72,126 +19,139 @@ export const nDaysAgo = (n: number = 0): Date => {
   return new Date(midnight - n * 24 * 3600 * 1000);
 };
 
-const median = (array: number[]) => {
+// find the median in an array of numbers
+const median = (array: number[]): number => {
   if (array.length === 0) {
     return 0;
   }
-
   const sorted = array.slice().sort((a, b) => a - b);
-
   const half = Math.floor(sorted.length / 2);
-
   if (sorted.length % 2) {
     return sorted[half];
   }
   return (sorted[half - 1] + sorted[half]) / 2.0;
 };
 
-const processReviews = (reviews: RawReview[]) => {
-  let results = [] as Review[];
+const questionsForSubject = (n: number): number => {
+  return 2; // TODO: lookup subject (2 for K or V, 1 for R)
+};
+
+// calculate durations of reviews by peeking at next in sequence
+// (duration is review-start to review-start)
+// NOTE: leaves last duration at 0
+const calculateDurations = (reviews: Review[]) => {
   reviews.forEach((r, i) => {
-    const processed = {} as Review;
-    processed.subject_id = r.data.subject_id;
-
-    processed.started = new Date(r.data.created_at);
-    processed.duration = 0;
-    processed.reading_incorrect = +r.data.incorrect_reading_answers;
-    processed.meaning_incorrect = +r.data.incorrect_meaning_answers;
-    processed.type = "kanji"; // TODO
-    processed.questions =
-      2 + processed.reading_incorrect + processed.meaning_incorrect;
-    results.push(processed);
-  });
-
-  // Need to look at next review to calculate duration
-  // Note: last review ends with a duration of 0 mS
-  results.forEach((r, i) => {
-    if (results[i + 1]) {
-      const nextTime = results[i + 1].started.getTime();
-      const thisTime = r.started.getTime();
-      if (nextTime < thisTime) {
+    if (reviews[i + 1]) {
+      const nextms = reviews[i + 1].started.getTime();
+      const thisms = r.started.getTime();
+      if (nextms < thisms) {
         throw "Reviews not in sequential creation order!";
       }
-      r.duration = results[i + 1].started.getTime() - r.started.getTime();
+      r.duration = nextms - thisms;
     }
   });
+};
+
+// Turn array of RawReviews into array processed reviews
+const processReviews = (reviews: RawReview[]) => {
+  const processed: Review[] = reviews.map((r) => {
+    return {
+      subject_id: r.data.subject_id,
+      started: new Date(r.data.created_at),
+      duration: 0,
+      reading_incorrect: +r.data.incorrect_reading_answers,
+      meaning_incorrect: +r.data.incorrect_meaning_answers,
+      questions:
+        questionsForSubject(+r.data.subject_id) +
+        +r.data.incorrect_meaning_answers +
+        +r.data.incorrect_reading_answers,
+    };
+  });
+
+  calculateDurations(processed);
 
   // Just assume the final review duration was the median of the prior reviews
   // (no way to know for sure)
-  if (results.length) {
-    results[results.length - 1].duration = median(
-      results.slice(0, -2).map((r) => r.duration)
+  if (processed.length) {
+    processed[processed.length - 1].duration = median(
+      processed.slice(0, -2).map((r) => r.duration)
     );
   }
 
-  return results;
+  return processed;
 };
 
-export const getSessions = (n: number = 3) => {
+// return a session for a single review
+// (Session should probably be a class with a constructor)
+const initializeSession = (r: Review) => {
+  return {
+    startTime: r.started,
+    endTime: new Date(r.started),
+    questions: 0,
+    reading_incorrect: r.reading_incorrect,
+    meaning_incorrect: r.meaning_incorrect,
+    reviews: [r],
+  };
+};
+
+const MAXINTERVAL = 600000; // >10 minutes between reviews indicates new session
+
+const getReviews = (fromDate: Date) => {
   const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
-    last_update: nDaysAgo(n),
+    last_update: fromDate.toISOString(),
   });
-  const reviews = processReviews(collection.data);
+  return processReviews(collection.data);
+};
 
-  const sessions = [] as Session[];
+export const getSessions = (n: number = 3): Session[] => {
+  const reviews = getReviews(nDaysAgo(n));
 
-  let session: Session;
+  // array of indices into reviews with duration > MAXINTERVAL
+  let sessionStartIndices: number[] = reviews
+    .map((r, i) => {
+      return { index: i, duration: r.duration };
+    })
+    .filter((obj) => obj.duration >= MAXINTERVAL)
+    .map((obj) => obj.index + 1);
 
-  // iterate through reviews, finding sessions closer than 10min apart
-  let inSession = false;
-  reviews.forEach((r) => {
-    if (!inSession) {
-      // First review - create a session object
-      session = {
-        startTime: r.started,
-        endTime: new Date(r.started),
-        questions: 2,
-        radicals: 0,
-        kanji: 1, // TODO
-        vocabulary: 0,
-        reading_incorrect: r.reading_incorrect,
-        meaning_incorrect: r.meaning_incorrect,
-        reviews: [r],
-      };
-      if (r.duration >= 600000) {
-        // this is only review in the session
-        sessions.push(session);
-        inSession = false;
-      } else {
-        inSession = true; // loop to get other reviews
-      }
-    } else if (r.duration >= 600000) {
-      // This is final review within a session
-      session.reading_incorrect += r.reading_incorrect;
-      session.meaning_incorrect += r.meaning_incorrect;
-      session.questions += 2 + r.reading_incorrect + r.meaning_incorrect;
-      session.kanji += 1; // TODO
-      session.reviews.push(r);
-      session.endTime = r.started;
-      sessions.push(session);
-      inSession = false;
-    } else {
-      // In the middle of a sequence
-      session.reading_incorrect += r.reading_incorrect;
-      session.meaning_incorrect += r.meaning_incorrect;
-      session.questions += 2 + r.reading_incorrect + r.meaning_incorrect;
-      session.kanji += 1; // TODO
-      session.reviews.push(r);
-    }
+  if (reviews.length && sessionStartIndices.length === 0) {
+    sessionStartIndices = [0];
+  }
+
+  // ensure allStarts either empty or first element is 0
+  const allStarts =
+    sessionStartIndices.length && sessionStartIndices[0] !== 0
+      ? [0, ...sessionStartIndices]
+      : sessionStartIndices;
+
+  const slices = allStarts.map((r, i) => {
+    return {
+      reviews: reviews.slice(
+        r,
+        i + 1 >= allStarts.length ? reviews.length : allStarts[i + 1]
+      ),
+    };
   });
-  if (inSession) {
-    // final review wasn't added
-    if (sessions.length > 1) {
-      session.endTime = new Date(sessions[sessions.length - 1].endTime);
-    }
-    sessions.push(session);
-  }
-  // assume final review took 30s
-  if (sessions.length) {
-    let finalSession = sessions[sessions.length - 1];
-    let finalReview = session.reviews[session.reviews.length - 1];
-    finalSession.endTime.setTime(finalReview.started.getTime() + 30000);
-  }
+
+  const sessions: Session[] = slices.map((reviewSlice) => {
+    return {
+      questions: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.questions,
+        0
+      ),
+      reading_incorrect: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.reading_incorrect,
+        0
+      ),
+      meaning_incorrect: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.meaning_incorrect,
+        0
+      ),
+      startTime: reviewSlice.reviews[0].started,
+      endTime: reviewSlice.reviews[reviewSlice.reviews.length - 1].started,
+      reviews: reviewSlice.reviews,
+    };
+  });
 
   return sessions;
 };
