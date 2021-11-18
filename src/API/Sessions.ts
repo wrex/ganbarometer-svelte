@@ -32,29 +32,13 @@ const median = (array: number[]): number => {
   return (sorted[half - 1] + sorted[half]) / 2.0;
 };
 
-const questionsForSubject = (n: number): number => {
+const questionsForSubject = (subjectId: number): number => {
   return 2; // TODO: lookup subject (2 for K or V, 1 for R)
-};
-
-// calculate durations of reviews by peeking at next in sequence
-// (duration is review-start to review-start)
-// NOTE: leaves last duration at 0
-const calculateDurations = (reviews: Review[]) => {
-  reviews.forEach((r, i) => {
-    if (reviews[i + 1]) {
-      const nextms = reviews[i + 1].started.getTime();
-      const thisms = r.started.getTime();
-      if (nextms < thisms) {
-        throw "Reviews not in sequential creation order!";
-      }
-      r.duration = nextms - thisms;
-    }
-  });
 };
 
 // Turn array of RawReviews into array processed reviews
 const processReviews = (reviews: RawReview[]) => {
-  const processed: Review[] = reviews.map((r) => {
+  const initial: Review[] = reviews.map((r) => {
     return {
       subject_id: r.data.subject_id,
       started: new Date(r.data.created_at),
@@ -68,7 +52,24 @@ const processReviews = (reviews: RawReview[]) => {
     };
   });
 
-  calculateDurations(processed);
+  // now calculate durations
+  // calculate durations of reviews by peeking at next in sequence
+  // (duration is review-start to review-start)
+  // NOTE: leaves last duration at 0
+  const processed = initial.map((r, i) => {
+    if (initial[i + 1]) {
+      const nextms = initial[i + 1].started.getTime();
+      const thisms = r.started.getTime();
+      if (nextms < thisms) {
+        throw "Reviews not in sequential creation order!";
+      }
+      return { ...r, duration: nextms - thisms };
+    } else {
+      return r;
+    }
+  });
+
+  // calculateDurations(processed);
 
   // Just assume the final review duration was the median of the prior reviews
   // (no way to know for sure)
