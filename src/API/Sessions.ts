@@ -1,6 +1,9 @@
+import type { number } from "yup";
 import type { RawReview, Review, ReviewCollection, Session } from "./API";
 
 declare var wkof: any;
+
+const MAXINTERVAL = 600000; // >10 minutes between reviews indicates new session
 
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
@@ -32,47 +35,50 @@ const median = (array: number[]): number => {
   return (sorted[half - 1] + sorted[half]) / 2.0;
 };
 
-const questionsForSubject = (subjectId: number): number => {
-  return 2; // TODO: lookup subject (2 for K or V, 1 for R)
+const getSubject = (id: number) => {
+  return { object: "kanji" }; // TODO
+};
+
+// create a processed review from the raw review JSON returned from server
+// (populates everything except the duration)
+const initializeReview = (r: RawReview): Review => {
+  return {
+    subject_id: r.data.subject_id,
+    started: new Date(r.data.created_at),
+    duration: 0,
+    reading_incorrect: +r.data.incorrect_reading_answers,
+    meaning_incorrect: +r.data.incorrect_meaning_answers,
+    questions:
+      (getSubject(+r.data.subject_id).object === "radical" ? 1 : 2) +
+      +r.data.incorrect_meaning_answers +
+      +r.data.incorrect_reading_answers,
+  };
+};
+
+// calculate duration of reviews by peeking at next in sequence
+// (duration is review-start to review-start)
+// NOTE: leaves last duration at 0
+const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
+  if (array[i + 1]) {
+    const nextms = array[i + 1].started.getTime();
+    const thisms = r.started.getTime();
+    if (nextms < thisms) {
+      throw "Reviews not in sequential creation order!";
+    }
+    return { ...r, duration: nextms - thisms };
+  } else {
+    return r;
+  }
 };
 
 // Turn array of RawReviews into array processed reviews
-const processReviews = (reviews: RawReview[]) => {
-  const initial: Review[] = reviews.map((r) => {
-    return {
-      subject_id: r.data.subject_id,
-      started: new Date(r.data.created_at),
-      duration: 0,
-      reading_incorrect: +r.data.incorrect_reading_answers,
-      meaning_incorrect: +r.data.incorrect_meaning_answers,
-      questions:
-        questionsForSubject(+r.data.subject_id) +
-        +r.data.incorrect_meaning_answers +
-        +r.data.incorrect_reading_answers,
-    };
-  });
-
-  // now calculate durations
-  // calculate durations of reviews by peeking at next in sequence
-  // (duration is review-start to review-start)
-  // NOTE: leaves last duration at 0
-  const processed = initial.map((r, i) => {
-    if (initial[i + 1]) {
-      const nextms = initial[i + 1].started.getTime();
-      const thisms = r.started.getTime();
-      if (nextms < thisms) {
-        throw "Reviews not in sequential creation order!";
-      }
-      return { ...r, duration: nextms - thisms };
-    } else {
-      return r;
-    }
-  });
-
-  // calculateDurations(processed);
+const processReviews = (reviews: RawReview[]): Review[] => {
+  const processed: Review[] = reviews
+    .map(initializeReview)
+    .map(calculateDuration);
 
   // Just assume the final review duration was the median of the prior reviews
-  // (no way to know for sure)
+  // (no way to know actual duration)
   if (processed.length) {
     processed[processed.length - 1].duration = median(
       processed.slice(0, -2).map((r) => r.duration)
@@ -94,8 +100,6 @@ const initializeSession = (r: Review) => {
     reviews: [r],
   };
 };
-
-const MAXINTERVAL = 600000; // >10 minutes between reviews indicates new session
 
 const getReviews = (fromDate: Date) => {
   const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
