@@ -66,6 +66,8 @@ describe("getSessions()", () => {
       Apiv2: {
         fetch_endpoint: wkofApiv2Mock,
       },
+      include: jest.fn(),
+      ready: jest.fn(),
     };
   });
 
@@ -73,58 +75,57 @@ describe("getSessions()", () => {
     drop(wkApiFactory);
   });
 
-  it("calls wkof.Apiv2.fetch_endpoint with 'reviews' as the first param", () => {
+  it("calls wkof.Apiv2.fetch_endpoint with 'reviews' as the first param", async () => {
     mockReviewCollection([]);
-    getSessions();
+    await getSessions();
     expect(wkofApiv2Mock.mock.calls.length).toBe(1);
     expect(wkofApiv2Mock.mock.calls[0][0]).toEqual("reviews");
   });
 
-  it("returns no session if no review fetched", () => {
+  it("returns no session if no review fetched", async () => {
     mockReviewCollection([]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(0);
   });
 
-  it("returns one session if only one review fetched", () => {
-    // reviews.mockReturnValue([wkApiFactory.review.create()]);
+  it("returns one session if only one review fetched", async () => {
     mockReviewCollection([mockReview()]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(1);
   });
 
-  it("returns the number of reviews in the sessions object", () => {
+  it("returns the number of reviews in the sessions object", async () => {
     mockReviewCollection([mockReview()]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions[0].reviews.length).toBe(1);
   });
 
-  it("returns a duration of 0 seconds if only one review fetched", () => {
+  it("returns a duration of 0 seconds if only one review fetched", async () => {
     mockReviewCollection([mockReview()]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions[0].reviews.length).toBe(1);
     expect(
       sessions[0].endTime.getTime() - sessions[0].startTime.getTime()
     ).toBe(0);
   });
 
-  it("returns one session if two reviews together", () => {
+  it("returns one session if two reviews together", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
     ]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(1);
   });
-  it("returns two sessions if two widely spaced reviews fetched", () => {
+  it("returns two sessions if two widely spaced reviews fetched", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-05T04:25:18.048Z" } }),
     ]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(2);
   });
-  it("returns two sessions if string of 2 and 3 reviews", () => {
+  it("returns two sessions if string of 2 and 3 reviews", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:01:00.000Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:02:00.000Z" } }),
@@ -132,13 +133,13 @@ describe("getSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T05:02:00.000Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T05:03:00.000Z" } }),
     ]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(2);
     expect(sessions[0].reviews.length).toBe(2);
     expect(sessions[1].reviews.length).toBe(3);
   });
 
-  it("sets final review to median duration of prior reviews", () => {
+  it("sets final review to median duration of prior reviews", async () => {
     // median(1000, 2000, 3000, 4000, 5000, 30000) === 3000
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
@@ -148,7 +149,7 @@ describe("getSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:12.000Z" } }), // 3s duration
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
     ]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
     expect(sessions.length).toBe(1);
     expect(sessions[0].reviews.length).toBe(6);
     expect(sessions[0].reviews[5].duration).toBe(3000);

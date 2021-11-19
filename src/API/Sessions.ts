@@ -1,5 +1,7 @@
+import { set_data_dev } from "svelte/internal";
 import type { number } from "yup";
 import type { RawReview, Review, ReviewCollection, Session } from "./API";
+import { std as sigma } from "mathjs";
 
 declare var wkof: any;
 
@@ -7,7 +9,13 @@ const logObj = (title: string, obj: any): void => {
   console.log(`${title}: ${JSON.stringify(obj, null, 2)}`);
 };
 
-const MAXINTERVAL = 600000; // >10 minutes between reviews indicates new session
+// Maximum number of ms between reviews before it's considered a new review
+// Default to 10 minutes, but use an algorithm to find a more suitable value
+// once reviews are retrieved and processed
+let MAXINTERVAL = 600000;
+
+// Global to store the median interval between all reviews
+let MEDIANINTERVAL;
 
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
@@ -75,6 +83,27 @@ const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
   }
 };
 
+// update the global MAXINTERVAL with a heuristic
+const updateMaxInterval = (durations: number[]): void => {
+  // guard clause: keep default unless there are some durations
+  if (!durations.length) {
+    return;
+  }
+
+  // First pass: clamp maximum durations to current MAXINTERVAL (default: 10m)
+  const clampedDurations = durations.map((d) =>
+    d > MAXINTERVAL ? MAXINTERVAL : d
+  );
+
+  // Find the new median to be safe (shouldn't have changed much)
+  const newMedian = median(clampedDurations);
+
+  let stdDev = sigma(clampedDurations);
+
+  // Heuristic:
+  MAXINTERVAL = Math.max(newMedian + 2 * stdDev, 600000);
+};
+
 // Turn array of RawReviews into array processed reviews
 const processReviews = (reviews: RawReview[]): Review[] => {
   const processed: Review[] = reviews
@@ -83,19 +112,28 @@ const processReviews = (reviews: RawReview[]): Review[] => {
 
   // Just assume the final review duration was the median of the prior reviews
   // (no way to know actual duration)
+  let durations: number[] = processed.slice(0, -1).map((r) => r.duration);
+  let medianInterval: number = median(durations);
   if (processed.length) {
-    processed[processed.length - 1].duration = median(
-      processed.slice(0, -2).map((r) => r.duration)
-    );
+    processed[processed.length - 1].duration = medianInterval;
   }
+
+  // Calculate a better value for MAXINTERVAL global than the 10m default
+  updateMaxInterval(durations);
 
   return processed;
 };
 
-const getReviews = (fromDate: Date) => {
-  const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
-    last_update: fromDate.toISOString(),
-  });
+const getReviews = async (fromDate: Date) => {
+  // First retrieve raw reviews
+  wkof.include("Apiv2");
+  await wkof.ready("Apiv2");
+  const collection: ReviewCollection = await wkof.Apiv2.fetch_endpoint(
+    "reviews",
+    {
+      last_update: fromDate.toISOString(),
+    }
+  );
   return processReviews(collection.data);
 };
 
@@ -109,58 +147,62 @@ const findLongDurations = (reviews: Review[]): number[] => {
     .map((obj) => obj.index);
 };
 
-export const getSessions = (n: number = 3): Session[] => {
-  const reviews: Review[] = getReviews(nDaysAgo(n));
+export const getSessions = async (n: number = 3) => {
+  const reviews: Review[] = await getReviews(nDaysAgo(n));
 
-  // guard clause: bail early if no reviews
-  if (reviews.length === 0) {
-    return [];
-  }
+  return new Promise((resolve, reject) => {
+    // guard clause: bail early if no reviews
+    if (reviews.length === 0) {
+      resolve([]);
+    }
 
-  // Works but UGLY!!!!
-  // find indexes in reviews array with long durations
-  const longDurations: number[] = findLongDurations(reviews);
+    // Works but UGLY!!!!
+    // find indexes in reviews array with long durations
+    const longDurations: number[] = findLongDurations(reviews);
 
-  // Long Durations indicate last review in a session.
-  // The last review might or might not have a long duration.
-  // Ensure the final review index is always the end of a session.
-  const ends: number[] =
-    longDurations[longDurations.length - 1] === reviews.length - 1
-      ? longDurations
-      : [...longDurations, reviews.length - 1];
+    // Long Durations indicate last review in a session.
+    // The last review might or might not have a long duration.
+    // Ensure the final review index is always the end of a session.
+    const ends: number[] =
+      longDurations[longDurations.length - 1] === reviews.length - 1
+        ? longDurations
+        : [...longDurations, reviews.length - 1];
 
-  // The first review in a session is either index 0 in the reviews array, or
-  // the next index after a long duration.
-  // The first review might or might not have a long duration.
-  // Ensure index 0 in the review array is always the start of a session.
-  const starts: number[] =
-    ends[0] === 0 ? ends : [0, ...ends.map((i) => i + 1)];
+    // The first review in a session is either index 0 in the reviews array, or
+    // the next index after a long duration.
+    // The first review might or might not have a long duration.
+    // Ensure index 0 in the review array is always the start of a session.
+    const starts: number[] =
+      ends[0] === 0 ? ends : [0, ...ends.map((i) => i + 1)];
 
-  // Create some "proto Sessions" for these review sequences
-  const sessionSlices: { reviews: Review[] }[] = ends.map((end, i) => {
-    return {
-      reviews: reviews.slice(starts[i], end + 1),
-    };
-  });
+    // Create some "proto Sessions" for these review sequences
+    const sessionSlices: { reviews: Review[] }[] = ends.map((end, i) => {
+      return {
+        reviews: reviews.slice(starts[i], end + 1),
+      };
+    });
 
-  // Finally, flesh out the rest of the session object
-  return sessionSlices.map((reviewSlice) => {
-    return {
-      questions: reviewSlice.reviews.reduce(
-        (acc, review) => acc + review.questions,
-        0
-      ),
-      reading_incorrect: reviewSlice.reviews.reduce(
-        (acc, review) => acc + review.reading_incorrect,
-        0
-      ),
-      meaning_incorrect: reviewSlice.reviews.reduce(
-        (acc, review) => acc + review.meaning_incorrect,
-        0
-      ),
-      startTime: reviewSlice.reviews[0].started,
-      endTime: reviewSlice.reviews[reviewSlice.reviews.length - 1].started,
-      reviews: reviewSlice.reviews,
-    };
+    // Finally, flesh out the rest of the session object
+    resolve(
+      sessionSlices.map((reviewSlice) => {
+        return {
+          questions: reviewSlice.reviews.reduce(
+            (acc, review) => acc + review.questions,
+            0
+          ),
+          reading_incorrect: reviewSlice.reviews.reduce(
+            (acc, review) => acc + review.reading_incorrect,
+            0
+          ),
+          meaning_incorrect: reviewSlice.reviews.reduce(
+            (acc, review) => acc + review.meaning_incorrect,
+            0
+          ),
+          startTime: reviewSlice.reviews[0].started,
+          endTime: reviewSlice.reviews[reviewSlice.reviews.length - 1].started,
+          reviews: reviewSlice.reviews,
+        };
+      })
+    );
   });
 };
