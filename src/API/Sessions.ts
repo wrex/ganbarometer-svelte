@@ -101,14 +101,12 @@ const getReviews = (fromDate: Date) => {
 
 // look at durations to find last reviews in a session
 const findLongDurations = (reviews: Review[]): number[] => {
-  const longDurations: number[] = reviews
+  return reviews
     .map((r, i) => {
       return { index: i, duration: r.duration };
     })
     .filter((obj) => obj.duration >= MAXINTERVAL)
     .map((obj) => obj.index);
-
-  return longDurations;
 };
 
 export const getSessions = (n: number = 3): Session[] => {
@@ -120,22 +118,33 @@ export const getSessions = (n: number = 3): Session[] => {
   }
 
   // Works but UGLY!!!!
-  const longDurations = findLongDurations(reviews);
+  // find indexes in reviews array with long durations
+  const longDurations: number[] = findLongDurations(reviews);
 
+  // Long Durations indicate last review in a session.
+  // The last review might or might not have a long duration.
+  // Ensure the final review index is always the end of a session.
   const ends: number[] =
     longDurations[longDurations.length - 1] === reviews.length - 1
       ? longDurations
       : [...longDurations, reviews.length - 1];
+
+  // The first review in a session is either index 0 in the reviews array, or
+  // the next index after a long duration.
+  // The first review might or might not have a long duration.
+  // Ensure index 0 in the review array is always the start of a session.
   const starts: number[] =
     ends[0] === 0 ? ends : [0, ...ends.map((i) => i + 1)];
 
-  const sessionSlices = ends.map((end, i) => {
+  // Create some "proto Sessions" for these review sequences
+  const sessionSlices: { reviews: Review[] }[] = ends.map((end, i) => {
     return {
       reviews: reviews.slice(starts[i], end + 1),
     };
   });
 
-  const sessions: Session[] = sessionSlices.map((reviewSlice) => {
+  // Finally, flesh out the rest of the session object
+  return sessionSlices.map((reviewSlice) => {
     return {
       questions: reviewSlice.reviews.reduce(
         (acc, review) => acc + review.questions,
@@ -154,6 +163,4 @@ export const getSessions = (n: number = 3): Session[] => {
       reviews: reviewSlice.reviews,
     };
   });
-
-  return sessions;
 };
