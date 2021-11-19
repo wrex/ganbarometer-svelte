@@ -3,6 +3,10 @@ import type { RawReview, Review, ReviewCollection, Session } from "./API";
 
 declare var wkof: any;
 
+const logObj = (title: string, obj: any): void => {
+  console.log(`${title}: ${JSON.stringify(obj, null, 2)}`);
+};
+
 const MAXINTERVAL = 600000; // >10 minutes between reviews indicates new session
 
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
@@ -57,7 +61,7 @@ const initializeReview = (r: RawReview): Review => {
 
 // calculate duration of reviews by peeking at next in sequence
 // (duration is review-start to review-start)
-// NOTE: leaves last duration at 0
+// NOTE: doesn't change duration of final review in array
 const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
   if (array[i + 1]) {
     const nextms = array[i + 1].started.getTime();
@@ -67,7 +71,7 @@ const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
     }
     return { ...r, duration: nextms - thisms };
   } else {
-    return r;
+    return r; // final review unchanged
   }
 };
 
@@ -88,19 +92,6 @@ const processReviews = (reviews: RawReview[]): Review[] => {
   return processed;
 };
 
-// return a session for a single review
-// (Session should probably be a class with a constructor)
-const initializeSession = (r: Review) => {
-  return {
-    startTime: r.started,
-    endTime: new Date(r.started),
-    questions: 0,
-    reading_incorrect: r.reading_incorrect,
-    meaning_incorrect: r.meaning_incorrect,
-    reviews: [r],
-  };
-};
-
 const getReviews = (fromDate: Date) => {
   const collection: ReviewCollection = wkof.Apiv2.fetch_endpoint("reviews", {
     last_update: fromDate.toISOString(),
@@ -108,37 +99,43 @@ const getReviews = (fromDate: Date) => {
   return processReviews(collection.data);
 };
 
-export const getSessions = (n: number = 3): Session[] => {
-  const reviews = getReviews(nDaysAgo(n));
-
-  // array of indices into reviews with duration > MAXINTERVAL
-  let sessionStartIndices: number[] = reviews
+// look at durations to find last reviews in a session
+const findLongDurations = (reviews: Review[]): number[] => {
+  const longDurations: number[] = reviews
     .map((r, i) => {
       return { index: i, duration: r.duration };
     })
     .filter((obj) => obj.duration >= MAXINTERVAL)
-    .map((obj) => obj.index + 1);
+    .map((obj) => obj.index);
 
-  if (reviews.length && sessionStartIndices.length === 0) {
-    sessionStartIndices = [0];
+  return longDurations;
+};
+
+export const getSessions = (n: number = 3): Session[] => {
+  const reviews: Review[] = getReviews(nDaysAgo(n));
+
+  // guard clause: bail early if no reviews
+  if (reviews.length === 0) {
+    return [];
   }
 
-  // ensure allStarts either empty or first element is 0
-  const allStarts =
-    sessionStartIndices.length && sessionStartIndices[0] !== 0
-      ? [0, ...sessionStartIndices]
-      : sessionStartIndices;
+  // Works but UGLY!!!!
+  const longDurations = findLongDurations(reviews);
 
-  const slices = allStarts.map((r, i) => {
+  const ends: number[] =
+    longDurations[longDurations.length - 1] === reviews.length - 1
+      ? longDurations
+      : [...longDurations, reviews.length - 1];
+  const starts: number[] =
+    ends[0] === 0 ? ends : [0, ...ends.map((i) => i + 1)];
+
+  const sessionSlices = ends.map((end, i) => {
     return {
-      reviews: reviews.slice(
-        r,
-        i + 1 >= allStarts.length ? reviews.length : allStarts[i + 1]
-      ),
+      reviews: reviews.slice(starts[i], end + 1),
     };
   });
 
-  const sessions: Session[] = slices.map((reviewSlice) => {
+  const sessions: Session[] = sessionSlices.map((reviewSlice) => {
     return {
       questions: reviewSlice.reviews.reduce(
         (acc, review) => acc + review.questions,
