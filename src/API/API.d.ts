@@ -1,3 +1,8 @@
+export interface Subject {
+  id: number;
+  object: string;
+}
+
 export interface RawReview {
   id: string;
   object: string;
