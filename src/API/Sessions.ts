@@ -1,5 +1,3 @@
-import { set_data_dev } from "svelte/internal";
-import type { number } from "yup";
 import type { RawReview, Review, ReviewCollection, Session } from "./API";
 import { std as sigma } from "mathjs";
 
