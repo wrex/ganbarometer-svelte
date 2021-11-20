@@ -33,7 +33,38 @@ describe("nDaysAgo()", () => {
   });
 });
 
+let wkofApiv2Mock = jest.fn();
+
+window.wkof = {
+  // Need to mock return values for Apiv2.fetch_endpoint()
+  Apiv2: {
+    fetch_endpoint: wkofApiv2Mock,
+  },
+  // Need to mock return values for ItemData.get_items() and get_index()
+  ItemData: {
+    get_items: jest.fn(),
+    get_index: jest.fn(),
+  },
+  // Mock include to do nothing
+  include: jest.fn(),
+  // Ready returns a promise that just resolves
+  ready: jest.fn(() => new Promise((r) => r())),
+};
+
 describe("getSessions()", () => {
+  const mockGetIndex = (subjects) => {
+    window.wkof.ItemData.get_items.mockReturnValue(
+      new Promise((r) => r(subjects))
+    );
+    let index = {};
+    subjects.forEach((s) => {
+      index[s.id] = s;
+    });
+    window.wkof.ItemData.get_index.mockReturnValue(
+      new Promise((r) => r(index))
+    );
+  };
+
   // call like: mockreview({subject: {...}, review: {...}, reviewData: {...} })
   const mockReview = (values) => {
     const subject = values?.subject ?? {};
@@ -41,6 +72,7 @@ describe("getSessions()", () => {
     const reviewData = values?.reviewData ?? {};
 
     const mockSubject = wkApiFactory.subject.create({ ...subject });
+    // mockGetIndex([mockSubject]);  // BUG!!!! need array of all subjects
     const mockData = wkApiFactory.reviewData.create({
       ...reviewData,
       subject_id: mockSubject.id,
@@ -48,27 +80,20 @@ describe("getSessions()", () => {
     return wkApiFactory.review.create({ ...review, data: mockData });
   };
 
-  let wkofApiv2Mock = jest.fn();
-
-  const mockReviewCollection = (reviews) => {
-    return wkofApiv2Mock.mockReturnValue(
+  const mockReviewCollection = async (reviews) => {
+    wkofApiv2Mock.mockReturnValue(
       wkApiFactory.reviewCollection.create({
         data: reviews,
         total_count: reviews.length,
       })
     );
+    const subjects = wkApiFactory.subject.getAll();
+    mockGetIndex(subjects);
   };
 
   beforeAll(() => {
     // Make all tests start at a known point in time
     jest.setSystemTime(new Date("05 Oct 2019 01:02:03").getTime());
-    window.wkof = {
-      Apiv2: {
-        fetch_endpoint: wkofApiv2Mock,
-      },
-      include: jest.fn(),
-      ready: jest.fn(),
-    };
   });
 
   afterEach(() => {
@@ -114,6 +139,7 @@ describe("getSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
     ]);
+    const inDB = wkApiFactory.subject.getAll();
     const sessions = await getSessions();
     expect(sessions.length).toBe(1);
   });
@@ -155,7 +181,7 @@ describe("getSessions()", () => {
     expect(sessions[0].reviews[5].duration).toBe(3000);
   });
 
-  fit("gets only counts one question for radicals", async () => {
+  it("only counts one question for radicals", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "123", object: "radical" },
@@ -166,7 +192,62 @@ describe("getSessions()", () => {
       }),
     ]);
     const sessions = await getSessions();
-    console.log(JSON.stringify(sessions[0], null, 2));
     expect(sessions[0].questions).toBe(1);
+  });
+
+  it("counts two questions for kanji", async () => {
+    mockReviewCollection([
+      mockReview({
+        subject: { id: "101", object: "kanji" },
+        reviewData: {
+          incorrect_meaning_answers: 0,
+          incorrect_reading_answers: 0,
+        },
+      }),
+    ]);
+    const sessions = await getSessions();
+    expect(sessions[0].questions).toBe(2);
+  });
+
+  it("counts two questions for vocabulary", async () => {
+    mockReviewCollection([
+      mockReview({
+        subject: { id: "101", object: "kanji" },
+        reviewData: {
+          incorrect_meaning_answers: 0,
+          incorrect_reading_answers: 0,
+        },
+      }),
+    ]);
+    const sessions = await getSessions();
+    expect(sessions[0].questions).toBe(2);
+  });
+
+  it("adds incorrect meanings to question count", async () => {
+    mockReviewCollection([
+      mockReview({
+        subject: { id: "101", object: "kanji" },
+        reviewData: {
+          incorrect_meaning_answers: 3,
+          incorrect_reading_answers: 0,
+        },
+      }),
+    ]);
+    const sessions = await getSessions();
+    expect(sessions[0].questions).toBe(5);
+  });
+
+  it("adds incorrect readings to question count", async () => {
+    mockReviewCollection([
+      mockReview({
+        subject: { id: "101", object: "kanji" },
+        reviewData: {
+          incorrect_meaning_answers: 3,
+          incorrect_reading_answers: 3,
+        },
+      }),
+    ]);
+    const sessions = await getSessions();
+    expect(sessions[0].questions).toBe(8);
   });
 });

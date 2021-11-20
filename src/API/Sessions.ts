@@ -1,5 +1,12 @@
-import type { RawReview, Review, ReviewCollection, Session } from "./API";
+import type {
+  RawReview,
+  Review,
+  ReviewCollection,
+  Session,
+  Subject,
+} from "./API";
 import { std as sigma } from "mathjs";
+import { getSubject } from "./Subjects";
 
 declare var wkof: any;
 
@@ -45,23 +52,16 @@ const median = (array: number[]): number => {
   return (sorted[half - 1] + sorted[half]) / 2.0;
 };
 
-const getSubject = (id: number) => {
-  return { object: "kanji" }; // TODO
-};
-
 // create a processed review from the raw review JSON returned from server
 // (populates everything except the duration)
-const initializeReview = (r: RawReview): Review => {
+const initializeReview = (r: RawReview) => {
   return {
     subject_id: r.data.subject_id,
     started: new Date(r.data.created_at),
     duration: 0,
     reading_incorrect: +r.data.incorrect_reading_answers,
     meaning_incorrect: +r.data.incorrect_meaning_answers,
-    questions:
-      (getSubject(+r.data.subject_id).object === "radical" ? 1 : 2) +
-      +r.data.incorrect_meaning_answers +
-      +r.data.incorrect_reading_answers,
+    questions: 0,
   };
 };
 
@@ -96,17 +96,28 @@ const updateMaxInterval = (durations: number[]): void => {
   // Find the new median to be safe (shouldn't have changed much)
   const newMedian = median(clampedDurations);
 
-  let stdDev = sigma(clampedDurations);
-
   // Heuristic:
-  MAXINTERVAL = Math.max(newMedian + 2 * stdDev, 600000);
+  MAXINTERVAL = Math.max(newMedian + 2 * sigma(clampedDurations), 600000);
+};
+
+const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
+  let reviewsCopy = reviews.slice();
+
+  for (let review of reviewsCopy) {
+    const subject: Subject = await getSubject(+review.subject_id);
+    review.questions = subject.object === "radical" ? 1 : 2;
+    review.questions += review.meaning_incorrect + review.reading_incorrect;
+  }
+  return new Promise((resolve, reject) => resolve(reviewsCopy));
 };
 
 // Turn array of RawReviews into array processed reviews
-const processReviews = (reviews: RawReview[]): Review[] => {
-  const processed: Review[] = reviews
-    .map(initializeReview)
-    .map(calculateDuration);
+const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
+  const initialized: Review[] = reviews.map(initializeReview);
+
+  const converted: Review[] = initialized.map(calculateDuration);
+
+  const processed: Review[] = await calculateQuestions(converted);
 
   // Just assume the final review duration was the median of the prior reviews
   // (no way to know actual duration)
@@ -119,7 +130,7 @@ const processReviews = (reviews: RawReview[]): Review[] => {
   // Calculate a better value for MAXINTERVAL global than the 10m default
   updateMaxInterval(durations);
 
-  return processed;
+  return new Promise((resolve, reject) => resolve(processed));
 };
 
 const getReviews = async (fromDate: Date) => {
@@ -132,7 +143,7 @@ const getReviews = async (fromDate: Date) => {
       last_update: fromDate.toISOString(),
     }
   );
-  return processReviews(collection.data);
+  return await processReviews(collection.data);
 };
 
 // look at durations to find last reviews in a session

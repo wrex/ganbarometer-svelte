@@ -5,8 +5,8 @@ declare var wkof: any;
 let subjects: Subject[];
 let subjectIndex;
 
-export const getSubject = async (id: number) => {
-  if (!subjectIndex) {
+export const getSubject = async (id: number): Promise<Subject> => {
+  if (!subjectIndex || !subjectIndex[id]) {
     wkof.include("ItemData");
     await wkof.ready("ItemData");
     subjects = await wkof.ItemData.get_items(); // retrieve all subjects
