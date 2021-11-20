@@ -12,5 +12,5 @@ export const getSubject = async (id: number) => {
     subjects = await wkof.ItemData.get_items(); // retrieve all subjects
     subjectIndex = await wkof.ItemData.get_index(subjects);
   }
-  return subjectIndex[id];
+  return new Promise((r) => r(subjectIndex[id]));
 };

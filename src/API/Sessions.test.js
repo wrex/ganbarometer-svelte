@@ -34,8 +34,8 @@ describe("nDaysAgo()", () => {
 });
 
 describe("getSessions()", () => {
+  // call like: mockreview({subject: {...}, review: {...}, reviewData: {...} })
   const mockReview = (values) => {
-    // const { subject, review, reviewData } = values;
     const subject = values?.subject ?? {};
     const review = values?.review ?? {};
     const reviewData = values?.reviewData ?? {};
@@ -155,13 +155,18 @@ describe("getSessions()", () => {
     expect(sessions[0].reviews[5].duration).toBe(3000);
   });
 
-  xit("gets only counts one question for radicals", () => {
+  fit("gets only counts one question for radicals", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "123", object: "radical" },
+        reviewData: {
+          incorrect_meaning_answers: 0,
+          incorrect_reading_answers: 0,
+        },
       }),
     ]);
-    const sessions = getSessions();
+    const sessions = await getSessions();
+    console.log(JSON.stringify(sessions[0], null, 2));
     expect(sessions[0].questions).toBe(1);
   });
 });

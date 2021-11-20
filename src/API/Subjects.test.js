@@ -25,12 +25,14 @@ window.wkof.ItemData.get_items = jest.fn();
 window.wkof.ItemData.get_index = jest.fn();
 
 const mockSubjectIndex = (subjects) => {
-  window.wkof.ItemData.get_items.mockReturnValue(subjects);
+  window.wkof.ItemData.get_items.mockReturnValue(
+    new Promise((r) => r(subjects))
+  );
   let index = {};
   subjects.forEach((s) => {
     index[s.id] = s;
   });
-  window.wkof.ItemData.get_index.mockReturnValue(index);
+  window.wkof.ItemData.get_index.mockReturnValue(new Promise((r) => r(index)));
 };
 
 describe("getSubject()", () => {
@@ -40,9 +42,6 @@ describe("getSubject()", () => {
       object: "radical",
     });
     mockSubjectIndex([mockSubject]);
-    // window.wkof.ItemData.get_items.mockReturnValue([mockSubject]);
-    // window.wkof.ItemData.get_index.mockReturnValue({ 101: mockSubject });
-
     const subject = await getSubject(101);
     expect(subject.id).toBe(101);
     expect(subject.object).toEqual("radical");
