@@ -14,7 +14,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
-    "@mswjs/data": "^0.7.1",
+    "@mswjs/data": "^0.8.1",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.0.0",
@@ -67,7 +67,7 @@
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",
     "mathjs": "^10.0.0",
-    "svelte-forms-lib": "^1.10.7",
+    "svelte-forms-lib": "^2.0.0",
     "yup": "^0.32.11"
   }
 }
