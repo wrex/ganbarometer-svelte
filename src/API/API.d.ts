@@ -50,3 +50,7 @@ export interface Session {
   endTime: Date;
   reviews: Review[];
 }
+
+export interface SessionMonth {
+  [key: string]: Session;
+}
