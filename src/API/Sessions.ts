@@ -10,6 +10,7 @@ import { getSubject } from "./Subjects";
 
 declare var wkof: any;
 
+// Utility function for debugging
 const logObj = (title: string, obj: any): void => {
   console.log(`${title}: ${JSON.stringify(obj, null, 2)}`);
 };
@@ -156,6 +157,7 @@ const findLongDurations = (reviews: Review[]): number[] => {
     .map((obj) => obj.index);
 };
 
+// Get (possibly cached) sessions from n days ago
 export const getSessions = async (n: number = 3) => {
   const reviews: Review[] = await getReviews(nDaysAgo(n));
 
@@ -165,26 +167,33 @@ export const getSessions = async (n: number = 3) => {
       resolve([]);
     }
 
-    // Works but UGLY!!!!
-    // find indexes in reviews array with long durations
+    // Complicated, but functional:
+    // Say 3 sessions: reviews 0-3, 4-5, and 6-12
+    // Create an array of start and end indices such that:
+    //   starts = [0, 4, 6]
+    //   ends   = [3, 5, 12]
+
+    // Note that reviews 3, 5, and MAYBE 12 will have a long duration
+
+    // first find indexes in reviews array with long durations
     const longDurations: number[] = findLongDurations(reviews);
 
-    // Long Durations indicate last review in a session.
-    // The last review might or might not have a long duration.
-    // Ensure the final review index is always the end of a session.
+    // The last review in a session will always have a long duration.
+    // But the final review retrieved might not have a long duration.
+    // Include the final review index if it isn't already there
+    const lastLongDurationIndex = longDurations[longDurations.length - 1];
+    const finalReviewIndex = reviews.length - 1;
     const ends: number[] =
-      longDurations[longDurations.length - 1] === reviews.length - 1
+      lastLongDurationIndex === finalReviewIndex
         ? longDurations
         : [...longDurations, reviews.length - 1];
 
-    // The first review in a session is either index 0 in the reviews array, or
-    // the next index after a long duration.
-    // The first review might or might not have a long duration.
-    // Ensure index 0 in the review array is always the start of a session.
-    const starts: number[] =
-      ends[0] === 0 ? ends : [0, ...ends.map((i) => i + 1)];
+    // First start is always index 0, then the index after the end of each
+    // session (slice off the last start to keep ends[] and starts[] the
+    // same length)
+    const starts: number[] = [0, ...ends.map((i) => i + 1)].slice(0, -1);
 
-    // Create some "proto Sessions" for these review sequences
+    // Create some "proto Sessions" objects for these review sequences
     const sessionSlices: { reviews: Review[] }[] = ends.map((end, i) => {
       return {
         reviews: reviews.slice(starts[i], end + 1),
