@@ -1,4 +1,7 @@
-import { writable } from "svelte/store";
+import { writable, readable } from "svelte/store";
+import { getSessions } from "../API/Sessions";
+
+declare var wkof: any;
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
@@ -39,3 +42,23 @@ export const gbSettings = writable(
 gbSettings.subscribe((val) =>
   localStorage.setItem(SETTINGSKEY, JSON.stringify(val))
 );
+
+const checkForNewReviews = () => false;
+
+// sessionsStore: array of 0 or more cached sessions
+// asynchronously updates in the background as new reviews are found
+
+// Look into this: https://github.com/cdellacqua/svelte-async-readable
+export const sessionsStore = readable([], (set) => {
+  const sessions = [];
+  set(sessions);
+
+  const interval = setInterval(() => {
+    const reviews = checkForNewReviews();
+    if (reviews) {
+      console.log("parse new reviews and set(sessions)");
+    }
+  }, 30000);
+
+  return () => clearInterval(interval);
+});
