@@ -29,7 +29,6 @@
     "faker": "^5.5.3",
     "jest": "^27.1.0",
     "magic-string": "^0.25.7",
-    "msw": "^0.35.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-svelte": "^7.1.0",
