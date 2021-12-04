@@ -2,14 +2,6 @@
   import Gauge from "../components/Gauge.svelte";
   import BarChart from "../components/BarChart.svelte";
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
-  // import {onMount} from 'svelte';
-  // import {getSessions} from "../API/Sessions";
-  
-  // onMount(async() => {
-  //   let sessions = await getSessions();
-  //   console.log(sessions);
-  //   debugger;
-  // });
 </script>
 
 <div class="difficulty">

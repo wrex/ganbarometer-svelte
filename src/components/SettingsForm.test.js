@@ -10,12 +10,6 @@ import { SETTINGSKEY } from "../store/stores";
 
 describe("Settings Form", () => {
   describe("layout", () => {
-    it("renders a form with a text input for the API Key", () => {
-      render(SettingsForm);
-      const input = screen.getByLabelText(/api key/i);
-      expect(input).toBeInTheDocument();
-    });
-
     it("has a button to save settings", () => {
       render(SettingsForm);
       const button = screen.getByRole("button");
@@ -58,7 +52,6 @@ describe("Settings Form", () => {
       const { debug } = render(SettingsForm);
 
       inputs = {
-        apiKey: screen.getByLabelText(/api key/i),
         retrieveDays: screen.getByLabelText(/days to retrieve/i),
         reviewsPer: screen.getByLabelText(/reviews per/i),
         apprenticeItems: screen.getByLabelText(/apprentice items/i),
@@ -70,10 +63,6 @@ describe("Settings Form", () => {
       };
 
       saveButton = screen.getByRole("button", { name: "Save" });
-      userEvent.type(
-        inputs.apiKey,
-        "{selectall}78ca70da-d268-4100-96ad-696014a53231"
-      );
     };
 
     describe("settings in localstorage", () => {
@@ -84,7 +73,6 @@ describe("Settings Form", () => {
 
       test.each`
         input                 | value
-        ${"apiKey"}           | ${"ffffffff-d268-4100-96ad-696014a53231"}
         ${"retrieveDays"}     | ${"5"}
         ${"reviewsPer"}       | ${"123"}
         ${"apprenticeItems"}  | ${"231"}
@@ -105,36 +93,34 @@ describe("Settings Form", () => {
 
     describe("Text and number input field validations", () => {
       test.each`
-        input                 | inputValue     | errorMsg
-        ${"apiKey"}           | ${""}          | ${"required"}
-        ${"apiKey"}           | ${"l33th4x0r"} | ${"invalid"}
-        ${"retrieveDays"}     | ${"dog"}       | ${"must be a number"}
-        ${"retrieveDays"}     | ${"-1"}        | ${"between 1 and 7"}
-        ${"retrieveDays"}     | ${"0"}         | ${"between 1 and 7"}
-        ${"retrieveDays"}     | ${"8"}         | ${"between 1 and 7"}
-        ${"reviewsPer"}       | ${"dog"}       | ${"must be a number"}
-        ${"reviewsPer"}       | ${"-1"}        | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"0"}         | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"9"}         | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"501"}       | ${"between 10 and 500"}
-        ${"apprenticeItems"}  | ${"dog"}       | ${"must be a number"}
-        ${"apprenticeItems"}  | ${"-1"}        | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"0"}         | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"9"}         | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"301"}       | ${"between 10 and 300"}
-        ${"acceptableMisses"} | ${"dog"}       | ${"must be a number"}
-        ${"acceptableMisses"} | ${"-1"}        | ${"between 0 and 30"}
-        ${"acceptableMisses"} | ${"31"}        | ${"between 0 and 30"}
-        ${"newKanjiWeight"}   | ${"dog"}       | ${"must be a number"}
-        ${"newKanjiWeight"}   | ${"-1"}        | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"0"}         | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"1"}         | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"0.11"}      | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"dog"}       | ${"must be a number"}
-        ${"excessMissWeight"} | ${"-1"}        | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"0"}         | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"1"}         | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"0.11"}      | ${"between 0.01 and 0.1"}
+        input                 | inputValue | errorMsg
+        ${"retrieveDays"}     | ${"dog"}   | ${"must be a number"}
+        ${"retrieveDays"}     | ${"-1"}    | ${"between 1 and 7"}
+        ${"retrieveDays"}     | ${"0"}     | ${"between 1 and 7"}
+        ${"retrieveDays"}     | ${"8"}     | ${"between 1 and 7"}
+        ${"reviewsPer"}       | ${"dog"}   | ${"must be a number"}
+        ${"reviewsPer"}       | ${"-1"}    | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"0"}     | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"9"}     | ${"between 10 and 500"}
+        ${"reviewsPer"}       | ${"501"}   | ${"between 10 and 500"}
+        ${"apprenticeItems"}  | ${"dog"}   | ${"must be a number"}
+        ${"apprenticeItems"}  | ${"-1"}    | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"0"}     | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"9"}     | ${"between 10 and 300"}
+        ${"apprenticeItems"}  | ${"301"}   | ${"between 10 and 300"}
+        ${"acceptableMisses"} | ${"dog"}   | ${"must be a number"}
+        ${"acceptableMisses"} | ${"-1"}    | ${"between 0 and 30"}
+        ${"acceptableMisses"} | ${"31"}    | ${"between 0 and 30"}
+        ${"newKanjiWeight"}   | ${"dog"}   | ${"must be a number"}
+        ${"newKanjiWeight"}   | ${"-1"}    | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"0"}     | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"1"}     | ${"between 0.01 and 0.1"}
+        ${"newKanjiWeight"}   | ${"0.11"}  | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"dog"}   | ${"must be a number"}
+        ${"excessMissWeight"} | ${"-1"}    | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"0"}     | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"1"}     | ${"between 0.01 and 0.1"}
+        ${"excessMissWeight"} | ${"0.11"}  | ${"between 0.01 and 0.1"}
       `(
         "$input reports '$errorMsg' for '$inputValue'",
         async ({ input, inputValue, errorMsg }) => {

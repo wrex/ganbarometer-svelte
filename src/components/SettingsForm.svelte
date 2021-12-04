@@ -1,17 +1,12 @@
 <script type="ts">
   import {createForm} from 'svelte-forms-lib';
   import * as yup from 'yup';
-  import { gbApiToken, gbSettings, APITOKENREGEX } from '../store/stores';
+  import { gbSettings } from '../store/stores';
   import { getModal } from './Modal.svelte';
 
   const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
-    initialValues: {apiKey: $gbApiToken, ...$gbSettings},
+    initialValues: {...$gbSettings},
     validationSchema: yup.object().shape({
-      apiKey: yup
-        .string()
-        .nullable()
-        .matches(APITOKENREGEX, "Invalid API token")
-        .required("Required field"),
       retrieveDays: yup
         .number()
         .typeError("Must be a number")
@@ -53,7 +48,6 @@
       reviewSessions: yup.string(),
     }),
     onSubmit: values => {
-      gbApiToken.set(values.apiKey);
       gbSettings.set(values);
       getModal().close();
     }
@@ -64,19 +58,6 @@
 <form on:submit={handleSubmit} aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
-    <label class="form-label" for="apiKey">API Key:</label>
-    <input 
-    class="form-control"
-    type="text" 
-    id="apiKey" 
-    on:change={handleChange}
-    on:blur={handleChange}
-    bind:value={$form.apiKey}
-    />
-    {#if $errors.apiKey}
-    <small>{$errors.apiKey}</small>
-    {/if}
-    
     <label for="retrieveDays">
       Number of days to retrieve reviews: 
     </label>
@@ -277,10 +258,6 @@
     display: block;
     color: red;
   }
-
-  /* input {
-    display: block;
-  } */
 
   input[type="radio"] {
     display: inline-block;

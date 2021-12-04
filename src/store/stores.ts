@@ -1,25 +1,9 @@
 import { writable, readable } from "svelte/store";
-import { getSessions } from "../API/Sessions";
 
 declare var wkof: any;
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
-export const TOKENKEY = "gbApiToken";
-
-export const APITOKENREGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-
-export const validApiToken = (token: string): boolean => {
-  return token.match(APITOKENREGEX) !== null;
-};
-
-// If there is already a token for WKOF, use that as a default value
-const wkofKey: string = localStorage.getItem("apiv2_key") ?? "";
-
-// Store #1: the API token for https://docs.api.wanikani.com)
-export const gbApiToken = writable(localStorage.getItem(TOKENKEY) ?? wkofKey);
-gbApiToken.subscribe((val) => localStorage.setItem(TOKENKEY, val));
 
 export const defaultSettings = {
   retrieveDays: "3",

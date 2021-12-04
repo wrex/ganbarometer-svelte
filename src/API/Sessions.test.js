@@ -2,9 +2,7 @@
  * @jest-environment jsdom
  */
 
-// import { jest } from "@jest/globals";
 import { getSessions, nDaysAgo } from "./Sessions";
-// import { sessionsStore } from "../store/stores";
 import { wkApiFactory } from "../mocks/wanikaniApi";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
@@ -258,44 +256,4 @@ describe("getSessions()", () => {
     const sessions = await getSessions();
     expect(sessions[0].questions).toBe(8);
   });
-
-  // IGNORE CACHING FOR NOW AND WORK ON REST OF APP
-
-  // describe("sessionsStore (readable svelte store)", () => {
-  //   it("has a subscribe() function that returns an unusubscribe function", () => {
-  //     let sessions;
-  //     const unsubscribe = sessionsStore.subscribe((val) => (sessions = val));
-  //     expect(typeof unsubscribe).toEqual("function");
-  //     expect(unsubscribe).not.toThrow();
-  //   });
-  //   it("returns an empty array if nothing stored and no new reviews", () => {
-  //     let sessions;
-  //     const unsubscribe = sessionsStore.subscribe((val) => (sessions = val));
-  //     expect(sessions).toEqual([]);
-  //     unsubscribe();
-  //   });
-  //   it("returns cached values immediately", () => {
-  //     let sessions;
-  //     const today = new Date();
-
-  //     mockReviewCollection([]);
-  //     window.wkof.file_cache.load.mockReturnValue([
-  //       {
-  //         questions: 543,
-  //         reading_incorrect: 17,
-  //         meaning_incorrect: 33,
-  //         startTime: new Date("11/1/2021 10:00:00").toISOString(),
-  //         endTime: new Date("11/1/2021 11:00:00").toISOString(),
-  //         reviews: [],
-  //       },
-  //     ]);
-  //     console.log(window.wkof.file_cache.load());
-  //     const unsubscribe = sessionsStore.subscribe((val) => (sessions = val));
-  //     expect(sessions.length).toBe(1);
-  //     expect(sessions[0].questions).toBe(543);
-  //     unsubscribe();
-  //   });
-  //   it.todo("calls subscribers after new sessions retrieved");
-  //   it.todo("loops looking for more reviews as long as there are subscribers");
-  // });
 });
