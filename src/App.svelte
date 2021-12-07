@@ -3,7 +3,7 @@
   import SettingsForm from "./components/SettingsForm.svelte";
   import Modal, {getModal} from './components/Modal.svelte'
 
-  let wkofLoaded = window.wkof ? true : false;
+  let wkofLoaded = wkof ? true : false;
 </script>
 
 <section data-testid="ganbarometer">
@@ -19,7 +19,6 @@
     <p>Please refer to the <a
     href="http://community.wanikani.com/t/instructions-installing-wanikani-open-framework/28549">WKOF
     installation instructions.</a></p>
-    <p>{console.log(window.wkof)}</p>
   </div>
   {/if}
 
