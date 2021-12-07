@@ -16,6 +16,18 @@ describe("App layout", () => {
     expect(gbSection).toBeInTheDocument();
   });
 
+  it("has a nav for showing graphs", () => {
+    render(App);
+    const element = screen.getByText("Graphs");
+    expect(element).toBeInTheDocument();
+  });
+
+  it("has a nav for showing data", () => {
+    render(App);
+    const element = screen.getByText("Data");
+    expect(element).toBeInTheDocument();
+  });
+
   it("has a button to change the settings", () => {
     render(App);
     const button = screen.getByRole("button", { name: "settings" });

@@ -4,6 +4,11 @@
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
 </script>
 
+<nav>
+  <li>Graphs</li>
+  <li>Data</li>
+</nav>
+
 <div class="difficulty">
   <h1>Difficulty</h1>
   <Gauge value={0.25} />
