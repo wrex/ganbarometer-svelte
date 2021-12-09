@@ -33,3 +33,19 @@ nefarious is included in the user script:
 3. Run `npm run test` to ensure all the tests are passing.
 4. Run `npm run build` to create the bundle.user.js userscript in the `dist`
    subdirectory. This should be identical to the distributed version.
+
+## TODO
+
+- Change getSessions to use Median Absolute Deviation to find sessions
+
+- Wire everything up to fetch without caching (add caching later)
+
+- Modify settings to use vest instead of yup, and eliminate forms library.
+
+- Change reviews/day to a bar graph
+
+- Change speed to a dial gauge
+
+- get reviews at app startup and asynch re-render when new data returned.
+
+- Create components for difficulty/workload/speed that display Graphs OR data
