@@ -36,8 +36,6 @@ nefarious is included in the user script:
 
 ## TODO
 
-- Change getSessions to use Median Absolute Deviation to find sessions
-
 - Wire everything up to fetch without caching (add caching later)
 
 - Modify settings to use vest instead of yup, and eliminate forms library.

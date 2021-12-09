@@ -15,14 +15,6 @@ const logObj = (title: string, obj: any): void => {
   console.log(`${title}: ${JSON.stringify(obj, null, 2)}`);
 };
 
-// Maximum number of ms between reviews before it's considered a new review
-// Default to 10 minutes, but use an algorithm to find a more suitable value
-// once reviews are retrieved and processed
-let MAXINTERVAL = 600000;
-
-// Global to store the median interval between all reviews
-let MEDIANINTERVAL;
-
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
  * e.g. if now is 11/5/2021 01:02:03 local time,
@@ -82,25 +74,6 @@ const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
   }
 };
 
-// update the global MAXINTERVAL with a heuristic
-const updateMaxInterval = (durations: number[]): void => {
-  // guard clause: keep default unless there are some durations
-  if (!durations.length) {
-    return;
-  }
-
-  // First pass: clamp maximum durations to current MAXINTERVAL (default: 10m)
-  const clampedDurations = durations.map((d) =>
-    d > MAXINTERVAL ? MAXINTERVAL : d
-  );
-
-  // Find the new median to be safe (shouldn't have changed much)
-  const newMedian = median(clampedDurations);
-
-  // Heuristic:
-  MAXINTERVAL = Math.max(newMedian + 2 * sigma(clampedDurations), 600000);
-};
-
 const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
   let reviewsCopy = reviews.slice();
 
@@ -114,9 +87,9 @@ const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
 
 // Turn array of RawReviews into array processed reviews
 const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
-  const initialized: Review[] = reviews.map(initializeReview);
-
-  const converted: Review[] = initialized.map(calculateDuration);
+  const converted: Review[] = reviews
+    .map(initializeReview)
+    .map(calculateDuration);
 
   const processed: Review[] = await calculateQuestions(converted);
 
@@ -127,9 +100,6 @@ const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
   if (processed.length) {
     processed[processed.length - 1].duration = medianInterval;
   }
-
-  // Calculate a better value for MAXINTERVAL global than the 10m default
-  updateMaxInterval(durations);
 
   return new Promise((resolve, reject) => resolve(processed));
 };
@@ -147,58 +117,83 @@ const getReviews = async (fromDate: Date) => {
   return await processReviews(collection.data);
 };
 
-// look at durations to find last reviews in a session
-const findLongDurations = (reviews: Review[]): number[] => {
-  return reviews
-    .map((r, i) => {
-      return { index: i, duration: r.duration };
-    })
-    .filter((obj) => obj.duration >= MAXINTERVAL)
-    .map((obj) => obj.index);
+const findSessionEnds = (reviews: Review[]): number[] => {
+  const durations = reviews.map((r) => r.duration);
+  const min_duration = Math.min(...durations);
+
+  // Heuristic: no duration > 10min means single-review sessions
+  if (min_duration > 60000) {
+    return durations.map((r, i) => i);
+  } else {
+    // Use the "Median absolute deviation" to find outlier durations that
+    // indicate the start of a new session.
+
+    // See this blog post for an excellent description of MAD:
+    // https://hausetutorials.netlify.app/posts/2019-10-07-outlier-detection-with-median-absolute-deviation/
+
+    // first find the deviations from the median
+    const median_duration = median(durations);
+    const duration_deviations = reviews.map((r) =>
+      Math.abs(r.duration - median_duration)
+    );
+
+    // Next, find the median of the deviations (assume normal distribution of
+    // durations within a session -- this is where 1.4826 comes from)
+    const median_absolute_deviation = median(duration_deviations) * 1.4826;
+
+    // Finally, calculate the MAD for each duration
+    // MAD values greater than 2.0 indicate the start of a new session
+    const initial_mads = duration_deviations.map(
+      (d) => (d - median_duration) / median_absolute_deviation
+    );
+
+    // Force final duration MAD to be huge since the last review is always the
+    // end of a sessions
+    const duration_mads =
+      initial_mads[initial_mads.length - 1] > 2.0
+        ? initial_mads
+        : [...initial_mads.slice(0, -1), 999999];
+
+    // Say 3 sessions in 12 reviews: reviews 0-3, 4-5, and 6-12
+    // Want to reate arrays of start and end indices such that:
+    //   starts = [0, 4, 6]
+    //   ends   = [3, 5, 12]
+    // Note that reviews 3, 5, and 12 will have a duration MAD > 2.0
+
+    const indices = reviews.map((r, i) => i);
+    return indices.filter((r, i) => duration_mads[i] > 2.0);
+  }
 };
 
-// Get (possibly cached) sessions from n days ago
+// Get sessions from n days ago
 export const getSessions = async (n: number = 3) => {
   const reviews: Review[] = await getReviews(nDaysAgo(n));
 
   return new Promise((resolve, reject) => {
-    // guard clause: bail early if no reviews
     if (reviews.length === 0) {
       resolve([]);
     }
 
-    // Complicated, but functional:
-    // Say 3 sessions: reviews 0-3, 4-5, and 6-12
-    // Create an array of start and end indices such that:
-    //   starts = [0, 4, 6]
-    //   ends   = [3, 5, 12]
-
-    // Note that reviews 3, 5, and MAYBE 12 will have a long duration
-
-    // first find indexes in reviews array with long durations
-    const longDurations: number[] = findLongDurations(reviews);
-
-    // The last review in a session will always have a long duration.
-    // But the final review retrieved might not have a long duration.
-    // Include the final review index if it isn't already there
-    const lastLongDurationIndex = longDurations[longDurations.length - 1];
-    const finalReviewIndex = reviews.length - 1;
-    const ends: number[] =
-      lastLongDurationIndex === finalReviewIndex
-        ? longDurations
-        : [...longDurations, reviews.length - 1];
+    // Find the indices of reviews with long durations (indicating the end of a
+    // session)
+    const session_ends = findSessionEnds(reviews);
 
     // First start is always index 0, then the index after the end of each
     // session (slice off the last start to keep ends[] and starts[] the
     // same length)
-    const starts: number[] = [0, ...ends.map((i) => i + 1)].slice(0, -1);
+    const session_starts: number[] = [
+      0,
+      ...session_ends.map((i) => i + 1),
+    ].slice(0, -1);
 
     // Create some "proto Sessions" objects for these review sequences
-    const sessionSlices: { reviews: Review[] }[] = ends.map((end, i) => {
-      return {
-        reviews: reviews.slice(starts[i], end + 1),
-      };
-    });
+    const sessionSlices: { reviews: Review[] }[] = session_ends.map(
+      (end, i) => {
+        return {
+          reviews: reviews.slice(session_starts[i], end + 1),
+        };
+      }
+    );
 
     // Finally, flesh out the rest of the session object
     resolve(

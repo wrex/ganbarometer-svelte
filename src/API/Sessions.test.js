@@ -140,7 +140,7 @@ describe("getSessions()", () => {
     ).toBe(0);
   });
 
-  it("returns one session if two reviews together", async () => {
+  it("returns one session if two reviews together (within 10 minutes)", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
