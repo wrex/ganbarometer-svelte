@@ -1,14 +1,16 @@
 <script>
-  import Gauge from "./Gauge.svelte";
+  import BarChart from "./BarChart.svelte";
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
   <h1>Reviews/Day</h1>
-  <Gauge value={0.65} label="127" />
-  <p>Reviews/day footer</p>
+  <BarChart values={[119, 153, 98, 122]} labels={["M", "Tu", "W", "Th"]}/>
 </div>
 
 <style>
+  .reviews-per-day {
+    min-width: 20em;
+  }
   h1 {
     font-size: 1.25rem;
     font-weight: normal;

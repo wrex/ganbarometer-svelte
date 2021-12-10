@@ -28,6 +28,12 @@ describe("App layout", () => {
     expect(element).toBeInTheDocument();
   });
 
+  it("has an input for entering the number of days to retrieve", () => {
+    render(App);
+    const element = screen.getByLabelText(/Days to retrieve/i);
+    expect(element).toBeInTheDocument();
+  });
+
   it("has a button to change the settings", () => {
     render(App);
     const button = screen.getByRole("button", { name: "settings" });

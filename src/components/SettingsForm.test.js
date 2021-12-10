@@ -26,7 +26,6 @@ describe("Settings Form", () => {
 
     test.each`
       inputText
-      ${"number of days"}
       ${"background"}
       ${"fill"}
       ${"warning"}
@@ -52,7 +51,7 @@ describe("Settings Form", () => {
       const { debug } = render(SettingsForm);
 
       inputs = {
-        retrieveDays: screen.getByLabelText(/days to retrieve/i),
+        // retrieveDays: screen.getByLabelText(/days to retrieve/i),
         reviewsPer: screen.getByLabelText(/reviews per/i),
         apprenticeItems: screen.getByLabelText(/apprentice items/i),
         acceptableMisses: screen.getByLabelText(
@@ -71,9 +70,10 @@ describe("Settings Form", () => {
         localStorage.removeItem("gbSettings");
       });
 
+      // ${"retrieveDays"}     | ${"5"}
+
       test.each`
         input                 | value
-        ${"retrieveDays"}     | ${"5"}
         ${"reviewsPer"}       | ${"123"}
         ${"apprenticeItems"}  | ${"231"}
         ${"acceptableMisses"} | ${"17"}
@@ -91,13 +91,14 @@ describe("Settings Form", () => {
       });
     });
 
+    // ${"retrieveDays"}     | ${"dog"}   | ${"must be a number"}
+    // ${"retrieveDays"}     | ${"-1"}    | ${"between 1 and 7"}
+    // ${"retrieveDays"}     | ${"0"}     | ${"between 1 and 7"}
+    // ${"retrieveDays"}     | ${"8"}     | ${"between 1 and 7"}
+
     describe("Text and number input field validations", () => {
       test.each`
         input                 | inputValue | errorMsg
-        ${"retrieveDays"}     | ${"dog"}   | ${"must be a number"}
-        ${"retrieveDays"}     | ${"-1"}    | ${"between 1 and 7"}
-        ${"retrieveDays"}     | ${"0"}     | ${"between 1 and 7"}
-        ${"retrieveDays"}     | ${"8"}     | ${"between 1 and 7"}
         ${"reviewsPer"}       | ${"dog"}   | ${"must be a number"}
         ${"reviewsPer"}       | ${"-1"}    | ${"between 10 and 500"}
         ${"reviewsPer"}       | ${"0"}     | ${"between 10 and 500"}

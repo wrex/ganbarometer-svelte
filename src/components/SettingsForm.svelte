@@ -7,12 +7,6 @@
   const { form, errors, state, handleChange, handleSubmit, isValid } = createForm({
     initialValues: {...$gbSettings},
     validationSchema: yup.object().shape({
-      retrieveDays: yup
-        .number()
-        .typeError("Must be a number")
-        .nullable()
-        .min(1, "Must be between 1 and 7")
-        .max(7, "Must be between 1 and 7"),
       reviewsPer: yup
         .number()
         .typeError("Must be a number")
@@ -58,21 +52,6 @@
 <form on:submit={handleSubmit} aria-label="Settings Form">
   <fieldset>
     <legend>General</legend>
-    <label for="retrieveDays">
-      Number of days to retrieve reviews: 
-    </label>
-    <input 
-      type="number" 
-      id="retrieveDays" 
-      on:change={handleChange}
-      on:blur={handleChange}
-      bind:value={$form.retrieveDays}
-    />
-    {#if $errors.retrieveDays}
-    <small>{$errors.retrieveDays}</small>
-    {/if}
-    
-    <br>
     <label for="bgColor">
       Background
     </label>
