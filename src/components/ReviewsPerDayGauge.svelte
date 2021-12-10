@@ -8,9 +8,6 @@
 </div>
 
 <style>
-  .reviews-per-day {
-    width: 370px;
-  }
   h1 {
     font-size: 1.25rem;
     font-weight: normal;
@@ -22,6 +19,16 @@
 
   p {
     color: var(--text-color, #004033);
+  }
+
+  .reviews-per-day {
+    min-width: 300px;
+  }
+
+  @media (min-width: 1200px ) {
+    .reviews-per-day {
+      min-width: 370px;
+    }
   }
 
 </style>

@@ -1,7 +1,7 @@
 <script>
   import Gauge from "../components/Gauge.svelte";
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
-  import Modal, {getModal} from './components/Modal.svelte';
+  import Modal, {getModal} from '../components/Modal.svelte';
   import SettingsForm from '../components/SettingsForm.svelte';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -30,11 +30,11 @@
     <svg xmlns="http://www.w3.org/2000/svg" 
       height="24px" 
       viewBox="0 0 24 24" 
-      width="24px" >
-      <path 
+      width="24px" 
+      ><path 
         d="M0 0h24v24H0V0z" 
-        fill="none"/>
-      <path 
+        fill="none"
+      /><path 
         d="M19.43 12.98c.04-.32.07-.64.07-.98
         0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06
         0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18
@@ -55,8 +55,8 @@
         1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13
         1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7
         1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79
-        4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-      </svg>
+        4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+    /></svg>
   </button>
 </div>
 
@@ -100,12 +100,6 @@
     border-bottom: 2px solid black;
   }
 
-  .settings {
-    background: initial;
-    border:none;
-    margin-top: -0.5em;
-  }
-
   .retrieval {
     display: flex;
   }
@@ -128,15 +122,18 @@
     color: var(--text-color, #004033);
   }
 
-  p {
-    color: var(--text-color, #004033);
-  }
-
   .difficulty,
   .review-intervals {
     align-self: end;
     padding-bottom: 1.5em;
-    width: 370px;
+    min-width: 300px;
+  }
+
+  @media (min-width: 1200px) {
+    .difficulty,
+    .review-intervals {
+      min-width: 370px;
+    }
   }
 
 </style>
