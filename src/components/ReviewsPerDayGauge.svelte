@@ -9,7 +9,7 @@
 
 <style>
   .reviews-per-day {
-    min-width: 20em;
+    width: 370px;
   }
   h1 {
     font-size: 1.25rem;
