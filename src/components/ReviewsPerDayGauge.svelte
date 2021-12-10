@@ -11,7 +11,7 @@
   h1 {
     font-size: 1.25rem;
     font-weight: normal;
-    margin: 0 0 5px;
+    margin: 0;
     text-align: center;
     display: inline-block;
     color: var(--text-color, #004033);
@@ -23,6 +23,9 @@
 
   .reviews-per-day {
     min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   @media (min-width: 1200px ) {

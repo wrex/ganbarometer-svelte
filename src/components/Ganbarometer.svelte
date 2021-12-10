@@ -26,7 +26,7 @@
     <li>Data</li>
   </nav>
 
-  <button aria-label="settings" on:click={() => getModal().open()}>
+  <button aria-label="settings" class="settings" on:click={() => getModal().open()}>
     <svg xmlns="http://www.w3.org/2000/svg" 
       height="24px" 
       viewBox="0 0 24 24" 
@@ -60,24 +60,25 @@
   </button>
 </div>
 
-<div class="difficulty">
-  <h1>Difficulty</h1>
+<div class="ganbarometer">
+  <h1>GanbarOmeter</h1>
   <Gauge value={0.25} />
   <!-- <p>Difficulty footer</p> -->
 </div>
-
-<ReviewsPerDayGauge />
 
 <div class="review-intervals">
   <h1>Review Intervals</h1>
   <Gauge value={0.47} label="5.2s" />
 </div>
 
+<ReviewsPerDayGauge />
+
 <Modal>
   <SettingsForm />
 </Modal>
 
 <style>
+
   .spinner {
     margin-inline: 0.5em;
   }
@@ -93,6 +94,7 @@
     text-decoration: none;
     display: inline;
     margin-inline: 1rem;
+    height: fit-content;
   }
 
   .navigation .active {
@@ -102,6 +104,12 @@
 
   .retrieval {
     display: flex;
+  }
+
+  .settings {
+    background-color: inherit;
+    border: none;
+    margin-top: -0.5em;
   }
 
   .retrieval > label {
@@ -116,21 +124,24 @@
   h1 {
     font-size: 1.25rem;
     font-weight: normal;
-    margin: 0 0 5px;
+    margin: 0;
     text-align: center;
     display: inline-block;
     color: var(--text-color, #004033);
   }
 
-  .difficulty,
+  .ganbarometer,
   .review-intervals {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-self: end;
-    padding-bottom: 1.5em;
+    padding-bottom: 14px;
     min-width: 300px;
   }
 
   @media (min-width: 1200px) {
-    .difficulty,
+    .ganbarometer,
     .review-intervals {
       min-width: 370px;
     }

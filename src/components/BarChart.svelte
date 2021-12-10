@@ -3,8 +3,6 @@
   export let values: number[];
   export let labels: string[] = [];
   export let onClickHandlers: {(): void}[] = [];
-  export let caption = '';
-
 
 	const max = Math.max(...values);
 	const heights: string[] = [];
@@ -14,7 +12,6 @@
 </script>
 
 <table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
-  <caption>{caption}</caption>
   <thead>
     <tr>
       <th scope="col">Item</th>
@@ -38,10 +35,7 @@
 <style>
 .graph {
 	margin-bottom:1em;
-}
-
-.graph caption {
-	padding-bottom:0.33em;
+	padding: 0 1em 0;
 }
 
 .graph tbody th {
@@ -56,10 +50,6 @@
 			display:block;
 		}
 
-		.graph caption {
-			display:block;
-		}
-
 		.graph thead {
 			display:none;
 		}
@@ -70,7 +60,7 @@
 			grid-template-columns:repeat(auto-fit, minmax(1em, 1fr));
 			column-gap:2.5%;
 			align-items:end;
-			min-height: 90px;
+			min-height: 75px;
 			padding:0 1em;
 			border-bottom:2px solid rgba(0,0,0,0.5);
 			background:repeating-linear-gradient(
