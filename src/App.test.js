@@ -40,20 +40,20 @@ describe("App layout", () => {
     expect(button).toBeInTheDocument();
   });
 
-  it("has a Difficulty gauge", () => {
+  it("has a Ganbarometer gauge", () => {
     render(App);
     const difficultyGauge = screen.getByRole("heading", {
-      name: "Difficulty",
+      name: "GanbarOmeter",
     });
     expect(difficultyGauge).toBeInTheDocument();
   });
 
   it("has a Reviews/Day gauge", () => {
     render(App);
-    const difficultyGauge = screen.getByRole("heading", {
+    const reviewsGauge = screen.getByRole("heading", {
       name: "Reviews/Day",
     });
-    expect(difficultyGauge).toBeInTheDocument();
+    expect(reviewsGauge).toBeInTheDocument();
   });
 
   it("Has a Review Intervals bar chart", () => {
