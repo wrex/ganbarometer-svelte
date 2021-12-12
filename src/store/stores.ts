@@ -7,6 +7,8 @@ export const SETTINGSKEY = "gbSettings";
 
 export const display = writable("chart");
 
+export const daysToReview = writable("4");
+
 export const defaultSettings = {
   retrieveDays: "3",
   bgColor: "#000000",

@@ -3,7 +3,7 @@
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
   import Modal, {getModal} from '../components/Modal.svelte';
   import SettingsForm from '../components/SettingsForm.svelte';
-  import {display} from '../store/stores';
+  import { display, daysToReview } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -14,7 +14,7 @@
 <div class="controls">
   <div class="retrieval">
     <label for="review-days">Days to retrieve:</label>
-    <input type="number" id="review-days" name="review-days" min="1" max="4">
+    <input type="number" id="review-days" name="review-days" min="1" max="4" bind:value={$daysToReview}>
   </div>
   
   {#if loading}
