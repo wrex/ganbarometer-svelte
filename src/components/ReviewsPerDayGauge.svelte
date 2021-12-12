@@ -3,7 +3,6 @@
   import { display } from "../store/stores";
 
   const daysToReview = 4;
-  const dayLegends = ["M", "Tu", "W", "Th"];
   const reviewStats = {
     total: 584,
     reviewsPerDay: 146,
@@ -12,13 +11,14 @@
     first: new Date("11/1/2021 10:18"),
     last: new Date("11/4/2021 15:32"),
     reviews: [113, 147, 113, 113],
+    legends: ["M", "Tu", "W", "Th"],
   };
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
   <h1>Reviews/Day</h1>
   {#if ($display === "chart")}
-    <BarChart values={reviewStats.reviews} labels={dayLegends}/>
+    <BarChart values={reviewStats.reviews} labels={reviewStats.lgends}/>
   {:else}
     <div >Review data goes here. Table?</div>
   {/if}
