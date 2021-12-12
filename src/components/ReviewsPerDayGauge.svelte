@@ -1,10 +1,27 @@
 <script>
   import BarChart from "./BarChart.svelte";
+  import { display } from "../store/stores";
+
+  const daysToReview = 4;
+  const dayLegends = ["M", "Tu", "W", "Th"];
+  const reviewStats = {
+    total: 584,
+    reviewsPerDay: 146,
+    targetRPD: 150,
+    accuracy: "86%",
+    first: new Date("11/1/2021 10:18"),
+    last: new Date("11/4/2021 15:32"),
+    reviews: [113, 147, 113, 113],
+  };
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
   <h1>Reviews/Day</h1>
-  <BarChart values={[119, 153, 98, 122]} labels={["M", "Tu", "W", "Th"]}/>
+  {#if ($display === "chart")}
+    <BarChart values={reviewStats.reviews} labels={dayLegends}/>
+  {:else}
+    <div >Review data goes here. Table?</div>
+  {/if}
 </div>
 
 <style>
@@ -23,6 +40,7 @@
 
   .reviews-per-day {
     min-width: 300px;
+    align-self: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;

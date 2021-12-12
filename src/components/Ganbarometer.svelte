@@ -3,6 +3,8 @@
   import ReviewsPerDayGauge from "../components/ReviewsPerDayGauge.svelte";
   import Modal, {getModal} from '../components/Modal.svelte';
   import SettingsForm from '../components/SettingsForm.svelte';
+  import {display} from '../store/stores';
+  import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
   let loading = true;
@@ -16,14 +18,14 @@
   </div>
   
   {#if loading}
-    <div class="spinner">
+    <div transition:fade class="spinner">
       <SyncLoader size="25" unit="px" />
     </div>
   {/if}
 
   <nav class="navigation">
-    <li class="active">Graphs</li>
-    <li>Data</li>
+    <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
+    <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
   </nav>
 
   <button aria-label="settings" class="settings" on:click={() => getModal().open()}>

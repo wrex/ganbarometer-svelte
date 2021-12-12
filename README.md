@@ -36,16 +36,10 @@ nefarious is included in the user script:
 
 ## TODO
 
-- Create new markup for ganbarometer (spinner, review-days input, nav, ...)
+- Create components for difficulty/workload/speed that display Graphs OR data
 
 - Wire everything up to fetch without caching (add caching later)
 
 - Modify settings to use vest instead of yup, and eliminate forms library.
 
-- Change reviews/day to a bar graph
-
-- Change speed to a dial gauge
-
 - get reviews at app startup and async re-render when new data returned.
-
-- Create components for difficulty/workload/speed that display Graphs OR data

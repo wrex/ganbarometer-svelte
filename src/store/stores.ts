@@ -5,6 +5,8 @@ declare var wkof: any;
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
 
+export const display = writable("chart");
+
 export const defaultSettings = {
   retrieveDays: "3",
   bgColor: "#000000",
