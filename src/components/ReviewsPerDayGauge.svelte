@@ -2,7 +2,6 @@
   import BarChart from "./BarChart.svelte";
   import { display } from "../store/stores";
 
-  const daysToReview = 4;
   const reviewStats = {
     total: 584,
     reviewsPerDay: 146,
@@ -18,9 +17,9 @@
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
   <h1>Reviews/Day</h1>
   {#if ($display === "chart")}
-    <BarChart values={reviewStats.reviews} labels={reviewStats.lgends}/>
+    <BarChart values={reviewStats.reviews} labels={reviewStats.legends}/>
   {:else}
-    <div >Review data goes here. Table?</div>
+    <div data-testid="reviews-per-day-data">Review data goes here. Table?</div>
   {/if}
 </div>
 
