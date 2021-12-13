@@ -30,7 +30,7 @@
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
   </nav>
 
-  <SettingsButton handler={getModal()} />
+  <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
 <div class="ganbarometer">

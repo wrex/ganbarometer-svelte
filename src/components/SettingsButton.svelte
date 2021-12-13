@@ -1,8 +1,4 @@
-<script lang="ts">
-  export let handler;
-</script>
-
-<button aria-label="settings" class="settings" on:click={() => handler.open()}>
+<button aria-label="settings" class="settings" on:click >
   <svg xmlns="http://www.w3.org/2000/svg" 
     height="24px" 
     viewBox="0 0 24 24" 
