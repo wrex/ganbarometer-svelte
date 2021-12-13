@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
-import App from "./App.svelte";
+import App from "../App.svelte";
 import { render, screen } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
-import { mockWkof } from "./mocks/wkof";
+import { mockWkof } from "../mocks/wkof";
 
 describe("App layout", () => {
   mockWkof();

@@ -33,10 +33,6 @@
     color: var(--text-color, #004033);
   }
 
-  p {
-    color: var(--text-color, #004033);
-  }
-
   .reviews-per-day {
     min-width: 300px;
     align-self: flex-start;
