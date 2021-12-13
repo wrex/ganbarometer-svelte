@@ -19,7 +19,7 @@
   {#if ($display === "chart")}
     <BarChart values={reviewStats.reviews} labels={reviewStats.legends}/>
   {:else}
-    <div data-testid="reviews-per-day-data">Review data goes here. Table?</div>
+    <div data-testid="reviews-per-day-table">Review data goes here. Table?</div>
   {/if}
 </div>
 

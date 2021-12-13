@@ -48,10 +48,10 @@ describe("App layout", () => {
     expect(difficultyGauge).toBeInTheDocument();
   });
 
-  it("has a Reviews/Day gauge", () => {
+  it("has a speed gauge", () => {
     render(App);
     const reviewsGauge = screen.getByRole("heading", {
-      name: "Reviews/Day",
+      name: "Seconds/Question",
     });
     expect(reviewsGauge).toBeInTheDocument();
   });
@@ -59,7 +59,7 @@ describe("App layout", () => {
   it("Has a Review Intervals bar chart", () => {
     render(App);
     const intervalChart = screen.getByRole("heading", {
-      name: "Review Intervals",
+      name: "Reviews/Day",
     });
     expect(intervalChart).toBeInTheDocument();
   });
@@ -72,5 +72,23 @@ describe("Interaction", () => {
     await userEvent.click(button);
     const form = screen.getByRole("form", { name: "Settings Form" });
     expect(form).toBeInTheDocument();
+  });
+
+  it("displays the reviews/day table when the Data nav is clicked", async () => {
+    render(App);
+    const dataNav = screen.getByText("Data");
+    await userEvent.click(dataNav);
+    const table = screen.getByTestId("reviews-per-day-table");
+    expect(table).toBeInTheDocument();
+  });
+
+  it("reverts to the chart view when the Graphs nav is clicked", async () => {
+    render(App);
+    const graphNav = screen.getByText("Graphs");
+    const dataNav = screen.getByText("Data");
+    await userEvent.click(dataNav);
+    await userEvent.click(graphNav);
+    const table = screen.queryByTestId("reviews-per-day-table");
+    expect(table).not.toBeInTheDocument();
   });
 });
