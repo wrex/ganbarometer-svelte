@@ -30,7 +30,7 @@ describe("App layout", () => {
 
   it("has an input for entering the number of days to retrieve", () => {
     render(App);
-    const element = screen.getByLabelText(/Days to retrieve/i);
+    const element = screen.getByLabelText(/Days to display/i);
     expect(element).toBeInTheDocument();
   });
 
@@ -52,6 +52,14 @@ describe("App layout", () => {
     render(App);
     const reviewsGauge = screen.getByRole("heading", {
       name: "Speed",
+    });
+    expect(reviewsGauge).toBeInTheDocument();
+  });
+
+  it("has an accuracy gauge", () => {
+    render(App);
+    const reviewsGauge = screen.getByRole("heading", {
+      name: "Accuracy",
     });
     expect(reviewsGauge).toBeInTheDocument();
   });

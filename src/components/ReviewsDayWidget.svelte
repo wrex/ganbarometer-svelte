@@ -84,7 +84,7 @@
 
 
   .reviews-per-day {
-    min-width: 300px;
+    min-width: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -92,7 +92,7 @@
 
   @media (min-width: 1200px ) {
     .reviews-per-day {
-      min-width: 370px;
+      min-width: 275px;
     }
   }
 

@@ -31,12 +31,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 300px;
+    min-width: 220px;
   }
 
   @media (min-width: 1200px) {
     .ganbarometer {
-      min-width: 370px;
+      min-width: 275px;
     }
   }
 </style>

@@ -2,21 +2,20 @@
   import Gauge from "./Gauge.svelte";
   import {display} from "../store/stores";
   export let value=0;
-  export let label="0s";
 </script>
 
-<div class="speed">
-  <h1 class="gb-header">Speed</h1>
+<div class="accuracy">
+  <h1 class="gb-header">Accuracy</h1>
   {#if $display === "chart"}
-    <Gauge {value} {label} />
-    <div class="units">seconds/question</div>
+    <Gauge {value} />
+    <div class="units">correct first time</div>
   {:else}
-    <div data-testid="speed-table">Table content goes here</div>
+    <div data-testid="accuracy-table">Table content goes here</div>
   {/if}
 </div>
 
 <style>
-  .speed {
+  .accuracy {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,7 +23,7 @@
   }
 
   @media (min-width: 1200px) {
-    .speed {
+    .accuracy {
       min-width: 275px;
     }
   }

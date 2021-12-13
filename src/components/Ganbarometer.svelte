@@ -1,6 +1,7 @@
 <script>
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
+  import AccuracyWidget from "./AccuracyWidget.svelte";
   import ReviewsDayWidget from "./ReviewsDayWidget.svelte";
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
@@ -29,7 +30,7 @@
 
 <div class="controls">
   <div class="retrieval">
-    <label for="review-days">Days to retrieve:</label>
+    <label for="review-days">Days to display:</label>
     <input type="number" id="review-days" name="review-days" min="1" max="7" bind:value={$daysToReview}>
   </div>
   
@@ -50,6 +51,8 @@
 <GbWidget value={0.25} />
 
 <SpeedWidget value={0.42} label="5.2" />
+
+<AccuracyWidget value={0.86} />
 
 <ReviewsDayWidget {reviewStats} />
 
