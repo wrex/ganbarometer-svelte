@@ -37,4 +37,9 @@
     border: none;
     margin-top: -0.5em;
   }
+
+  .settings:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 </style>

@@ -1,29 +1,25 @@
 <script>
   import Gauge from "./Gauge.svelte";
+  import {display} from "../store/stores";
   export let value=0;
   export let label="0s";
 </script>
 
 <div class="speed">
-  <h1><slot>Seconds/Question</slot></h1>
-  <Gauge {value} {label} />
+  <h1 class="gb-header">Speed</h1>
+  {#if $display === "chart"}
+    <Gauge {value} {label} />
+    <div class="units">seconds/question</div>
+  {:else}
+    <div data-testid="speed-table">Table content goes here</div>
+  {/if}
 </div>
 
 <style>
-    h1 {
-    font-size: 1.25rem;
-    font-weight: normal;
-    margin: 0;
-    text-align: center;
-    display: inline-block;
-    color: var(--text-color, #004033);
-  }
-  
   .speed {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-self: end;
     padding-bottom: 14px;
     min-width: 300px;
   }

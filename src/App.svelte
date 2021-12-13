@@ -28,6 +28,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    align-items: flex-start;
     column-gap: 20px;
 
     background-color: #f4f4f4;

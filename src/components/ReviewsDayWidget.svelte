@@ -1,41 +1,91 @@
 <script>
   import BarChart from "./BarChart.svelte";
-  import { display } from "../store/stores";
+  import { display, daysToReview } from "../store/stores";
 
   export let reviewStats = {
-    total: 1,
-    reviewsPerDay: 1,
-    targetRPD: 1,
-    accuracy: "100%",
-    first: new Date(),
-    last: new Date(),
-    reviews: [1],
-    legends: ["M"],
+    targetReviewsPerDay: 150,
+    reviews: [
+      {count: 113, accuracy: 0.86, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
+      {count: 128, accuracy: 0.90, start: new Date("11/2/2021 10:08"), end: new Date("11/2/2021 11:12")},
+      {count: 158, accuracy: 0.83, start: new Date("11/3/2021 9:27"), end: new Date("11/3/2021 10:31")},
+      {count: 98, accuracy: 0.95, start: new Date("11/4/2021 9:05"), end: new Date("11/4/2021 9:43")},
+    ],
   };
+
+  // save some screen real-estate below
+  let revs = reviewStats.reviews;
+
+  const dowString = (date) => { 
+    return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
+  ;
+
+  let startDayOfWeeks = revs.map(r => dowString(r.start));
+  let endDayOfWeeks = revs.map(r => dowString(r.end));
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
-  <h1>Reviews/Day</h1>
+  <h1 class="gb-header">Load</h1>
   {#if ($display === "chart")}
-    <BarChart values={reviewStats.reviews} labels={reviewStats.legends}/>
+    <BarChart 
+      values={revs.map(r => r.count)} 
+      labels={startDayOfWeeks}
+    />
+    <div class="units">reviews/day</div>
   {:else}
-    <div data-testid="reviews-per-day-table">Review data goes here. Table?</div>
+    <div data-testid="reviews-per-day-table">
+      <table>
+        <tr>
+          <th>Total:</th>
+          <td>{ revs.reduce((acc,r) => acc += r.count, 0) } reviews
+          <span class="secondary">target {reviewStats.targetReviewsPerDay * $daysToReview}</span></td>
+        </tr>
+        <tr>
+          <th>Overall Accuracy:</th>
+          <td>{
+            (revs.reduce((acc, r) => acc += r.accuracy, 0) * 100 / revs.length)
+          }%</td>
+        </tr>
+        <tr>
+          <th>Latest ({dowString(revs[revs.length - 1].start)}):</th>
+          <td>{ revs[revs.length - 1].count } reviews <span
+          class="secondary">{revs[revs.length-1].accuracy * 100}% accuracy</span></td>
+        </tr>
+        <tr>
+          <th>{dowString(revs[0].start)} &ndash; {dowString(revs[revs.length - 2].start)}:</th>
+          <td>{revs.slice(0, -1).map(r => r.count).join(" • ")}</td>
+        </tr>
+      </table>
+    </div>
   {/if}
 </div>
 
 <style>
-  h1 {
-    font-size: 1.25rem;
-    font-weight: normal;
-    margin: 0;
-    text-align: center;
-    display: inline-block;
-    color: var(--text-color, #004033);
+
+  table {
+    border-collapse: collapse;
+    font-size: small;
+    line-height: 1.2;
+    /* width: 100%; */
   }
+  th,
+  td {
+    padding: 0.25em;
+    text-align: left;
+    font-weight: bold;
+  }
+  th {
+    text-align: right;
+    font-weight: 100;
+  }
+
+  .secondary {
+    opacity: 60%;
+    font-size: x-small;
+  }
+
 
   .reviews-per-day {
     min-width: 300px;
-    align-self: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -13,14 +13,13 @@
   let loading = false;
 
   let reviewStats = {
-    total: 584,
-    reviewsPerDay: 146,
-    targetRPD: 150,
-    accuracy: "86%",
-    first: new Date("11/1/2021 10:18"),
-    last: new Date("11/4/2021 15:32"),
-    reviews: [113, 147, 113, 113],
-    legends: ["M", "Tu", "W", "Th"],
+    targetReviewsPerDay: 150,
+    reviews: [
+      {count: 113, accuracy: 0.86, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
+      {count: 128, accuracy: 0.90, start: new Date("11/2/2021 10:08"), end: new Date("11/2/2021 11:12")},
+      {count: 158, accuracy: 0.83, start: new Date("11/3/2021 9:27"), end: new Date("11/3/2021 10:31")},
+      {count: 98, accuracy: 0.95, start: new Date("11/4/2021 9:05"), end: new Date("11/4/2021 9:43")},
+    ],
   };
 </script>
 
@@ -28,7 +27,7 @@
 <div class="controls">
   <div class="retrieval">
     <label for="review-days">Days to retrieve:</label>
-    <input type="number" id="review-days" name="review-days" min="1" max="4" bind:value={$daysToReview}>
+    <input type="number" id="review-days" name="review-days" min="1" max="7" bind:value={$daysToReview}>
   </div>
   
   {#if loading}
@@ -47,7 +46,7 @@
 
 <GbWidget value={0.25} />
 
-<SpeedWidget value={0.42} label="5.2s" />
+<SpeedWidget value={0.42} label="5.2" />
 
 <ReviewsDayWidget {reviewStats} />
 
@@ -56,6 +55,20 @@
 </Modal>
 
 <style>
+
+  :global(.gb-header) {
+    font-size: 1.25rem;
+    font-weight: normal;
+    margin: 0;
+    text-align: center;
+    display: inline-block;
+    color: var(--text-color, #004033);
+  }
+
+  :global(.units) {
+    font-size: x-small;
+    margin: auto;
+  }
 
   .spinner {
     margin-inline: 0.5em;
@@ -73,6 +86,11 @@
     display: inline;
     margin-inline: 1rem;
     height: fit-content;
+  }
+
+  .navigation li:hover {
+    cursor: pointer;
+    transform: scale(1.1);
   }
 
   .navigation .active {

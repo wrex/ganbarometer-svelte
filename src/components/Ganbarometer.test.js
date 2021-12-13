@@ -51,15 +51,15 @@ describe("App layout", () => {
   it("has a speed gauge", () => {
     render(App);
     const reviewsGauge = screen.getByRole("heading", {
-      name: "Seconds/Question",
+      name: "Speed",
     });
     expect(reviewsGauge).toBeInTheDocument();
   });
 
-  it("Has a Review Intervals bar chart", () => {
+  it("Has a load bar chart", () => {
     render(App);
     const intervalChart = screen.getByRole("heading", {
-      name: "Reviews/Day",
+      name: "Load",
     });
     expect(intervalChart).toBeInTheDocument();
   });
