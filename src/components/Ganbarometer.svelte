@@ -19,6 +19,9 @@
       {count: 128, accuracy: 0.90, start: new Date("11/2/2021 10:08"), end: new Date("11/2/2021 11:12")},
       {count: 158, accuracy: 0.83, start: new Date("11/3/2021 9:27"), end: new Date("11/3/2021 10:31")},
       {count: 98, accuracy: 0.95, start: new Date("11/4/2021 9:05"), end: new Date("11/4/2021 9:43")},
+      {count: 104, accuracy: 0.93, start: new Date("11/4/2021 9:05"), end: new Date("11/4/2021 9:43")},
+      {count: 228, accuracy: 0.79, start: new Date("11/5/2021 10:13"), end: new Date("11/5/2021 11:45")},
+      {count: 57, accuracy: 0.95, start: new Date("11/6/2021 11:19"), end: new Date("11/6/2021 11:50")},
     ],
   };
 </script>

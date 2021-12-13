@@ -20,7 +20,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-bottom: 14px;
     min-width: 300px;
   }
 

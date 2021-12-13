@@ -24,13 +24,12 @@
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
-  <h1 class="gb-header">Load</h1>
+  <h1 class="gb-header">Reviews/day</h1>
   {#if ($display === "chart")}
     <BarChart 
       values={revs.map(r => r.count)} 
       labels={startDayOfWeeks}
     />
-    <div class="units">reviews/day</div>
   {:else}
     <div data-testid="reviews-per-day-table">
       <table>

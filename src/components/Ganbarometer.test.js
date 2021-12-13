@@ -59,7 +59,7 @@ describe("App layout", () => {
   it("Has a load bar chart", () => {
     render(App);
     const intervalChart = screen.getByRole("heading", {
-      name: "Load",
+      name: "Reviews/day",
     });
     expect(intervalChart).toBeInTheDocument();
   });
