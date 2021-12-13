@@ -1,6 +1,7 @@
 <script>
-  import Gauge from "./Gauge.svelte";
-  import ReviewsPerDayGauge from "./ReviewsPerDayGauge.svelte";
+  import GbWidget from "./GbWidget.svelte";
+  import SpeedWidget from "./SpeedWidget.svelte";
+  import ReviewsDayWidget from "./ReviewsDayWidget.svelte";
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
   import SettingsButton from './SettingsButton.svelte';
@@ -10,6 +11,17 @@
   import { SyncLoader } from 'svelte-loading-spinners';
 
   let loading = false;
+
+  let reviewStats = {
+    total: 584,
+    reviewsPerDay: 146,
+    targetRPD: 150,
+    accuracy: "86%",
+    first: new Date("11/1/2021 10:18"),
+    last: new Date("11/4/2021 15:32"),
+    reviews: [113, 147, 113, 113],
+    legends: ["M", "Tu", "W", "Th"],
+  };
 </script>
 
 
@@ -33,18 +45,11 @@
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
-<div class="ganbarometer">
-  <h1>GanbarOmeter</h1>
-  <Gauge value={0.95} />
-  <!-- <p>Difficulty footer</p> -->
-</div>
+<GbWidget value={0.25} />
 
-<div class="speed">
-  <h1>Seconds/Question</h1>
-  <Gauge value={0.47} label="5.2s" />
-</div>
+<SpeedWidget value={0.42} label="5.2s" />
 
-<ReviewsPerDayGauge />
+<ReviewsDayWidget {reviewStats} />
 
 <Modal>
   <SettingsForm />
@@ -75,12 +80,6 @@
     border-bottom: 2px solid black;
   }
 
-  /* .settings {
-    background-color: inherit;
-    border: none;
-    margin-top: -0.5em;
-  } */
-
   .retrieval {
     display: flex;
   }
@@ -91,32 +90,6 @@
   .retrieval > input {
     padding: 0 0.2em;
     width: 2em;
-  }
-
-  h1 {
-    font-size: 1.25rem;
-    font-weight: normal;
-    margin: 0;
-    text-align: center;
-    display: inline-block;
-    color: var(--text-color, #004033);
-  }
-
-  .ganbarometer,
-  .speed {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: end;
-    padding-bottom: 14px;
-    min-width: 300px;
-  }
-
-  @media (min-width: 1200px) {
-    .ganbarometer,
-    .speed {
-      min-width: 370px;
-    }
   }
 
 </style>

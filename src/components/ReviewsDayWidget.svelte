@@ -2,15 +2,15 @@
   import BarChart from "./BarChart.svelte";
   import { display } from "../store/stores";
 
-  const reviewStats = {
-    total: 584,
-    reviewsPerDay: 146,
-    targetRPD: 150,
-    accuracy: "86%",
-    first: new Date("11/1/2021 10:18"),
-    last: new Date("11/4/2021 15:32"),
-    reviews: [113, 147, 113, 113],
-    legends: ["M", "Tu", "W", "Th"],
+  export let reviewStats = {
+    total: 1,
+    reviewsPerDay: 1,
+    targetRPD: 1,
+    accuracy: "100%",
+    first: new Date(),
+    last: new Date(),
+    reviews: [1],
+    legends: ["M"],
   };
 </script>
 
