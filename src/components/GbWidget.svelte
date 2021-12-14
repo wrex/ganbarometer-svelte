@@ -9,7 +9,7 @@
   <slot><h1>GanbarOmeter</h1></slot>
   {#if $display === "chart" }
     <Gauge value={value} />
-    <div class="units">of max effort</div>
+    <div class="units">of max difficulty</div>
   {:else}
     <div data-testid="ganbarometer-table">Table data goes here</div>
   {/if}

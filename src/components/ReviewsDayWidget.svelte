@@ -21,6 +21,9 @@
 
   let startDayOfWeeks = revs.map(r => dowString(r.start));
   let endDayOfWeeks = revs.map(r => dowString(r.end));
+
+  let totalReviews = revs.reduce((acc,r) => acc += r.count, 0);
+  let targetReviews = reviewStats.targetReviewsPerDay * $daysToReview;
 </script>
 
 <div class="reviews-per-day" data-testid="reviews-per-day-gauge">
@@ -35,19 +38,19 @@
       <table>
         <tr>
           <th>Total:</th>
-          <td>{ revs.reduce((acc,r) => acc += r.count, 0) } reviews
-          <span class="secondary">target {reviewStats.targetReviewsPerDay * $daysToReview}</span></td>
+          <td>{ totalReviews }
+            <span class="secondary">reviews</span>
+          </td>
         </tr>
         <tr>
-          <th>Overall Accuracy:</th>
-          <td>{
-            (revs.reduce((acc, r) => acc += r.accuracy, 0) * 100 / revs.length)
-          }%</td>
+          <th>Target:</th>
+          <td>{ targetReviews } 
+            <span class="secondary">{((totalReviews/targetReviews) * 100 ).toFixed(1)}% achieved</span></td>
         </tr>
         <tr>
           <th>Latest ({dowString(revs[revs.length - 1].start)}):</th>
-          <td>{ revs[revs.length - 1].count } reviews <span
-          class="secondary">{revs[revs.length-1].accuracy * 100}% accuracy</span></td>
+          <td>{ revs[revs.length - 1].count } <span
+          class="secondary">reviews</span></td>
         </tr>
         <tr>
           <th>{dowString(revs[0].start)} &ndash; {dowString(revs[revs.length - 2].start)}:</th>
