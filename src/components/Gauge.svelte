@@ -11,7 +11,7 @@
     {#if value && label}
       <div class="gauge__cover">{label}</div>
     {:else}
-      <div class="gauge__cover">{value * 100}%</div>
+      <div class="gauge__cover">{(value * 100).toFixed()}%</div>
     {/if}
   </div>
 </div>
