@@ -13,13 +13,20 @@
 
   let loading = false;
 
-  let reviewStats = {
+  let progressCounts = {
+    totalApprentice: 105,
+    targetApprentice: 100,
+    new: {radicals: 4, kanji: 5, vocabulary: 14},
+    newWeights: {radicals: 0.75, kanji: 3.0, vocabulary: 1.0},
+  };
+
+  let reviewDayCounts = {
     targetReviewsPerDay: 150,
     reviews: [
-      {count: 113, accuracy: 0.86, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
-      {count: 128, accuracy: 0.90, start: new Date("11/2/2021 10:08"), end: new Date("11/2/2021 11:12")},
-      {count: 158, accuracy: 0.83, start: new Date("11/3/2021 9:27"), end: new Date("11/3/2021 10:31")},
-      {count: 98, accuracy: 0.95, start: new Date("11/4/2021 9:05"), end: new Date("11/4/2021 9:43")},
+      {count: 113, accuracy: 0.86, reading_accuracy: 0.81, meaning_accuracy: 0.89, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
+      {count: 129, accuracy: 0.91, reading_accuracy: 0.93, meaning_accuracy: 0.90, start: new Date("11/2/2021 9:37"), end: new Date("11/2/2021 10:18")},
+      {count: 228, accuracy: 0.93, reading_accuracy: 0.91, meaning_accuracy: 0.83, start: new Date("11/3/2021 11:04"), end: new Date("11/3/2021 11:57")},
+      {count: 143, accuracy: 0.80, reading_accuracy: 0.94, meaning_accuracy: 0.83, start: new Date("11/4/2021 10:19"), end: new Date("11/4/2021 11:09")},
     ],
   };
 </script>
@@ -45,13 +52,13 @@
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
-<GbWidget value={0.57} />
+<GbWidget {progressCounts} />
 
 <SpeedWidget value={0.42} label="5.2" />
 
-<AccuracyWidget value={0.86} />
+<AccuracyWidget {reviewDayCounts} />
 
-<ReviewsDayWidget {reviewStats} />
+<ReviewsDayWidget {reviewDayCounts} />
 
 <Modal>
   <SettingsForm />
@@ -59,7 +66,7 @@
 
 <style>
 
-  :global(.gb-header) {
+  :global(.gbHeader) {
     font-size: 1.25rem;
     font-weight: normal;
     margin: 0;
@@ -71,6 +78,45 @@
   :global(.units) {
     font-size: x-small;
     margin: auto;
+  }
+
+  :global(.gbTable) {
+    border-collapse: collapse;
+    font-size: small;
+    line-height: 1.2;
+    width: 100%;
+    outline: 1px solid black;
+    padding: 0.5rem;
+    overflow: scroll;
+  }
+  :global(.gbTable th,
+   .gbTable td) {
+    padding: 0.25em;
+    text-align: left;
+    font-weight: bold;
+  }
+  :global(.gbTable th) {
+    text-align: right;
+    font-weight: 100;
+  }
+
+  :global(.secondary) {
+    opacity: 60%;
+    font-size: x-small;
+    font-weight: 200;
+  }
+
+  :global(.gbWidget) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 220px;
+  }
+
+  @media (min-width: 1200px) {
+    :global(.gbWidget) {
+      min-width: 275px;
+    }
   }
 
   .spinner {

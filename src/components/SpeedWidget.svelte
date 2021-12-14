@@ -5,8 +5,8 @@
   export let label="0s";
 </script>
 
-<div class="speed">
-  <h1 class="gb-header">Speed</h1>
+<div class="gbWidget">
+  <h1 class="gbHeader">Speed</h1>
   {#if $display === "chart"}
     <Gauge {value} {label} />
     <div class="units">seconds/question</div>
@@ -14,19 +14,3 @@
     <div data-testid="speed-table">Table content goes here</div>
   {/if}
 </div>
-
-<style>
-  .speed {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 220px;
-  }
-
-  @media (min-width: 1200px) {
-    .speed {
-      min-width: 275px;
-    }
-  }
-
-</style>
