@@ -6,6 +6,7 @@ let subjects: Subject[];
 let subjectIndex;
 
 export const getSubject = async (id: number): Promise<Subject> => {
+  console.log(`retrieving subject ${id}`);
   if (!subjectIndex || !subjectIndex[id]) {
     wkof.include("ItemData");
     await wkof.ready("ItemData");

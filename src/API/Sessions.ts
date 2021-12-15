@@ -166,7 +166,7 @@ const findSessionEnds = (reviews: Review[]): number[] => {
 };
 
 // Get sessions from n days ago
-export const getSessions = async (n: number = 3) => {
+export const getSessions = async (n: number = 3): Promise<Session[]> => {
   const reviews: Review[] = await getReviews(nDaysAgo(n));
 
   return new Promise((resolve, reject) => {

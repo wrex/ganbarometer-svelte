@@ -29,7 +29,7 @@
     <div class="units">correct first time</div>
   {:else}
     <div data-testid="accuracy-table">
-      <table class="gbTable">
+      <table class="gbContent">
         <tr>
           <th>Overall</th>
           <td>{ (100*readingAccuracy).toFixed() }<span

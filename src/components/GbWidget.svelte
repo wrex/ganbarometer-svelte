@@ -29,7 +29,7 @@
     <div class="units">of max difficulty</div>
   {:else}
     <div data-testid="ganbarometer-table">
-      <table class="gbTable">
+      <table class="gbContent">
         <tr>
           <th>Apprentice</th>
           <td>{progressCounts.totalApprentice} <span

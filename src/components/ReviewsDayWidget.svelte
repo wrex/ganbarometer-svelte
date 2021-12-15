@@ -27,7 +27,7 @@
     />
   {:else}
     <div data-testid="reviews-per-day-table">
-      <table class="gbTable">
+      <table class="gbContent">
         <tr>
           <th>Total:</th>
           <td>{ totalReviews }
