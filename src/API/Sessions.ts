@@ -5,7 +5,6 @@ import type {
   Session,
   Subject,
 } from "./API";
-import { std as sigma } from "mathjs";
 import { getSubject } from "./Subjects";
 
 declare var wkof: any;
@@ -137,20 +136,26 @@ const findSessionEnds = (reviews: Review[]): number[] => {
       Math.abs(r.duration - median_duration)
     );
 
+    // Assume normal distribution
+    const MAD_K = 1.4826;
+
     // Next, find the median of the deviations (assume normal distribution of
     // durations within a session -- this is where 1.4826 comes from)
-    const median_absolute_deviation = median(duration_deviations) * 1.4826;
+    const median_absolute_deviation = median(duration_deviations) * MAD_K;
 
-    // Finally, calculate the MAD for each duration
-    // MAD values greater than 2.0 indicate the start of a new session
+    // Now, calculate the MAD for each duration
     const initial_mads = duration_deviations.map(
-      (d) => (d - median_duration) / median_absolute_deviation
+      (d) => Math.abs(d - median_duration) / median_absolute_deviation
     );
 
-    // Force final duration MAD to be huge since the last review is always the
-    // end of a sessions
+    // Cutoff value: MAD values greater than the cuttoff indicate the start of a
+    // new session, lower values find more sessions
+    const MAD_CUTOFF = 10.0;
+
+    // Force final duration MAD to be huge if it isn't already since the last
+    // review is always the end of a session
     const duration_mads =
-      initial_mads[initial_mads.length - 1] > 2.0
+      initial_mads[initial_mads.length - 1] > MAD_CUTOFF
         ? initial_mads
         : [...initial_mads.slice(0, -1), 999999];
 
@@ -159,9 +164,8 @@ const findSessionEnds = (reviews: Review[]): number[] => {
     //   starts = [0, 4, 6]
     //   ends   = [3, 5, 12]
     // Note that reviews 3, 5, and 12 will have a duration MAD > 2.0
-
     const indices = reviews.map((r, i) => i);
-    return indices.filter((r, i) => duration_mads[i] > 2.0);
+    return indices.filter((r, i) => duration_mads[i] > MAD_CUTOFF);
   }
 };
 
