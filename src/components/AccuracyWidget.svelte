@@ -23,11 +23,12 @@
 </script>
 
 <div class="gbWidget">
-  <h1 class="gbHeader">Accuracy</h1>
   {#if $display === "chart"}
+    <h1 class="gbHeader">Accuracy</h1>
     <Gauge value={ overallAccuracy } />
     <div class="units">correct first time</div>
   {:else}
+    <h1 class="gbHeader">{(overallAccuracy * 100).toFixed()}% Accuracy</h1>
     <div data-testid="accuracy-table">
       <table class="gbContent">
         <tr>

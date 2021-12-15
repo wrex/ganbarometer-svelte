@@ -5,27 +5,29 @@
   export let reviewDayCounts;
 
   // save some screen real-estate below
-  let revs = reviewDayCounts.reviews;
+  const revs = reviewDayCounts.reviews;
 
   const dowString = (date) => { 
     return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
   ;
 
-  let startDayOfWeeks = revs.map(r => dowString(r.start));
-  let endDayOfWeeks = revs.map(r => dowString(r.end));
+  const startDayOfWeeks = revs.map(r => dowString(r.start));
 
-  let totalReviews = revs.reduce((acc,r) => acc += r.count, 0);
-  let targetReviews = reviewDayCounts.targetReviewsPerDay * $daysToReview;
+  const totalReviews = revs.reduce((acc,r) => acc += r.count, 0);
+  const targetReviews = reviewDayCounts.targetReviewsPerDay * $daysToReview;
+
+  const avgReviewsPerDay = (totalReviews / $daysToReview).toFixed();
 </script>
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
-  <h1 class="gbHeader">Reviews/day</h1>
   {#if ($display === "chart")}
+    <h1 class="gbHeader">Reviews/day</h1>
     <BarChart 
       values={revs.map(r => r.count)} 
       labels={startDayOfWeeks}
     />
   {:else}
+    <h1 class="gbHeader">{avgReviewsPerDay} Reviews/day</h1>
     <div data-testid="reviews-per-day-table">
       <table class="gbContent">
         <tr>

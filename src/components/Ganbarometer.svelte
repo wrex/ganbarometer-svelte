@@ -104,13 +104,13 @@
     overflow-x: hidden;
     height: 8rem;
   }
-  :global(.gbTable th,
-   .gbTable td) {
+  :global(.gbContent th,
+   .gbContent td) {
     padding: 0.25em;
     text-align: left;
     font-weight: bold;
   }
-  :global(.gbTable th) {
+  :global(.gbContent th) {
     text-align: right;
     font-weight: 100;
   }
@@ -127,6 +127,7 @@
     justify-content: center;
     min-width: 220px;
     max-height: 200px;
+    margin-bottom: 0.5em;
   }
 
   @media (min-width: 1200px) {

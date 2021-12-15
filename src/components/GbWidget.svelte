@@ -23,11 +23,12 @@
 </script>
 
 <div class="gbWidget">
-  <h1 class="gbHeader">GanbarOmeter</h1>
   {#if $display === "chart" }
+    <h1 class="gbHeader">GanbarOmeter</h1>
     <Gauge value={weightedValue} />
     <div class="units">of max difficulty</div>
   {:else}
+    <h1 class="gbHeader">{(weightedValue * 100).toFixed()}% GanbarOmeter</h1>
     <div data-testid="ganbarometer-table">
       <table class="gbContent">
         <tr>

@@ -35,11 +35,12 @@
 </script>
 
 <div class="gbWidget">
-  <h1 class="gbHeader">Speed</h1>
   {#if $display === "chart"}
+    <h1 class="gbHeader">Speed</h1>
     <Gauge value={0.5} label={secondsPerQ} />
     <div class="units">seconds/question</div>
   {:else}
+    <h1 class="gbHeader">{secondsPerQ}s Speed</h1>
     <div data-testid="speed-table">
       <div class="gbContent scrollbox">
         <h4>{sessions.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
