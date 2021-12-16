@@ -8,7 +8,7 @@
   import SettingsButton from './SettingsButton.svelte';
   import { getSessions } from '../API/Sessions';
 
-  import { display, daysToReview } from '../store/stores';
+  import { display, daysToReview, sessionSummaries } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -39,9 +39,8 @@
     correctAnswerCount: number;
   }
 
-  let sessionSummaries: SessionSummary[] =[];
-
   getSessions(+$daysToReview).then(sessions => {
+    let summaries = [];
     sessions.forEach((s, i) => {
       const summary: SessionSummary = {
         start: s.startTime,
@@ -51,8 +50,9 @@
         correctAnswerCount: s.reviews.filter(r => 
           r.meaning_incorrect + r.reading_incorrect === 0).reduce((acc, r) => acc += r.questions, 0),
       }
-      sessionSummaries.push(summary);
+      summaries.push(summary);
     });
+    sessionSummaries.set(summaries);
   });
 
   // let sessions = [
@@ -92,7 +92,7 @@
 
 <GbWidget {progressCounts} />
 
-<SpeedWidget {sessionSummaries} />
+<SpeedWidget />
 
 <AccuracyWidget {reviewDayCounts} />
 

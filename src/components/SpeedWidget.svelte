@@ -1,18 +1,16 @@
 <script type="ts">
   import Gauge from "./Gauge.svelte";
-  import {display} from "../store/stores";
+  import {display, sessionSummaries} from "../store/stores";
 
-  export let sessionSummaries;
-
-  const totalReviews = sessionSummaries.reduce((acc, s) => acc += +s.reviewCount, 0);
-  const totalQuestions = sessionSummaries.reduce((acc, s) => acc += +s.questionCount, 0);
-  const totalCorrect = sessionSummaries.reduce((acc, s) => acc += +s.correctAnswerCount, 0);
+  $: totalReviews = $sessionSummaries.reduce((acc, s) => acc += +s.reviewCount, 0);
+  $: totalQuestions = $sessionSummaries.reduce((acc, s) => acc += +s.questionCount, 0);
+  $: totalCorrect = $sessionSummaries.reduce((acc, s) => acc += +s.correctAnswerCount, 0);
   const durationS = (sess) => {
     return (sess.end - sess.start) / 1000;
   };
-  const totalDuration = sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
+  const totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
 
-  const secondsPerQ = (totalDuration / totalQuestions).toFixed(1).toString();
+  $: secondsPerQ = (totalDuration / totalQuestions).toFixed(1).toString();
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -32,8 +30,8 @@
     <h1 class="gbHeader">{secondsPerQ}s Speed</h1>
     <div data-testid="speed-table">
       <div class="gbContent scrollbox">
-        <h4>{sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
-        {#each sessionSummaries as summary, i}
+        <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
+        {#each $sessionSummaries as summary, i}
           <article>
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
             ({(durationS(summary) / 60).toFixed()}m)</h5>
