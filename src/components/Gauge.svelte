@@ -2,7 +2,7 @@
   export let value = 0.5;
   export let label = '';
 
-  let rotate = `transform: rotate(${value / 2}turn)`;
+  $: rotate = `transform: rotate(${value / 2}turn)`;
 </script>
 
 <div class="gauge" data-testid="gauge">

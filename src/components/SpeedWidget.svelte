@@ -8,9 +8,11 @@
   const durationS = (sess) => {
     return (sess.end - sess.start) / 1000;
   };
-  const totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
+  $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
 
-  $: secondsPerQ = (totalDuration / totalQuestions).toFixed(1).toString();
+  $: secondsPerQ = (totalQuestions > 0)
+    ? (totalDuration / totalQuestions).toFixed(1).toString()
+    : '0';
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -19,12 +21,17 @@
     let percent = 100 * summary.correctAnswerCount / summary.questionCount;
     return percent.toFixed(1);
   };
+
+  const desiredSecondsPerQ = 10;
+  $: gauge_value = (totalQuestions > 0)
+    ? (totalDuration / totalQuestions) / desiredSecondsPerQ
+    : 0;
 </script>
 
 <div class="gbWidget">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
-    <Gauge value={0.5} label={secondsPerQ} />
+    <Gauge value={gauge_value} label={secondsPerQ} />
     <div class="units">seconds/question</div>
   {:else}
     <h1 class="gbHeader">{secondsPerQ}s Speed</h1>
