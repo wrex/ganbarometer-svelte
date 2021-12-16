@@ -9,7 +9,22 @@ export const display = writable("chart");
 
 export const daysToReview = writable("4");
 
-export const sessionSummaries = writable([]);
+// Grr. JSON.stringify() is NOT reversible with JSON.parse()
+// because Dates get turned into strings
+const unStringify = (summaries) => {
+  let withStringDates = JSON.parse(summaries);
+  return withStringDates.map((s) => {
+    return { ...s, start: new Date(s.start), end: new Date(s.end) };
+  });
+};
+
+export const sessionSummaries = writable(
+  // JSON.parse(localStorage.getItem("sessionSummaries")) ?? []
+  unStringify(localStorage.getItem("sessionSummaries")) ?? []
+);
+sessionSummaries.subscribe((val) => {
+  localStorage.setItem("sessionSummaries", JSON.stringify(val));
+});
 
 export const defaultSettings = {
   retrieveDays: "3",
@@ -32,23 +47,3 @@ export const gbSettings = writable(
 gbSettings.subscribe((val) =>
   localStorage.setItem(SETTINGSKEY, JSON.stringify(val))
 );
-
-const checkForNewReviews = () => false;
-
-// sessionsStore: array of 0 or more cached sessions
-// asynchronously updates in the background as new reviews are found
-
-// Look into this: https://github.com/cdellacqua/svelte-async-readable
-export const sessionsStore = readable([], (set) => {
-  const sessions = [];
-  set(sessions);
-
-  const interval = setInterval(() => {
-    const reviews = checkForNewReviews();
-    if (reviews) {
-      console.log("parse new reviews and set(sessions)");
-    }
-  }, 30000);
-
-  return () => clearInterval(interval);
-});

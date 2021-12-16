@@ -4,15 +4,24 @@
 
   $: totalReviews = $sessionSummaries.reduce((acc, s) => acc += +s.reviewCount, 0);
   $: totalQuestions = $sessionSummaries.reduce((acc, s) => acc += +s.questionCount, 0);
-  $: totalCorrect = $sessionSummaries.reduce((acc, s) => acc += +s.correctAnswerCount, 0);
+
   const durationS = (sess) => {
     return (sess.end - sess.start) / 1000;
   };
   $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
 
+
   $: secondsPerQ = (totalQuestions > 0)
-    ? (totalDuration / totalQuestions).toFixed(1).toString()
-    : '0';
+    ? (totalDuration / totalQuestions)
+    : 0;
+
+  const desiredSecondsPerQ = 10;
+  $: gauge_value = (totalQuestions > 0)
+    ? secondsPerQ / desiredSecondsPerQ
+    : 0;
+
+
+  $: gauge_label = `${secondsPerQ.toFixed(1)}`;
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -22,16 +31,12 @@
     return percent.toFixed(1);
   };
 
-  const desiredSecondsPerQ = 10;
-  $: gauge_value = (totalQuestions > 0)
-    ? (totalDuration / totalQuestions) / desiredSecondsPerQ
-    : 0;
 </script>
 
 <div class="gbWidget">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
-    <Gauge value={gauge_value} label={secondsPerQ} />
+    <Gauge value={gauge_value} label={gauge_label} />
     <div class="units">seconds/question</div>
   {:else}
     <h1 class="gbHeader">{secondsPerQ}s Speed</h1>

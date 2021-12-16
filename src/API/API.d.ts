@@ -51,6 +51,10 @@ export interface Session {
   reviews: Review[];
 }
 
-export interface SessionMonth {
-  [key: string]: Session;
+interface SessionSummary {
+  start: Date;
+  end: Date;
+  reviewCount: number;
+  questionCount: number;
+  correctAnswerCount: number;
 }
