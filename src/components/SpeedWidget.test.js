@@ -16,19 +16,15 @@ describe("Speed Widget", () => {
 
   it("displays a gauge with speed of 0.0 by default", () => {
     render(SpeedWidget);
-    const widget = screen.getByTestId("speedWidget");
-    const gaugeCover = widget.querySelector(".gauge__cover");
-    const value = gaugeCover.textContent;
-    expect(value).toEqual("0.0");
+    const value = screen.getByText("0.0");
+    expect(value).toBeInTheDocument;
   });
 
-  it("displays a gauge with a speed of 6.2 with real data", () => {
+  it("displays a gauge with a speed of 6.3 with real data", () => {
     sessionSummaries.set(realData);
     render(SpeedWidget);
-    const widget = screen.getByTestId("speedWidget");
-    const gaugeCover = widget.querySelector(".gauge__cover");
-    const value = gaugeCover.textContent;
-    expect(value).toEqual("6.3");
+    const value = screen.getByText("6.3");
+    expect(value).toBeInTheDocument;
   });
 
   it("calculates the totals correctly with real data", () => {
