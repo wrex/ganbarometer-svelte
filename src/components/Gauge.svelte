@@ -1,6 +1,6 @@
 <script lang="ts">
   export let value = 0.5;
-  export let label = '';
+  export let label = null;
 
   $: rotate = `transform: rotate(${value / 2}turn)`;
 </script>
@@ -8,7 +8,7 @@
 <div class="gauge" data-testid="gauge">
   <div class="gauge__body">
     <div class="gauge__fill" style="{rotate}"></div>
-    {#if value && label}
+    {#if label !== null}
       <div class="gauge__cover">{label}</div>
     {:else}
       <div class="gauge__cover">{(value * 100).toFixed()}%</div>

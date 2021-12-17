@@ -8,6 +8,8 @@
   const durationS = (sess) => {
     return (sess.end - sess.start) / 1000;
   };
+
+  let totalDuration: number;
   $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
 
 
@@ -15,13 +17,11 @@
     ? (totalDuration / totalQuestions)
     : 0;
 
-  const desiredSecondsPerQ = 10;
-  $: gauge_value = (totalQuestions > 0)
-    ? secondsPerQ / desiredSecondsPerQ
-    : 0;
-
-
   $: gauge_label = `${secondsPerQ.toFixed(1)}`;
+
+  // TODO: add targetSecodsPerQ to settings
+  const targetSecondsPerQ = 10;
+  $: gauge_value = secondsPerQ / (2 * targetSecondsPerQ);
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -33,7 +33,7 @@
 
 </script>
 
-<div class="gbWidget">
+<div class="gbWidget" data-testid="speedWidget">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
     <Gauge value={gauge_value} label={gauge_label} />
