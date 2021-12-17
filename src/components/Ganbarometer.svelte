@@ -8,7 +8,7 @@
   import SettingsButton from './SettingsButton.svelte';
   import { getSessions } from '../API/Sessions';
 
-  import { display, daysToReview, sessionSummaries } from '../store/stores';
+  import { display, daysToReview, sessionSummaries, reviewSummaries } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -31,23 +31,32 @@
     ],
   };
 
-  let loading = true;
-  getSessions(+$daysToReview).then(sessions => {
-    let summaries = [];
-    sessions.forEach((s, i) => {
-      const summary: SessionSummary = {
-        start: s.startTime,
-        end: s.endTime,
-        reviewCount: s.reviews.length,
-        questionCount: s.reviews.reduce((acc, r) => acc += r.questions, 0),
-        correctAnswerCount: s.reviews.filter(r => 
-          r.meaning_incorrect + r.reading_incorrect === 0).reduce((acc, r) => acc += r.questions, 0),
-      }
-      summaries.push(summary);
+  let loading = false;
+
+  const updateSessionSummaries = (days) => {
+    loading = true;
+    getSessions(days).then(sessions => {
+      let summaries = [];
+      sessions.forEach(s => {
+        const totalQuestions = s.reviews.reduce((acc,r) => acc += r.questions, 0);
+        const correctFirstTime = s.reviews.filter(r => r.meaning_incorrect + r.reading_incorrect === 0 );
+        const correctAnswers = correctFirstTime.reduce((acc,r) => acc += r.questions, 0);
+        
+        const summary: SessionSummary = {
+          start: s.startTime,
+          end: s.endTime,
+          reviewCount: s.reviews.length,
+          questionCount: totalQuestions,
+          correctAnswerCount: correctAnswers,
+        }
+        summaries.push(summary);
+      });
+      sessionSummaries.set(summaries);
     });
-    sessionSummaries.set(summaries);
     loading = false;
-  });
+  };
+
+  $: updateSessionSummaries(+$daysToReview);
 </script>
 
 

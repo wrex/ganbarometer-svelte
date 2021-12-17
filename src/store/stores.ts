@@ -19,8 +19,9 @@ const unStringify = (summaries) => {
 };
 
 export const sessionSummaries = writable(
-  // JSON.parse(localStorage.getItem("sessionSummaries")) ?? []
-  unStringify(localStorage.getItem("sessionSummaries")) ?? []
+  localStorage.getItem("sessionSummaries")
+    ? unStringify(localStorage.getItem("sessionSummaries"))
+    : []
 );
 sessionSummaries.subscribe((val) => {
   localStorage.setItem("sessionSummaries", JSON.stringify(val));

@@ -140,12 +140,14 @@ describe("getSessions()", () => {
     ).toBe(0);
   });
 
-  it("returns one session if two reviews together (within 10 minutes)", async () => {
+  it("returns one session if small number of reviews together (within 10 minutes)", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:26:18.048Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:27:18.048Z" } }),
+      mockReview({ reviewData: { created_at: "2019-10-04T04:28:18.048Z" } }),
     ]);
-    const inDB = wkApiFactory.subject.getAll();
     const sessions = await getSessions();
     expect(sessions.length).toBe(1);
   });
@@ -182,6 +184,7 @@ describe("getSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
     ]);
     const sessions = await getSessions();
+    console.log(JSON.stringify(sessions, null, 2));
     expect(sessions.length).toBe(1);
     expect(sessions[0].reviews.length).toBe(6);
     expect(sessions[0].reviews[5].duration).toBe(3000);

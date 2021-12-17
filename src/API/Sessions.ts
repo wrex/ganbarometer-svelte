@@ -1,3 +1,4 @@
+import { i } from "mathjs";
 import type {
   RawReview,
   Review,
@@ -119,9 +120,10 @@ const getReviews = async (fromDate: Date) => {
 const findSessionEnds = (reviews: Review[]): number[] => {
   const durations = reviews.map((r) => r.duration);
   const min_duration = Math.min(...durations);
+  const max_duration = Math.max(...durations);
 
   // Heuristic: no duration > 10min means single-review sessions
-  if (min_duration > 60000) {
+  if (min_duration > 1000 * 60 * 10) {
     return durations.map((r, i) => i);
   } else {
     // Use the "Median absolute deviation" to find outlier durations that
@@ -144,9 +146,11 @@ const findSessionEnds = (reviews: Review[]): number[] => {
     const median_absolute_deviation = median(duration_deviations) * MAD_K;
 
     // Now, calculate the MAD for each duration
-    const initial_mads = duration_deviations.map(
-      (d) => Math.abs(d - median_duration) / median_absolute_deviation
-    );
+    const initial_mads = duration_deviations.map((d) => {
+      return median_absolute_deviation > 0
+        ? Math.abs(d - median_duration) / median_absolute_deviation
+        : Math.abs(d - median_duration) / median_duration;
+    });
 
     // Cutoff value: MAD values greater than the cuttoff indicate the start of a
     // new session, lower values find more sessions
@@ -165,7 +169,8 @@ const findSessionEnds = (reviews: Review[]): number[] => {
     //   ends   = [3, 5, 12]
     // Note that reviews 3, 5, and 12 will have a duration MAD > 2.0
     const indices = reviews.map((r, i) => i);
-    return indices.filter((r, i) => duration_mads[i] > MAD_CUTOFF);
+    const filtered = indices.filter((r, i) => duration_mads[i] > MAD_CUTOFF);
+    return filtered;
   }
 };
 
@@ -181,6 +186,7 @@ export const getSessions = async (n: number = 3): Promise<Session[]> => {
     // Find the indices of reviews with long durations (indicating the end of a
     // session)
     const session_ends = findSessionEnds(reviews);
+    logObj("ends", session_ends);
 
     // First start is always index 0, then the index after the end of each
     // session (slice off the last start to keep ends[] and starts[] the
