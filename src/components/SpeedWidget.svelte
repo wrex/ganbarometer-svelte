@@ -12,7 +12,6 @@
   let totalDuration: number;
   $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
 
-
   $: secondsPerQ = (totalQuestions > 0)
     ? (totalDuration / totalQuestions)
     : 0;
