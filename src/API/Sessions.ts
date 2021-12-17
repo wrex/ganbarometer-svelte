@@ -87,6 +87,9 @@ const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
 
 // Turn array of RawReviews into array processed reviews
 const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
+  if (!reviews?.length) {
+    return [];
+  }
   const converted: Review[] = reviews
     .map(initializeReview)
     .map(calculateDuration);
@@ -114,7 +117,7 @@ const getReviews = async (fromDate: Date) => {
       last_update: fromDate.toISOString(),
     }
   );
-  return await processReviews(collection.data);
+  return processReviews(collection?.data);
 };
 
 const findSessionEnds = (reviews: Review[]): number[] => {
@@ -186,7 +189,6 @@ export const getSessions = async (n: number = 3): Promise<Session[]> => {
     // Find the indices of reviews with long durations (indicating the end of a
     // session)
     const session_ends = findSessionEnds(reviews);
-    logObj("ends", session_ends);
 
     // First start is always index 0, then the index after the end of each
     // session (slice off the last start to keep ends[] and starts[] the

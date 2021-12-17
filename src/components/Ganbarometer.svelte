@@ -8,7 +8,7 @@
   import SettingsButton from './SettingsButton.svelte';
   import { getSessions } from '../API/Sessions';
 
-  import { display, daysToReview, sessionSummaries, reviewSummaries } from '../store/stores';
+  import { display, daysToReview, sessionSummaries } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -52,7 +52,7 @@
         summaries.push(summary);
       });
       sessionSummaries.set(summaries);
-    });
+    }).catch(err => console.warn(err));
     loading = false;
   };
 

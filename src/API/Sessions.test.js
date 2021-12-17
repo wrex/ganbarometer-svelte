@@ -184,7 +184,6 @@ describe("getSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
     ]);
     const sessions = await getSessions();
-    console.log(JSON.stringify(sessions, null, 2));
     expect(sessions.length).toBe(1);
     expect(sessions[0].reviews.length).toBe(6);
     expect(sessions[0].reviews[5].duration).toBe(3000);
