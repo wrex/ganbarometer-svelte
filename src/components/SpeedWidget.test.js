@@ -44,9 +44,17 @@ describe("Speed Widget", () => {
     const firstSessionText = screen.getByText(
       /65 items • 142 questions • 6\.2 s\/q 106\/142 = 74\.6% correct/i
     );
+    const lastSessionHeader = screen.getByRole("heading", {
+      name: /7: 12\/17\/21, 10:21 am – 10:52 am \(31m\)/i,
+    });
+    const lastSessionText = screen.getByText(
+      /123 items • 288 questions • 6\.4 s\/q 173\/288 = 60\.1% correct/i
+    );
 
     expect(header).toBeInTheDocument();
     expect(firstSessionHeader).toBeInTheDocument();
     expect(firstSessionText).toBeInTheDocument();
+    expect(lastSessionHeader).toBeInTheDocument();
+    expect(lastSessionText).toBeInTheDocument();
   });
 });
