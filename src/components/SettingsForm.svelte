@@ -6,9 +6,11 @@
   let values = {...$gbSettings};
   let errors = {};
 
-  export const validateField = path => () => {
+  const validateField = path => () => {
+    console.log("validating {path}")
     const res = validate(values, path);
     errors = res.getErrors();
+    console.log(errors);
   }
 
   const submit = () => {
@@ -71,7 +73,7 @@
       max="3"
       step="0.25"
       bind:value={values.newRWeight}
-      on:input={validateField('newRWeight')}
+      on:change={validateField('newRWeight')}
     >
     <Errors {errors} path="newRWeight" />
 
@@ -84,7 +86,7 @@
       max="3"
       step="0.25"
       bind:value={values.newKWeight}
-      on:input={validateField('newKWeight')}
+      on:change={validateField('newKWeight')}
     >
     <Errors {errors} path="newKWeight" />
 
@@ -97,7 +99,7 @@
       max="3"
       step="0.25"
       bind:value={values.newVWeight}
-      on:input={validateField('newVWeight')}
+      on:change={validateField('newVWeight')}
     >
     <Errors {errors} path="newVWeight" />
 
