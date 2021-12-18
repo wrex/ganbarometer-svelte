@@ -28,17 +28,20 @@ sessionSummaries.subscribe((val) => {
 });
 
 export const defaultSettings = {
-  retrieveDays: "3",
+  textColor: "#eeeeee",
   bgColor: "#000000",
-  fillColor: "#00ff00",
+  fillColor: "#333333",
+  goodColor: "#00ff00",
   warnColor: "#ffff00",
   alertColor: "#ff0000",
-  reviewsPer: "150",
-  apprenticeItems: "100",
-  acceptableMisses: "20",
-  newKanjiWeight: "0.05",
-  excessMissWeight: "0.03",
-  reviewSessions: "sessions",
+  tzOffset: 0,
+  targetApprentice: 100,
+  newRWeight: 0.75,
+  newKWeight: 3.0,
+  newVWeight: 1.0,
+  targetSpeed: 7.0,
+  madCutoff: 10.0,
+  targetRevDay: 150,
 };
 
 // Store #2: the user settings for Ganbarometer

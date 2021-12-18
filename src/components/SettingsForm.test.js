@@ -12,29 +12,34 @@ describe("Settings Form", () => {
   describe("layout", () => {
     it("has a button to save settings", () => {
       render(SettingsForm);
-      const button = screen.getByRole("button");
-      expect(button.textContent).toBe("Save");
+      const button = screen.getByRole("button", {
+        name: /save/i,
+      });
+      expect(button).toBeInTheDocument();
     });
-
-    it("renders radio buttons for reviews/day or sessions/day", () => {
+    it("has a button to reset settings", () => {
       render(SettingsForm);
-      const option1 = screen.getByLabelText(/reviews\/day/i);
-      const option2 = screen.getByLabelText(/sessions\/day/i);
-      expect(option1).toBeInTheDocument();
-      expect(option2).toBeInTheDocument();
+      const button = screen.getByRole("button", {
+        name: /reset/i,
+      });
+      expect(button).toBeInTheDocument();
     });
 
     test.each`
       inputText
       ${"background"}
       ${"fill"}
+      ${"good"}
       ${"warning"}
       ${"alert"}
-      ${"desired reviews per"}
+      ${"text"}
       ${"number of apprentice"}
-      ${"acceptable percentage of misses"}
+      ${"new radical"}
       ${"new kanji"}
-      ${"excess misses"}
+      ${"new vocab"}
+      ${"target speed"}
+      ${"MAD cutoff"}
+      ${"target reviews-per"}
     `("renders an input element for '$inputText'", ({ inputText }) => {
       render(SettingsForm);
       const input = screen.getByLabelText(new RegExp(inputText, "i"));
@@ -52,33 +57,36 @@ describe("Settings Form", () => {
 
       inputs = {
         // retrieveDays: screen.getByLabelText(/days to retrieve/i),
-        reviewsPer: screen.getByLabelText(/reviews per/i),
-        apprenticeItems: screen.getByLabelText(/apprentice items/i),
-        acceptableMisses: screen.getByLabelText(
-          /acceptable percentage of misses/i
-        ),
-        newKanjiWeight: screen.getByLabelText(/new kanji/i),
-        excessMissWeight: screen.getByLabelText(/excess misses/i),
+        reviewsPer: screen.getByLabelText(/target reviews-per/i),
+        apprenticeItems: screen.getByLabelText(/number of apprentice/i),
+        newRWeight: screen.getByLabelText(/new radical/i),
+        newKWeight: screen.getByLabelText(/new kanji/i),
+        newVWeight: screen.getByLabelText(/new vocab/i),
       };
 
-      saveButton = screen.getByRole("button", { name: "Save" });
+      saveButton = screen.getByRole("button", { name: /save/i });
     };
 
     describe("settings in localstorage", () => {
       // clear localstorage before each test!
       beforeEach(() => {
-        localStorage.removeItem("gbSettings");
+        localStorage.removeItem(SETTINGSKEY);
       });
 
-      // ${"retrieveDays"}     | ${"5"}
+      xit("stores values to localstorage", async () => {
+        setup();
+        userEvent.clear(inputs.newKWeight);
+        userEvent.type(inputs.newKWeight, "2.5");
+        userEvent.click(saveButton);
+        await waitFor(() => {
+          const stored = JSON.parse(localStorage.getItem(SETTINGSKEY));
+          expect(stored).toEqual("2.5");
+        });
+      });
 
-      test.each`
-        input                 | value
-        ${"reviewsPer"}       | ${"123"}
-        ${"apprenticeItems"}  | ${"231"}
-        ${"acceptableMisses"} | ${"17"}
-        ${"newKanjiWeight"}   | ${"0.07"}
-        ${"excessMissWeight"} | ${"0.08"}
+      test.skip.each`
+        input           | value
+        ${"newKWeight"} | ${"2.5"}
       `("$input stores $value to localstorage", async ({ input, value }) => {
         setup();
         userEvent.clear(inputs[input]);
@@ -86,6 +94,7 @@ describe("Settings Form", () => {
         userEvent.click(saveButton);
         await waitFor(() => {
           const stored = JSON.parse(localStorage.getItem(SETTINGSKEY));
+          console.log(stored);
           expect(stored[input]).toEqual(value);
         });
       });
@@ -97,7 +106,7 @@ describe("Settings Form", () => {
     // ${"retrieveDays"}     | ${"8"}     | ${"between 1 and 7"}
 
     describe("Text and number input field validations", () => {
-      test.each`
+      test.skip.each`
         input                 | inputValue | errorMsg
         ${"reviewsPer"}       | ${"dog"}   | ${"must be a number"}
         ${"reviewsPer"}       | ${"-1"}    | ${"between 10 and 500"}

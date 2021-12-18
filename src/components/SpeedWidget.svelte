@@ -1,6 +1,6 @@
 <script type="ts">
   import Gauge from "./Gauge.svelte";
-  import {display, sessionSummaries} from "../store/stores";
+  import {display, sessionSummaries, gbSettings} from "../store/stores";
 
   $: totalReviews = $sessionSummaries.reduce((acc, s) => acc += +s.reviewCount, 0);
   $: totalQuestions = $sessionSummaries.reduce((acc, s) => acc += +s.questionCount, 0);
@@ -18,9 +18,7 @@
 
   $: gauge_label = `${secondsPerQ.toFixed(1)}`;
 
-  // TODO: add targetSecodsPerQ to settings
-  const targetSecondsPerQ = 10;
-  $: gauge_value = secondsPerQ / (2 * targetSecondsPerQ);
+  $: gauge_value = secondsPerQ / (2 * $gbSettings.targetSpeed);
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
