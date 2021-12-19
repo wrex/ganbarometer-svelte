@@ -52,8 +52,11 @@
         summaries.push(summary);
       });
       sessionSummaries.set(summaries);
-    }).catch(err => console.warn(err));
-    loading = false;
+      loading = false;
+    }).catch(err => {
+      console.warn(err);
+      loading = false;
+    });
   };
 
   $: updateSessionSummaries(+$daysToReview);
