@@ -25,6 +25,8 @@
   }
 
   const reset = () => { 
+    // TODO figure out weird problem with warning about empty color values and
+    // empty weights whenever reset button is clicked
     values = { ...defaultSettings };
     errors = {};
   };
