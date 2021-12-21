@@ -14,13 +14,6 @@
 
   import type {SessionSummary} from "../API/API";
 
-  let progressCounts = {
-    totalApprentice: 105,
-    targetApprentice: 100,
-    new: {radicals: 4, kanji: 5, vocabulary: 14},
-    newWeights: {radicals: 0.75, kanji: 3.0, vocabulary: 1.0},
-  };
-
   let reviewDayCounts = {
     targetReviewsPerDay: 150,
     reviews: [
@@ -83,7 +76,7 @@
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
-<GbWidget {progressCounts} />
+<GbWidget />
 
 <SpeedWidget />
 

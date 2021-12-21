@@ -29,7 +29,13 @@ export const nDaysAgo = (n: number = 0): Date => {
     now.getMinutes() * 60 * 1000 -
     now.getSeconds() * 1000 -
     now.getMilliseconds();
-  return new Date(midnight - n * 24 * 3600 * 1000);
+  let retval: Date;
+  if (n > 1) {
+    retval = new Date(midnight - (n - 1) * 24 * 3600 * 1000);
+  } else {
+    retval = new Date(midnight);
+  }
+  return retval;
 };
 
 // find the median in an array of numbers
@@ -82,7 +88,7 @@ const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
     review.questions = subject.object === "radical" ? 1 : 2;
     review.questions += review.meaning_incorrect + review.reading_incorrect;
   }
-  return new Promise((resolve, reject) => resolve(reviewsCopy));
+  return reviewsCopy;
 };
 
 // Turn array of RawReviews into array processed reviews
@@ -104,7 +110,7 @@ const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
     processed[processed.length - 1].duration = medianInterval;
   }
 
-  return new Promise((resolve, reject) => resolve(processed));
+  return processed;
 };
 
 const getReviews = async (fromDate: Date) => {

@@ -18,6 +18,16 @@ const unStringify = (summaries) => {
   });
 };
 
+export const apprenticeCounts = writable(
+  localStorage.getItem("apprenticeCounts")
+    ? unStringify(localStorage.getItem("apprenticeCounts"))
+    : {
+        radicals: [0, 0, 0, 0],
+        kanji: [0, 0, 0, 0],
+        vocabulary: [0, 0, 0, 0],
+      }
+);
+
 export const sessionSummaries = writable(
   localStorage.getItem("sessionSummaries")
     ? unStringify(localStorage.getItem("sessionSummaries"))

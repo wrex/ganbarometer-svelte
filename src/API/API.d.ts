@@ -1,3 +1,5 @@
+import type { number } from "mathjs";
+
 export interface Subject {
   id: number;
   object: string;
@@ -51,7 +53,14 @@ export interface Session {
   reviews: Review[];
 }
 
-interface SessionSummary {
+// e.g. newestKanji = apprenticeCounts.kanji[]
+export interface ApprenticeCounts {
+  radicals: number[];
+  kanji: number[];
+  vocabulary: number[];
+}
+
+export interface SessionSummary {
   start: Date;
   end: Date;
   reviewCount: number;

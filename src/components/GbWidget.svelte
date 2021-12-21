@@ -1,25 +1,30 @@
 <script>
   import Gauge from "./Gauge.svelte";
-  import { display } from "../store/stores";
+  import { display, gbSettings, apprenticeCounts } from "../store/stores";
+  import { getApprenticeCounts } from "../API/Apprentice";
 
-  export let progressCounts = {
-    totalApprentice: 105,
-    targetApprentice: 100,
-    new: {radicals: 4, kanji: 5, vocabulary: 14},
-    newWeights: {radicals: 0.75, kanji: 3.0, vocabulary: 1.0},
-  };
-  const newItems = progressCounts.new;
-  const weights = progressCounts.newWeights;
-  const weightedCount = progressCounts.totalApprentice 
-    - newItems.radicals 
-    - newItems.kanji 
-    - newItems.vocabulary
-    + newItems.radicals * weights.radicals
-    + newItems.kanji * weights.kanji
-    + newItems.vocabulary * weights.vocabulary;
+  $: getApprenticeCounts().then(newCounts => apprenticeCounts.set(newCounts));
 
-  const unweightedValue = progressCounts.totalApprentice / (2 * progressCounts.targetApprentice);
-  const weightedValue = weightedCount / (2 * progressCounts.targetApprentice);
+  $: totalApprentice = $apprenticeCounts.radicals.reduce((acc, c) => acc += c, 0)
+      + $apprenticeCounts.kanji.reduce((acc, c) => acc += c, 0)
+      + $apprenticeCounts.vocabulary.reduce((acc, c) => acc += c, 0);
+
+  $: newRadicals = $apprenticeCounts.radicals.slice(0,2).reduce((acc, c) => acc += c, 0);
+  $: newKanji = $apprenticeCounts.kanji.slice(0,2).reduce((acc, c) => acc += c, 0);
+  $: newVocabulary = $apprenticeCounts.vocabulary.slice(0,2).reduce((acc, c) => acc += c, 0);
+  
+  $: newItems = newRadicals + newKanji + newVocabulary;
+  
+  $: weightedCount = totalApprentice
+    - newRadicals
+    - newKanji
+    - newVocabulary
+    + newRadicals * $gbSettings.newRWeight
+    + newKanji * $gbSettings.newKWeight
+    + newVocabulary * $gbSettings.newVWeight
+
+  $: unweightedValue = totalApprentice / (2 * $gbSettings.targetApprentice);
+  $: weightedValue = weightedCount / (2 * $gbSettings.targetApprentice);
 </script>
 
 <div class="gbWidget">
@@ -33,21 +38,21 @@
       <table class="gbContent">
         <tr>
           <th>Apprentice</th>
-          <td>{progressCounts.totalApprentice} <span
-          class="secondary">target: {progressCounts.targetApprentice}</span></td>
+          <td>{totalApprentice} <span
+          class="secondary">target: {$gbSettings.targetApprentice}</span></td>
         </tr>
         <tr>
           <th>New</th>
-          <td>{progressCounts.new.radicals}<span class="secondary">r</span> 
-            {progressCounts.new.kanji}<span class="secondary">k</span> 
-            {progressCounts.new.vocabulary}<span class="secondary">v</span>
+          <td>{newRadicals}<span class="secondary">r</span> 
+            {newKanji}<span class="secondary">k</span> 
+            {newVocabulary}<span class="secondary">v</span>
           </td>
         </tr>
         <tr>
           <th>Weights</th>
-          <td>{progressCounts.newWeights.radicals}<span class="secondary">r</span> 
-            {progressCounts.newWeights.kanji}<span class="secondary">k</span> 
-            {progressCounts.newWeights.vocabulary}<span class="secondary">v</span>
+          <td>{$gbSettings.newRWeight}<span class="secondary">r</span> 
+            {$gbSettings.newKWeight}<span class="secondary">k</span> 
+            {$gbSettings.newVWeight}<span class="secondary">v</span>
           </td>
         </tr>
         <tr>
@@ -61,5 +66,4 @@
       </table>
     </div>
   {/if}
-  <slot name="footer"></slot>
 </div>
