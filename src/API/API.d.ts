@@ -1,8 +1,9 @@
-import type { number } from "mathjs";
-
 export interface Subject {
   id: number;
   object: string;
+  assignments: {
+    srs_stage: number;
+  };
 }
 
 export interface RawReview {

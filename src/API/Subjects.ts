@@ -19,8 +19,11 @@ export const getAllApprentice = async (): Promise<Subject[]> => {
   await wkof.ready("ItemData");
   return wkof.ItemData.get_items({
     wk_items: {
+      options: {
+        assignments: true,
+      },
       filters: {
-        level: "1..4",
+        srs: "appr1, appr2, appr3, appr4",
       },
     },
   });
