@@ -39,13 +39,12 @@ sessionSummaries.subscribe((val) => {
 });
 
 export const defaultSettings = {
-  textColor: "#eeeeee",
-  bgColor: "#000000",
-  fillColor: "#333333",
-  goodColor: "#00ff00",
-  warnColor: "#ffff00",
-  alertColor: "#ff0000",
-  tzOffset: 0,
+  textColor: "#333333",
+  bgColor: "#f4f4f4",
+  fillColor: "#b4c0be",
+  goodColor: "#59c273",
+  warnColor: "#fbb623",
+  alertColor: "#ff00aa",
   targetApprentice: 100,
   newRWeight: 0.75,
   newKWeight: 3.0,
@@ -53,6 +52,7 @@ export const defaultSettings = {
   targetSpeed: 7.0,
   madCutoff: 10.0,
   targetRevDay: 150,
+  tzOffset: 0,
 };
 
 // Store #2: the user settings for Ganbarometer
