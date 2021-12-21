@@ -1,7 +1,5 @@
 import { writable, readable } from "svelte/store";
 
-declare var wkof: any;
-
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
 
@@ -20,13 +18,16 @@ const unStringify = (summaries) => {
 
 export const apprenticeCounts = writable(
   localStorage.getItem("apprenticeCounts")
-    ? unStringify(localStorage.getItem("apprenticeCounts"))
+    ? JSON.parse(localStorage.getItem("apprenticeCounts"))
     : {
         radicals: [0, 0, 0, 0],
         kanji: [0, 0, 0, 0],
         vocabulary: [0, 0, 0, 0],
       }
 );
+apprenticeCounts.subscribe((val) => {
+  localStorage.setItem("apprenticeCounts", JSON.stringify(val));
+});
 
 export const sessionSummaries = writable(
   localStorage.getItem("sessionSummaries")
