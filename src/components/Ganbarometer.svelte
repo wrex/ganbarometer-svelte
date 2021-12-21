@@ -6,13 +6,13 @@
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
   import SettingsButton from './SettingsButton.svelte';
-  import { getSessions } from '../API/Sessions';
+  import { getReviews, parseSessions } from '../API/Sessions';
 
   import { display, daysToReview, sessionSummaries } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
-  import type {SessionSummary} from "../API/API";
+  import type { Session, SessionSummary} from "../API/API";
 
   let reviewDayCounts = {
     targetReviewsPerDay: 150,
@@ -26,33 +26,38 @@
 
   let loading = false;
 
-  const updateSessionSummaries = (days) => {
+  const updateSummaries = async (days): Promise<void> => {
+    
+    let reviews;
     loading = true;
-    getSessions(days).then(sessions => {
-      let summaries = [];
-      sessions.forEach(s => {
-        const totalQuestions = s.reviews.reduce((acc,r) => acc += r.questions, 0);
-        const correctFirstTime = s.reviews.filter(r => r.meaning_incorrect + r.reading_incorrect === 0 );
-        const correctAnswers = correctFirstTime.reduce((acc,r) => acc += r.questions, 0);
-        
-        const summary: SessionSummary = {
-          start: s.startTime,
-          end: s.endTime,
-          reviewCount: s.reviews.length,
-          questionCount: totalQuestions,
-          correctAnswerCount: correctAnswers,
-        }
-        summaries.push(summary);
-      });
-      sessionSummaries.set(summaries);
-      loading = false;
-    }).catch(err => {
-      console.warn(err);
-      loading = false;
+    try {
+      reviews = await getReviews(days);
+    } catch (error) {
+      console.warn(error);
+    }
+    loading = false;
+
+    const sessions: Session[] = parseSessions(reviews);
+
+    let summaries = [];
+    sessions.forEach(s => {
+      const totalQuestions = s.reviews.reduce((acc,r) => acc += r.questions, 0);
+      const correctFirstTime = s.reviews.filter(r => r.meaning_incorrect + r.reading_incorrect === 0 );
+      const correctAnswers = correctFirstTime.reduce((acc,r) => acc += r.questions, 0);
+      
+      const summary: SessionSummary = {
+        start: s.startTime,
+        end: s.endTime,
+        reviewCount: s.reviews.length,
+        questionCount: totalQuestions,
+        correctAnswerCount: correctAnswers,
+      }
+      summaries.push(summary);
     });
+    sessionSummaries.set(summaries);
   };
 
-  $: updateSessionSummaries(+$daysToReview);
+  $: updateSummaries(+$daysToReview);
 </script>
 
 

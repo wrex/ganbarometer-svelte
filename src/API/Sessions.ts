@@ -113,7 +113,8 @@ const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
   return processed;
 };
 
-const getReviews = async (fromDate: Date) => {
+export const getReviews = async (n: number) => {
+  const fromDate = nDaysAgo(n);
   // First retrieve raw reviews
   wkof.include("Apiv2");
   await wkof.ready("Apiv2");
@@ -184,56 +185,49 @@ const findSessionEnds = (reviews: Review[]): number[] => {
 };
 
 // Get sessions from n days ago
-export const getSessions = async (n: number = 3): Promise<Session[]> => {
-  const reviews: Review[] = await getReviews(nDaysAgo(n));
+export const parseSessions = (reviews: Review[]): Session[] => {
+  console.log(reviews);
+  if (reviews.length === 0) {
+    return [];
+  }
 
-  return new Promise((resolve, reject) => {
-    if (reviews.length === 0) {
-      resolve([]);
-    }
+  // Find the indices of reviews with long durations (indicating the end of a
+  // session)
+  const session_ends = findSessionEnds(reviews);
 
-    // Find the indices of reviews with long durations (indicating the end of a
-    // session)
-    const session_ends = findSessionEnds(reviews);
+  // First start is always index 0, then the index after the end of each
+  // session (slice off the last start to keep ends[] and starts[] the
+  // same length)
+  const session_starts: number[] = [0, ...session_ends.map((i) => i + 1)].slice(
+    0,
+    -1
+  );
 
-    // First start is always index 0, then the index after the end of each
-    // session (slice off the last start to keep ends[] and starts[] the
-    // same length)
-    const session_starts: number[] = [
-      0,
-      ...session_ends.map((i) => i + 1),
-    ].slice(0, -1);
+  // Create some "proto Sessions" objects for these review sequences
+  const sessionSlices: { reviews: Review[] }[] = session_ends.map((end, i) => {
+    return {
+      reviews: reviews.slice(session_starts[i], end + 1),
+    };
+  });
 
-    // Create some "proto Sessions" objects for these review sequences
-    const sessionSlices: { reviews: Review[] }[] = session_ends.map(
-      (end, i) => {
-        return {
-          reviews: reviews.slice(session_starts[i], end + 1),
-        };
-      }
-    );
-
-    // Finally, flesh out the rest of the session object
-    resolve(
-      sessionSlices.map((reviewSlice) => {
-        return {
-          questions: reviewSlice.reviews.reduce(
-            (acc, review) => acc + review.questions,
-            0
-          ),
-          reading_incorrect: reviewSlice.reviews.reduce(
-            (acc, review) => acc + review.reading_incorrect,
-            0
-          ),
-          meaning_incorrect: reviewSlice.reviews.reduce(
-            (acc, review) => acc + review.meaning_incorrect,
-            0
-          ),
-          startTime: reviewSlice.reviews[0].started,
-          endTime: reviewSlice.reviews[reviewSlice.reviews.length - 1].started,
-          reviews: reviewSlice.reviews,
-        };
-      })
-    );
+  // Finally, flesh out the rest of the session object
+  return sessionSlices.map((reviewSlice) => {
+    return {
+      questions: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.questions,
+        0
+      ),
+      reading_incorrect: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.reading_incorrect,
+        0
+      ),
+      meaning_incorrect: reviewSlice.reviews.reduce(
+        (acc, review) => acc + review.meaning_incorrect,
+        0
+      ),
+      startTime: reviewSlice.reviews[0].started,
+      endTime: reviewSlice.reviews[reviewSlice.reviews.length - 1].started,
+      reviews: reviewSlice.reviews,
+    };
   });
 };
