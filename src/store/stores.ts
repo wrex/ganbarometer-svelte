@@ -16,9 +16,10 @@ const unStringify = (summaries) => {
   });
 };
 
+const acString = localStorage.getItem("apprenticeCounts");
 export const apprenticeCounts = writable(
-  localStorage.getItem("apprenticeCounts")
-    ? JSON.parse(localStorage.getItem("apprenticeCounts"))
+  acString
+    ? JSON.parse(acString)
     : {
         radicals: [0, 0, 0, 0],
         kanji: [0, 0, 0, 0],
@@ -29,13 +30,17 @@ apprenticeCounts.subscribe((val) => {
   localStorage.setItem("apprenticeCounts", JSON.stringify(val));
 });
 
-export const sessionSummaries = writable(
-  localStorage.getItem("sessionSummaries")
-    ? unStringify(localStorage.getItem("sessionSummaries"))
-    : []
-);
+const ssString = localStorage.getItem("sessionSummaries");
+export const sessionSummaries = writable(ssString ? unStringify(ssString) : []);
 sessionSummaries.subscribe((val) => {
   localStorage.setItem("sessionSummaries", JSON.stringify(val));
+});
+
+const rcString = localStorage.getItem("reviewCounts");
+export const reviewCounts = writable(rcString ? unStringify(rcString) : []);
+reviewCounts.subscribe((val) => {
+  console.log(val);
+  localStorage.setItem("reviewCounts", JSON.stringify(val));
 });
 
 export const defaultSettings = {

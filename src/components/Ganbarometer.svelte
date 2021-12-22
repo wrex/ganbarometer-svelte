@@ -8,27 +8,30 @@
   import SettingsButton from './SettingsButton.svelte';
   import { getReviews, parseSessions } from '../API/Sessions';
 
-  import { display, daysToReview, sessionSummaries } from '../store/stores';
+  import { display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
-  import type { Session, SessionSummary} from "../API/API";
+  import type { Review, Session, SessionSummary, ReviewCount} from "../API/API";
 
-  let reviewDayCounts = {
-    targetReviewsPerDay: 150,
-    reviews: [
-      {count: 113, accuracy: 0.86, reading_accuracy: 0.81, meaning_accuracy: 0.89, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
-      {count: 129, accuracy: 0.91, reading_accuracy: 0.93, meaning_accuracy: 0.90, start: new Date("11/2/2021 9:37"), end: new Date("11/2/2021 10:18")},
-      {count: 228, accuracy: 0.93, reading_accuracy: 0.91, meaning_accuracy: 0.83, start: new Date("11/3/2021 11:04"), end: new Date("11/3/2021 11:57")},
-      {count: 143, accuracy: 0.80, reading_accuracy: 0.94, meaning_accuracy: 0.83, start: new Date("11/4/2021 10:19"), end: new Date("11/4/2021 11:09")},
-    ],
-  };
+  // $reviewCounts = [
+  //     {count: 113, accuracy: 0.86, reading_accuracy: 0.81, meaning_accuracy: 0.89, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
+  //     {count: 129, accuracy: 0.91, reading_accuracy: 0.93, meaning_accuracy: 0.90, start: new Date("11/2/2021 9:37"), end: new Date("11/2/2021 10:18")},
+  //     {count: 228, accuracy: 0.93, reading_accuracy: 0.91, meaning_accuracy: 0.83, start: new Date("11/3/2021 11:04"), end: new Date("11/3/2021 11:57")},
+  //     {count: 143, accuracy: 0.80, reading_accuracy: 0.94, meaning_accuracy: 0.83, start: new Date("11/4/2021 10:19"), end: new Date("11/4/2021 11:09")},
+  //   ];
 
   let loading = false;
 
-  const updateSummaries = async (days): Promise<void> => {
+  const inSameDay = (x: Date, ref: Date): boolean => {
+    return x.getDate() === ref.getDate() 
+      && x.getMonth() === ref.getMonth() 
+      && x.getFullYear() === ref.getFullYear() 
+  }
+
+  const updateSummaries = async (days: number): Promise<void> => {
     
-    let reviews;
+    let reviews: Review[];
     loading = true;
     try {
       reviews = await getReviews(days);
@@ -36,6 +39,53 @@
       console.warn(error);
     }
     loading = false;
+
+    let current: ReviewCount = {
+      start: reviews[0].started,
+      end: reviews[0].started,
+      count: 0,
+      accuracy: 0.93,
+      reading_accuracy: 0.86,
+      meaning_accuracy: 0.94,
+    }
+
+    let counts: ReviewCount[] = [];
+    let qCount = 0;
+    let riCount = 0;
+    let miCount = 0;
+
+    reviews.forEach(r => {
+      if (inSameDay(r.started, current.start)) {
+        current.end = r.started;
+        current.count += 1;
+        qCount += r.questions;
+        riCount += r.reading_incorrect;
+        miCount += r.meaning_incorrect;
+      } else {
+        // starting a new day
+        console.log(`${qCount} questions ${riCount} r-inc ${miCount} m-inc`);
+        current.reading_accuracy = (qCount - riCount) / qCount;
+        current.meaning_accuracy = (qCount - miCount) / qCount;
+        current.accuracy = (current.reading_accuracy + current.meaning_accuracy) / 2;
+        counts.push(current);
+        current = {
+          start: r.started,
+          end: r.started,
+          count: 1,
+          accuracy: 0,
+          reading_accuracy: 0,
+          meaning_accuracy: 0,
+        }
+        qCount = 0;
+        riCount = 0;
+        miCount = 0;
+      }
+    });
+    current.reading_accuracy = (qCount - riCount) / qCount;
+    current.meaning_accuracy = (qCount - miCount) / qCount;
+    current.accuracy = (current.reading_accuracy + current.meaning_accuracy) / 2;
+    counts.push(current);
+    $reviewCounts = counts;
 
     const sessions: Session[] = parseSessions(reviews);
 
@@ -56,6 +106,7 @@
     });
     sessionSummaries.set(summaries);
   };
+
 
   $: updateSummaries(+$daysToReview);
 </script>
@@ -85,9 +136,9 @@
 
 <SpeedWidget />
 
-<AccuracyWidget {reviewDayCounts} />
+<AccuracyWidget />
 
-<ReviewsDayWidget {reviewDayCounts} />
+<ReviewsDayWidget />
 
 <Modal>
   <SettingsForm />

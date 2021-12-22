@@ -54,7 +54,6 @@ export interface Session {
   reviews: Review[];
 }
 
-// e.g. newestKanji = apprenticeCounts.kanji[]
 export interface ApprenticeCounts {
   radicals: number[];
   kanji: number[];
@@ -67,4 +66,13 @@ export interface SessionSummary {
   reviewCount: number;
   questionCount: number;
   correctAnswerCount: number;
+}
+
+export interface ReviewCount {
+  count: number;
+  accuracy: number;
+  reading_accuracy: number;
+  meaning_accuracy: number;
+  start: Date;
+  end: Date;
 }

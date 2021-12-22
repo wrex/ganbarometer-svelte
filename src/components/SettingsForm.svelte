@@ -7,10 +7,8 @@
   let errors = {};
 
   const validateField = path => () => {
-    console.log("validating {path}")
     const res = validate(values, path);
     errors = res.getErrors();
-    console.log(errors);
   }
 
   const submit = () => {

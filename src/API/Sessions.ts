@@ -1,4 +1,3 @@
-import { i } from "mathjs";
 import type {
   RawReview,
   Review,
@@ -6,14 +5,10 @@ import type {
   Session,
   Subject,
 } from "./API";
+
 import { getSubject } from "./Subjects";
 
 declare var wkof: any;
-
-// Utility function for debugging
-const logObj = (title: string, obj: any): void => {
-  console.log(`${title}: ${JSON.stringify(obj, null, 2)}`);
-};
 
 /* nDaysAgo() returns date object for 00:00:00 local time, n full days before now
  *
@@ -21,7 +16,7 @@ const logObj = (title: string, obj: any): void => {
  * then dayStartDaysAgo(3) returns a Date object for
  * 11/2/2021 00:00:00 local time
  */
-export const nDaysAgo = (n: number = 0): Date => {
+const nDaysAgo = (n: number = 0): Date => {
   const now = new Date();
   let midnight: number =
     now.getTime() -
@@ -186,7 +181,6 @@ const findSessionEnds = (reviews: Review[]): number[] => {
 
 // Get sessions from n days ago
 export const parseSessions = (reviews: Review[]): Session[] => {
-  console.log(reviews);
   if (reviews.length === 0) {
     return [];
   }
