@@ -29,17 +29,17 @@
         </tr>
         <tr>
           <th>Latest ({dowString($reviewCounts[$reviewCounts.length - 1].start)})</th>
-          <td>{ 100 * $reviewCounts[$reviewCounts.length - 1].reading_accuracy }<span
-          class="secondary">%r</span> { 100 * $reviewCounts[$reviewCounts.length - 1].meaning_accuracy }<span
+          <td>{ (100 * $reviewCounts[$reviewCounts.length - 1].reading_accuracy).toFixed(1) }<span
+          class="secondary">%r</span> { (100 * $reviewCounts[$reviewCounts.length - 1].meaning_accuracy).toFixed(1) }<span
           class="secondary">%m</span></td>
         </tr>
         <tr>
           <th>Reading {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
-          <td>{$reviewCounts.slice(0, -1).map(r => r.reading_accuracy * 100).join(" • ")}</td>
+          <td>{$reviewCounts.slice(0, -1).map(r => (r.reading_accuracy * 100).toFixed(1)).join(" • ")}</td>
         </tr>
         <tr>
           <th>Meaning {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
-          <td>{$reviewCounts.slice(0, -1).map(r => r.meaning_accuracy * 100).join(" • ")}</td>
+          <td>{$reviewCounts.slice(0, -1).map(r => (r.meaning_accuracy * 100).toFixed(1)).join(" • ")}</td>
         </tr>
       </table>
     </div>
