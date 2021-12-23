@@ -12,13 +12,15 @@
   $: targetReviews = $gbSettings.targetRevDay * $daysToReview;
 
   $: avgReviewsPerDay = (totalReviews / $daysToReview).toFixed();
+
+  $: displayValues = $reviewCounts.map(r => r.review_count);
 </script>
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
   {#if ($display === "chart")}
     <h1 class="gbHeader">Reviews/day</h1>
     <BarChart 
-      values={$reviewCounts.map(r => r.review_count)} 
+      values={displayValues} 
       labels={startDayOfWeeks}
     />
   {:else}

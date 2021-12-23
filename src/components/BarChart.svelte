@@ -2,13 +2,14 @@
 
   export let values: number[];
   export let labels: string[] = [];
-  export let onClickHandlers: {(): void}[] = [];
 
 	const max = Math.max(...values);
 	const heights: string[] = [];
-	values.forEach(val => {
-		heights.push(`${Math.round(val/max * 100)}%`)
-	})
+	$: {
+		values.forEach(val => {
+			heights.push(`${Math.round(val/max * 100)}%`)
+		})
+	}
 </script>
 
 <table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
@@ -22,11 +23,7 @@
     {#each values as val, i}
     <tr aria-label="values" style="height: {heights[i]}">
       <th scope="row" aria-label="label">{labels[i] ? labels[i] : ''}</th>
-			{#if onClickHandlers[i]}
-				<td aria-label="value" on:click={onClickHandlers[i]} ><span>{val}</span></td>
-			{:else}
-				<td aria-label="value"><span>{val}</span></td>
-			{/if}
+			<td aria-label="value"><span>{val}</span></td>
     </tr>
     {/each}
   </tbody>
