@@ -5,7 +5,13 @@ export const SETTINGSKEY = "gbSettings";
 
 export const display = writable("chart");
 
-export const daysToReview = writable("4");
+const daysToReviewString = localStorage.getItem("daysToReview");
+export const daysToReview = writable(
+  daysToReviewString ? JSON.parse(daysToReviewString) : 4
+);
+daysToReview.subscribe((val) => {
+  localStorage.setItem("daysToReview", JSON.stringify(val));
+});
 
 // Grr. JSON.stringify() is NOT reversible with JSON.parse()
 // because Dates get turned into strings
