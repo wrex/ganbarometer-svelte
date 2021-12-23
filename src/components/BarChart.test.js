@@ -62,19 +62,4 @@ describe("BarChart", () => {
     const styles = window.getComputedStyle(table);
     expect(styles.getPropertyValue("--max-label")).toBe("30");
   });
-
-  it("calls each onClickHandler passed", () => {
-    const fnA = jest.fn();
-    const fnB = jest.fn();
-    const fnC = jest.fn();
-    render(BarChart, {
-      values: [10, 30, 20],
-      onClickHandlers: [fnA, fnB, fnC],
-    });
-    const cells = screen.getAllByRole("cell", { name: "value" });
-    fireEvent.click(cells[1]);
-    expect(fnA).toHaveBeenCalledTimes(0);
-    expect(fnB).toHaveBeenCalledTimes(1);
-    expect(fnC).toHaveBeenCalledTimes(0);
-  });
 });
