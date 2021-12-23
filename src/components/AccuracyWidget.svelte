@@ -33,14 +33,25 @@
           class="secondary">%r</span> { (100 * $reviewCounts[$reviewCounts.length - 1].meaning_accuracy).toFixed(1) }<span
           class="secondary">%m</span></td>
         </tr>
-        <tr>
-          <th>Reading {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
-          <td>{$reviewCounts.slice(0, -1).map(r => (r.reading_accuracy * 100).toFixed(1)).join(" • ")}</td>
-        </tr>
-        <tr>
-          <th>Meaning {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
-          <td>{$reviewCounts.slice(0, -1).map(r => (r.meaning_accuracy * 100).toFixed(1)).join(" • ")}</td>
-        </tr>
+        {#if ($reviewCounts.length > 2)}
+          <tr>
+            <th>Reading {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
+            <td>{$reviewCounts.slice(0, -1).map(r => (r.reading_accuracy * 100).toFixed(1)).join(" • ")}</td>
+          </tr>
+          <tr>
+            <th>Meaning {dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
+            <td>{$reviewCounts.slice(0, -1).map(r => (r.meaning_accuracy * 100).toFixed(1)).join(" • ")}</td>
+          </tr>
+        {:else if ($reviewCounts.length === 2)}
+          <tr>
+            <th>Reading {dowString($reviewCounts[0].start)}:</th>
+            <td>{($reviewCounts[0].reading_accuracy * 100).toFixed(1)}</td>
+          </tr>
+          <tr>
+            <th>Meaning {dowString($reviewCounts[0].start)}:</th>
+            <td>{($reviewCounts[0].meaning_accuracy * 100).toFixed(1)}</td>
+          </tr>
+        {/if}
       </table>
     </div>
   {/if}

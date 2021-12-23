@@ -45,7 +45,6 @@ sessionSummaries.subscribe((val) => {
 const rcString = localStorage.getItem("reviewCounts");
 export const reviewCounts = writable(rcString ? unStringify(rcString) : []);
 reviewCounts.subscribe((val) => {
-  console.log(val);
   localStorage.setItem("reviewCounts", JSON.stringify(val));
 });
 

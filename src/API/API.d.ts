@@ -69,7 +69,8 @@ export interface SessionSummary {
 }
 
 export interface ReviewCount {
-  count: number;
+  review_count: number;
+  question_count: number;
   accuracy: number;
   reading_accuracy: number;
   meaning_accuracy: number;

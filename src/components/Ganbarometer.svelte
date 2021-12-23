@@ -13,14 +13,6 @@
   import { SyncLoader } from 'svelte-loading-spinners';
 
   import type { Review, Session, SessionSummary, ReviewCount} from "../API/API";
-import { re } from "mathjs";
-
-  // $reviewCounts = [
-  //     {count: 113, accuracy: 0.86, reading_accuracy: 0.81, meaning_accuracy: 0.89, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
-  //     {count: 129, accuracy: 0.91, reading_accuracy: 0.93, meaning_accuracy: 0.90, start: new Date("11/2/2021 9:37"), end: new Date("11/2/2021 10:18")},
-  //     {count: 228, accuracy: 0.93, reading_accuracy: 0.91, meaning_accuracy: 0.83, start: new Date("11/3/2021 11:04"), end: new Date("11/3/2021 11:57")},
-  //     {count: 143, accuracy: 0.80, reading_accuracy: 0.94, meaning_accuracy: 0.83, start: new Date("11/4/2021 10:19"), end: new Date("11/4/2021 11:09")},
-  //   ];
 
   let loading = false;
 
@@ -41,17 +33,6 @@ import { re } from "mathjs";
     }
     loading = false;
 
-    let current: ReviewCount = {
-      start: reviews[0].started,
-      end: reviews[0].started,
-      count: 0,
-      accuracy: 0.93,
-      reading_accuracy: 0.86,
-      meaning_accuracy: 0.94,
-    }
-
-
-    // want array of days, where each day is a slice of reviews[]
     const reviewsEachDay: Review[][] = reviews
       // first filter to one review per unique day
       .filter((r, i) => (i > 0) ? !inSameDay(r.started, reviews[i-1].started) : true)
@@ -59,9 +40,6 @@ import { re } from "mathjs";
       .map(r => r.started)
       // finally, convert those dates to array of reviews on that date
       .map(date => reviews.filter(r => inSameDay(r.started, date)));
-
-
-    console.log(reviewsEachDay);
 
     let counts: ReviewCount[] = [];
     reviewsEachDay.forEach((reviewAry, i) => {
@@ -80,6 +58,7 @@ import { re } from "mathjs";
       const count: ReviewCount = {
         start: reviewAry[0].started,
         end: reviewAry[reviewAry.length - 1].started,
+        review_count: reviewAry.length,
         question_count: questionCount,
         accuracy: bothCorrect / questionCount,
         reading_accuracy: readingCorrect / questionCount,
