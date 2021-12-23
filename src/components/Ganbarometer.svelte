@@ -13,6 +13,7 @@
   import { SyncLoader } from 'svelte-loading-spinners';
 
   import type { Review, Session, SessionSummary, ReviewCount} from "../API/API";
+import { re } from "mathjs";
 
   // $reviewCounts = [
   //     {count: 113, accuracy: 0.86, reading_accuracy: 0.81, meaning_accuracy: 0.89, start: new Date("11/1/2021 10:18"), end: new Date("11/1/2021 11:46")},
@@ -49,42 +50,43 @@
       meaning_accuracy: 0.94,
     }
 
-    let counts: ReviewCount[] = [];
-    let qCount = 0;
-    let riCount = 0;
-    let miCount = 0;
 
-    reviews.forEach(r => {
-      if (inSameDay(r.started, current.start)) {
-        current.end = r.started;
-        current.count += 1;
-        qCount += r.questions;
-        riCount += r.reading_incorrect;
-        miCount += r.meaning_incorrect;
-      } else {
-        // starting a new day
-        console.log(`${qCount} questions ${riCount} r-inc ${miCount} m-inc`);
-        current.reading_accuracy = (qCount - riCount) / qCount;
-        current.meaning_accuracy = (qCount - miCount) / qCount;
-        current.accuracy = (current.reading_accuracy + current.meaning_accuracy) / 2;
-        counts.push(current);
-        current = {
-          start: r.started,
-          end: r.started,
-          count: 1,
-          accuracy: 0,
-          reading_accuracy: 0,
-          meaning_accuracy: 0,
-        }
-        qCount = 0;
-        riCount = 0;
-        miCount = 0;
-      }
+    // want array of days, where each day is a slice of reviews[]
+    const reviewsEachDay: Review[][] = reviews
+      // first filter to one review per unique day
+      .filter((r, i) => (i > 0) ? !inSameDay(r.started, reviews[i-1].started) : true)
+      // convert those reviews to just a date
+      .map(r => r.started)
+      // finally, convert those dates to array of reviews on that date
+      .map(date => reviews.filter(r => inSameDay(r.started, date)));
+
+
+    console.log(reviewsEachDay);
+
+    let counts: ReviewCount[] = [];
+    reviewsEachDay.forEach((reviewAry, i) => {
+      const readingCorrect = reviewAry
+        .filter(r => r.reading_incorrect === 0)
+        .reduce((acc, r) => acc += r.questions, 0);
+      const meaningCorrect = reviewAry
+        .filter(r => r.meaning_incorrect === 0)
+        .reduce((acc, r) => acc += r.questions, 0);
+      const bothCorrect = reviewAry
+        .filter(r => r.meaning_incorrect + r.reading_incorrect === 0 )
+        .reduce((acc, r) => acc += r.questions, 0);
+
+
+      const questionCount = reviewAry.reduce((acc,r) => acc += r.questions, 0);
+      const count: ReviewCount = {
+        start: reviewAry[0].started,
+        end: reviewAry[reviewAry.length - 1].started,
+        question_count: questionCount,
+        accuracy: bothCorrect / questionCount,
+        reading_accuracy: readingCorrect / questionCount,
+        meaning_accuracy: meaningCorrect / questionCount,
+      };
+      counts.push(count);
     });
-    current.reading_accuracy = (qCount - riCount) / qCount;
-    current.meaning_accuracy = (qCount - miCount) / qCount;
-    current.accuracy = (current.reading_accuracy + current.meaning_accuracy) / 2;
-    counts.push(current);
     $reviewCounts = counts;
 
     const sessions: Session[] = parseSessions(reviews);
