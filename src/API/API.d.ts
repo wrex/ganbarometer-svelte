@@ -69,11 +69,11 @@ export interface SessionSummary {
 }
 
 export interface ReviewCount {
-  review_count: number;
-  question_count: number;
-  accuracy: number;
-  reading_accuracy: number;
-  meaning_accuracy: number;
-  start: Date;
-  end: Date;
+  review_count: number; // Number of items reviewed (R+K+V)
+  question_count: number; // Number of questions (reading & meaning + repeats for misses)
+  accuracy: number; // Percent of items answered correctly the first time (reading & meaning)
+  reading_accuracy: number; // Percent of items with reading answered corretly the first time
+  meaning_accuracy: number; // percent of items with meaning answered correctly the first time
+  start: Date; // start time of the first review
+  end: Date; // start time of the final review in the session or day
 }
