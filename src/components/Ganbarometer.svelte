@@ -44,24 +44,25 @@
     reviewsEachDay.forEach((reviewAry, i) => {
       const readingCorrect = reviewAry
         .filter(r => r.reading_incorrect === 0)
-        .reduce((acc, r) => acc += r.questions, 0);
+        .reduce((acc, r) => acc += 1, 0);
       const meaningCorrect = reviewAry
         .filter(r => r.meaning_incorrect === 0)
-        .reduce((acc, r) => acc += r.questions, 0);
+        .reduce((acc, r) => acc += 1, 0);
       const bothCorrect = reviewAry
         .filter(r => r.meaning_incorrect + r.reading_incorrect === 0 )
-        .reduce((acc, r) => acc += r.questions, 0);
+        .reduce((acc, r) => acc += 1, 0);
 
 
       const questionCount = reviewAry.reduce((acc,r) => acc += r.questions, 0);
+      const itemCount = reviewAry.length;
       const count: ReviewCount = {
         start: reviewAry[0].started,
         end: reviewAry[reviewAry.length - 1].started,
         review_count: reviewAry.length,
         question_count: questionCount,
-        accuracy: bothCorrect / questionCount,
-        reading_accuracy: readingCorrect / questionCount,
-        meaning_accuracy: meaningCorrect / questionCount,
+        accuracy: bothCorrect / itemCount,
+        reading_accuracy: readingCorrect / itemCount,
+        meaning_accuracy: meaningCorrect / itemCount,
       };
       counts.push(count);
     });
