@@ -1,7 +1,6 @@
 <script type="ts">
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
-  import AccuracyWidget from "./AccuracyWidget.svelte";
   import ReviewsDayWidget from "./ReviewsDayWidget.svelte";
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
@@ -73,8 +72,8 @@
     let summaries = [];
     sessions.forEach(s => {
       const totalQuestions = s.reviews.reduce((acc,r) => acc += r.questions, 0);
-      const correctFirstTime = s.reviews.filter(r => r.meaning_incorrect + r.reading_incorrect === 0 );
-      const correctAnswers = correctFirstTime.reduce((acc,r) => acc += r.questions, 0);
+      const incorrectAnswers = s.reviews.reduce((acc, r) => acc += r.meaning_incorrect + r.reading_incorrect, 0);
+      const correctAnswers = totalQuestions - incorrectAnswers;
       
       const summary: SessionSummary = {
         start: s.startTime,
