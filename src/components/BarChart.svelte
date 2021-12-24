@@ -1,15 +1,11 @@
 <script lang="ts">
-
   export let values: number[];
   export let labels: string[] = [];
+	export let target: number = 0;
 
-	const max = Math.max(...values);
-	const heights: string[] = [];
-	$: {
-		values.forEach(val => {
-			heights.push(`${Math.round(val/max * 100)}%`)
-		})
-	}
+	$: max = Math.max(...values, target);
+	$: heights = values.map(v => `${Math.round(v/max * 100)}%`);
+	$: targetHeight = Math.round(target/max * 100);
 </script>
 
 <table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
@@ -26,7 +22,8 @@
 			<td aria-label="value"><span>{val}</span></td>
     </tr>
     {/each}
-  </tbody>
+		<div hidden={targetHeight === 0} class="target" style="height: {targetHeight}%"></div>
+	</tbody>
 </table>
   
 <style>
@@ -91,6 +88,7 @@
 		.graph tr {
 			position:relative;
 			display:block;
+			z-index: 1;
 		}
 
 		.graph tr:hover {
@@ -101,6 +99,12 @@
 		.graph td {
 			display:block;
 			text-align:center;
+		}
+
+		.target {
+			position: absolute;
+			border-top: 2px dashed #fbb621;
+			width: 100%;
 		}
 
 		.graph tbody th {

@@ -22,6 +22,7 @@
     <BarChart 
       values={displayValues} 
       labels={startDayOfWeeks}
+      target={$gbSettings.targetRevDay}
     />
   {:else}
     <h1 class="gbHeader">{avgReviewsPerDay} Reviews/day</h1>
