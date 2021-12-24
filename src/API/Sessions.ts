@@ -16,7 +16,7 @@ declare var wkof: any;
  * then dayStartDaysAgo(3) returns a Date object for
  * 11/2/2021 00:00:00 local time
  */
-const nDaysAgo = (n: number = 0): Date => {
+export const nDaysAgo = (n: number = 0): Date => {
   const now = new Date();
   let midnight: number =
     now.getTime() -
