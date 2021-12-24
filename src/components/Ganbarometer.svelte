@@ -113,12 +113,12 @@
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
-<GbWidget />
-
-<SpeedWidget />
-
-<ReviewsWidget />
-
+<div data-testid="gbwidgets">
+  <GbWidget />
+  <SpeedWidget />
+  <ReviewsWidget />
+</div>
+  
 <Modal>
   <SettingsForm />
 </Modal>
