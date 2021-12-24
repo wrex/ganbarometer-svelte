@@ -1,7 +1,7 @@
 <script type="ts">
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
-  import ReviewsDayWidget from "./ReviewsDayWidget.svelte";
+  import ReviewsWidget from "./ReviewsWidget.svelte";
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
   import SettingsButton from './SettingsButton.svelte';
@@ -117,7 +117,7 @@
 
 <SpeedWidget />
 
-<ReviewsDayWidget />
+<ReviewsWidget />
 
 <Modal>
   <SettingsForm />

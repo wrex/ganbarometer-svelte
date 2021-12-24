@@ -21,7 +21,7 @@ import { map } from "mathjs";
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
   {#if ($display === "chart")}
-    <h1 class="gbHeader">Reviews/day</h1>
+    <h1 class="gbHeader">Accuracy</h1>
     <BarChart 
       values={displayValues} 
       labels={startDayOfWeeks}
