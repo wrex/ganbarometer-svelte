@@ -117,8 +117,6 @@
 
 <SpeedWidget />
 
-<AccuracyWidget />
-
 <ReviewsDayWidget />
 
 <Modal>
