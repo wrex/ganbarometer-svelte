@@ -33,7 +33,7 @@
     <Gauge value={weightedValue} />
     <div class="units">of max difficulty</div>
   {:else}
-    <h1 class="gbHeader">{(weightedValue * 100).toFixed()}% GanbarOmeter</h1>
+    <h1 class="gbHeader">GanbarOmeter: {(weightedValue * 100).toFixed()}%</h1>
     <div data-testid="ganbarometer-table">
       <table class="gbContent">
         <tr>

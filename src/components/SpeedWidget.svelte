@@ -36,7 +36,7 @@
     <Gauge value={gauge_value} label={gauge_label} />
     <div class="units">seconds/question</div>
   {:else}
-    <h1 class="gbHeader">{gauge_label} Speed</h1>
+    <h1 class="gbHeader">Speed: {gauge_label} s/q</h1>
     <div data-testid="speed-table">
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>

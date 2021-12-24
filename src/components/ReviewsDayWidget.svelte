@@ -1,6 +1,7 @@
 <script type="ts">
   import BarChart from "./BarChart.svelte";
   import { display, gbSettings, daysToReview, reviewCounts } from "../store/stores";
+import { map } from "mathjs";
 
   const dowString = (date) => { 
     return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
@@ -15,6 +16,7 @@
 
   $: displayValues = $reviewCounts.map(r => r.review_count);
   $: accuracyValues = $reviewCounts.map(r => r.accuracy);
+  $: overallAccuracy = 100 * accuracyValues.reduce((acc, v) => acc += v, 0) / accuracyValues.length;
 </script>
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
@@ -27,34 +29,33 @@
       percents={accuracyValues}
     />
   {:else}
-    <h1 class="gbHeader">{avgReviewsPerDay} Reviews/day</h1>
+    <h1 class="gbHeader">{totalReviews} Reviews @{overallAccuracy.toFixed()}%</h1>
     <div data-testid="reviews-per-day-table">
       <table class="gbContent">
         <tr>
-          <th>Total:</th>
-          <td>{ totalReviews }
-            <span class="secondary">reviews</span>
+          <th>Average:</th>
+          <td>{ avgReviewsPerDay }
+            <span class="secondary">reviews @ {overallAccuracy.toFixed()}%</span>
           </td>
-        </tr>
-        <tr>
-          <th>Target:</th>
-          <td>{ targetReviews } 
-            <span class="secondary">{((totalReviews/targetReviews) * 100 ).toFixed()}% achieved</span></td>
         </tr>
         <tr>
           <th>Latest ({dowString($reviewCounts[$reviewCounts.length - 1].start)}):</th>
           <td>{ $reviewCounts[$reviewCounts.length - 1].review_count } <span
-            class="secondary">reviews</span></td>
+            class="secondary">reviews @ {(100*accuracyValues[accuracyValues.length-1]).toFixed()}%</span></td>
           </tr>
         {#if ($reviewCounts.length > 2)}
           <tr>
             <th>{dowString($reviewCounts[0].start)} &ndash; {dowString($reviewCounts[$reviewCounts.length - 2].start)}:</th>
-            <td>{$reviewCounts.slice(0, -1).map(r => r.review_count).join(" • ")}</td>
+            <td>{$reviewCounts.slice(0, -1).map(r => r.review_count).join(" • ")} <span class="secondary">reviews</span></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>{accuracyValues.slice(0, -1).map(a => (100*a).toFixed()).join("% • ")}% <span class="secondary">accuracy</span></td>
           </tr>
         {:else if ($reviewCounts.length === 2)}
           <tr>
             <th>{dowString($reviewCounts[0].start)}:</th>
-            <td>{$reviewCounts[0].review_count}</td>
+            <td>{$reviewCounts[0].review_count} <span class="secondary">reviews</span></td>
           </tr>
         {/if}
       </table>

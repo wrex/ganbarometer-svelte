@@ -144,7 +144,8 @@
 			border-radius: 0;
 			bottom: 0;
 			z-index: 2;
-			background-color: darkgreen;
+			background-color: black;
+			opacity: 0.2;
 		}
 
 		.graph td.percents:hover {
