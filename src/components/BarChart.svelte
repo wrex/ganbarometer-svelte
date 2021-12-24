@@ -20,9 +20,9 @@
     {#each values as val, i}
     <tr aria-label="values" style="height: {heights[i]}%">
       <th scope="row" aria-label="label">{labels[i] ? labels[i] : ''}</th>
-			<td aria-label="value"><span>{val}</span></td>
-			{#if (percents?.length)}
-			<td aria-label="percents" class="percents" style="height: {heights[i] * percents[i]}%"></td>
+			<td aria-label="value"><span>{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span></td>
+			{#if (percents.length)}
+			<td aria-label="percents" class="percents" style="height: {(percents[i]*100).toFixed(1)}%"></td>
 			{/if}
 		</tr>
     {/each}
@@ -109,6 +109,7 @@
 			position: absolute;
 			border-top: 2px dashed #fbb621;
 			width: 100%;
+			padding:0;
 		}
 
 		.graph tbody th {
@@ -135,6 +136,7 @@
 			background:var(--fill-color, #59c273);
 			border-radius:0.5em 0.5em 0 0;
 			transition:background 0.5s;
+			padding: 0;
 		}
 
 		.graph td.percents {
@@ -167,6 +169,7 @@
 			opacity:0;
 			transition:opacity 0.5s;
       color:#333;
+			padding: 0.1em;
 		}
 
 		table td span,
