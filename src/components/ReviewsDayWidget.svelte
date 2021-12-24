@@ -14,6 +14,7 @@
   $: avgReviewsPerDay = (totalReviews / $daysToReview).toFixed();
 
   $: displayValues = $reviewCounts.map(r => r.review_count);
+  $: accuracyValues = $reviewCounts.map(r => r.accuracy);
 </script>
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
@@ -23,6 +24,7 @@
       values={displayValues} 
       labels={startDayOfWeeks}
       target={$gbSettings.targetRevDay}
+      percents={accuracyValues}
     />
   {:else}
     <h1 class="gbHeader">{avgReviewsPerDay} Reviews/day</h1>

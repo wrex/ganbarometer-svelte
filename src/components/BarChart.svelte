@@ -1,10 +1,11 @@
 <script lang="ts">
   export let values: number[];
+	export let percents: number[] = [];
   export let labels: string[] = [];
 	export let target: number = 0;
 
-	$: max = Math.max(...values, target);
-	$: heights = values.map(v => `${Math.round(v/max * 100)}%`);
+	$: max = Math.max(...values);
+	$: heights = values.map(v => Math.round(v/max * 100));
 	$: targetHeight = Math.round(target/max * 100);
 </script>
 
@@ -17,10 +18,13 @@
   </thead>
   <tbody>
     {#each values as val, i}
-    <tr aria-label="values" style="height: {heights[i]}">
+    <tr aria-label="values" style="height: {heights[i]}%">
       <th scope="row" aria-label="label">{labels[i] ? labels[i] : ''}</th>
 			<td aria-label="value"><span>{val}</span></td>
-    </tr>
+			{#if (percents?.length)}
+			<td aria-label="percents" class="percents" style="height: {heights[i] * percents[i]}%"></td>
+			{/if}
+		</tr>
     {/each}
 		<div hidden={targetHeight === 0} class="target" style="height: {targetHeight}%"></div>
 	</tbody>
@@ -132,6 +136,19 @@
 			border-radius:0.5em 0.5em 0 0;
 			transition:background 0.5s;
 		}
+
+		.graph td.percents {
+			position: absolute;
+			border-radius: 0;
+			bottom: 0;
+			z-index: 2;
+			background-color: darkgreen;
+		}
+
+		.graph td.percents:hover {
+			opacity: 0;
+		}
+
 
 		.graph tr:hover td {
 			opacity:0.7;
