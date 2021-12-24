@@ -10,6 +10,7 @@
   $: overallAccuracy = $reviewCounts.map(r => r.accuracy).reduce((acc, a) => acc += a, 0) / $reviewCounts.length;
   $: readingAccuracy = $reviewCounts.map(r => r.reading_accuracy).reduce((acc, a) => acc += a, 0) / $reviewCounts.length;
   $: meaningAccuracy = $reviewCounts.map(r => r.meaning_accuracy).reduce((acc, a) => acc += a, 0) / $reviewCounts.length;
+  $: console.log($reviewCounts);
 </script>
 
 <div class="gbWidget">
