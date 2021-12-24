@@ -3,107 +3,48 @@
  */
 
 import { getReviews, parseSessions, nDaysAgo } from "./Sessions";
-import { wkApiFactory } from "../mocks/wanikaniApi";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
-import { drop } from "@mswjs/data";
+import {
+  mockWkof,
+  mockReview,
+  mockReviewCollection,
+  clearMockedAPIData,
+} from "../mocks/wkof";
 
+// Setup
 jest.useFakeTimers("modern");
+mockWkof();
+const wkofApiv2Mock = window.wkof.Apiv2.fetch_endpoint;
 
-const origIndexedDB = window.indexedDB;
-
-beforeAll(() => {
+beforeEach(() => {
   window.indexedDB = new FDBFactory(); // reset database
-});
-
-afterAll(() => {
-  window.indexedDB = origIndexedDB;
 });
 
 describe("nDaysAgo()", () => {
   beforeAll(() => {
     jest.setSystemTime(new Date("05 Oct 2019 01:02:03").getTime());
   });
-  it("returns midnight three days ago when passed 3", () => {
-    expect(nDaysAgo(3).toString()).toMatch(/^Thu Oct 03 2019 00:00:00/);
-  });
   it("defaults to midnight this a.m.", () => {
     expect(nDaysAgo().toString()).toMatch(/^Sat Oct 05 2019 00:00:00/);
   });
+  it("returns midnight yesterday a.m. when passed 2", () => {
+    expect(nDaysAgo(2).toString()).toMatch(/^Fri Oct 04 2019 00:00:00/);
+  });
+  it("returns midnight three days ago when passed 3", () => {
+    expect(nDaysAgo(3).toString()).toMatch(/^Thu Oct 03 2019 00:00:00/);
+  });
 });
 
-let wkofApiv2Mock = jest.fn();
-
-window.wkof = {
-  // Need to mock return values for Apiv2.fetch_endpoint()
-  Apiv2: {
-    fetch_endpoint: wkofApiv2Mock,
-  },
-  // Need to mock return values for ItemData.get_items() and get_index()
-  ItemData: {
-    get_items: jest.fn(),
-    get_index: jest.fn(),
-  },
-  file_cache: {
-    dir: {},
-    save: jest.fn(),
-    load: jest.fn(),
-    delete: jest.fn(),
-    clear: jest.fn(),
-  },
-  // Mock include to do nothing
-  include: jest.fn(),
-  // Ready returns a promise that just resolves
-  ready: jest.fn(() => new Promise((r) => r())),
-};
-
 describe("parseSessions()", () => {
-  const mockGetIndex = (subjects) => {
-    window.wkof.ItemData.get_items.mockReturnValue(
-      new Promise((r) => r(subjects))
-    );
-    let index = {};
-    subjects.forEach((s) => {
-      index[s.id] = s;
-    });
-    window.wkof.ItemData.get_index.mockReturnValue(
-      new Promise((r) => r(index))
-    );
-  };
-
-  // call like: mockreview({subject: {...}, review: {...}, reviewData: {...} })
-  const mockReview = (values) => {
-    const subject = values?.subject ?? {};
-    const review = values?.review ?? {};
-    const reviewData = values?.reviewData ?? {};
-
-    const mockSubject = wkApiFactory.subject.create({ ...subject });
-    // mockGetIndex([mockSubject]);  // BUG!!!! need array of all subjects
-    const mockData = wkApiFactory.reviewData.create({
-      ...reviewData,
-      subject_id: mockSubject.id,
-    });
-    return wkApiFactory.review.create({ ...review, data: mockData });
-  };
-
-  const mockReviewCollection = async (reviews) => {
-    wkofApiv2Mock.mockReturnValue(
-      wkApiFactory.reviewCollection.create({
-        data: reviews,
-        total_count: reviews.length,
-      })
-    );
-    const subjects = wkApiFactory.subject.getAll();
-    mockGetIndex(subjects);
-  };
-
   beforeAll(() => {
     // Make all tests start at a known point in time
     jest.setSystemTime(new Date("05 Oct 2019 01:02:03").getTime());
   });
 
   afterEach(() => {
-    drop(wkApiFactory);
+    // Clear all mocked data
+    clearMockedAPIData();
   });
 
   it("calls wkof.Apiv2.fetch_endpoint with 'reviews' as the first param", async () => {

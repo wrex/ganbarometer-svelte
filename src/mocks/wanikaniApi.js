@@ -1,4 +1,4 @@
-import { factory, primaryKey, oneOf, manyOf } from "@mswjs/data";
+import { factory, primaryKey, oneOf, manyOf, drop } from "@mswjs/data";
 import { mersenne, date, datatype } from "faker";
 
 // Randomness seed to ensure faker returns same values every run
@@ -42,5 +42,3 @@ export const wkApiFactory = factory({
     object: () => "kanji",
   },
 });
-
-// TODO: Collections!! subject, assignment, &tc.
