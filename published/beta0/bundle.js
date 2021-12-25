@@ -2,7 +2,7 @@
 // @name        ganbarometer-svelte
 // @description Svelte version of the GanbarOmeter for Wanikani
 // @namespace   https://github.com/wrex/
-// @version     0.0.1
+// @version     0.0.2
 // @homepage    https://github.com/wrex/ganbarometer-svelte#readme
 // @author      Rex Walters -- rw [at] pobox.com
 // @license     MIT-0
