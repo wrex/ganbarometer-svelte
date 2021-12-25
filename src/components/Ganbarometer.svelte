@@ -113,7 +113,7 @@
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
-<div data-testid="gbwidgets">
+<div data-testid="gbwidgets" class="gbwidgets">
   <GbWidget />
   <SpeedWidget />
   <ReviewsWidget />
@@ -124,6 +124,19 @@
 </Modal>
 
 <style>
+
+.gbwidgets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    column-gap: 20px;
+
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    margin: 0 0 30px;
+    padding: 0.5em 0 0;
+  }
 
   :global(.gbHeader) {
     font-size: 1.25rem;
