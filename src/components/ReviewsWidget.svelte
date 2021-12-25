@@ -39,8 +39,8 @@ import { map } from "mathjs";
           </td>
         </tr>
         <tr>
-          <th>Latest ({dowString($reviewCounts[$reviewCounts.length - 1].start)}):</th>
-          <td>{ $reviewCounts[$reviewCounts.length - 1].review_count } <span
+          <th>Latest ({dowString($reviewCounts[$reviewCounts.length - 1]?.start)}):</th>
+          <td>{ $reviewCounts[$reviewCounts.length - 1]?.review_count } <span
             class="secondary">reviews @ {(100*accuracyValues[accuracyValues.length-1]).toFixed()}%</span></td>
           </tr>
         {#if ($reviewCounts.length > 2)}

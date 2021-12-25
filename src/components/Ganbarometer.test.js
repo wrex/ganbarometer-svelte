@@ -3,8 +3,8 @@
  */
 
 import Ganbarometer from "./Ganbarometer.svelte";
-import { render, screen } from "@testing-library/svelte";
-
+import { render, screen, within } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
 import {
@@ -18,12 +18,15 @@ import {
 mockWkof();
 const wkofApiv2Mock = window.wkof.Apiv2.fetch_endpoint;
 
-beforeEach(() => {
-  window.indexedDB = new FDBFactory(); // reset database
-});
-
 describe("Ganbarometer layout", () => {
-  mockReviewCollection([]);
+  beforeEach(() => {
+    window.indexedDB = new FDBFactory(); // reset database
+    mockReviewCollection([]);
+  });
+
+  afterEach(() => {
+    clearMockedAPIData();
+  });
 
   it("creates a div with the ganbarometer widgets", () => {
     render(Ganbarometer);
@@ -33,13 +36,15 @@ describe("Ganbarometer layout", () => {
 
   it("has a nav for showing graphs", () => {
     render(Ganbarometer);
-    const element = screen.getByText("Graphs");
+    const navbar = screen.getByRole("navigation");
+    const element = within(navbar).getByText("Graphs");
     expect(element).toBeInTheDocument();
   });
 
   it("has a nav for showing data", () => {
     render(Ganbarometer);
-    const element = screen.getByText("Data");
+    const navbar = screen.getByRole("navigation");
+    const element = within(navbar).getByText("Data");
     expect(element).toBeInTheDocument();
   });
 
@@ -77,5 +82,38 @@ describe("Ganbarometer layout", () => {
       name: "Accuracy",
     });
     expect(accuracyChart).toBeInTheDocument();
+  });
+});
+
+describe("Interaction", () => {
+  beforeEach(() => {
+    window.indexedDB = new FDBFactory(); // reset database
+  });
+
+  afterEach(() => {
+    clearMockedAPIData();
+  });
+
+  it("Displays data tables when Data nav is clicked", async () => {
+    mockReviewCollection([]);
+    render(Ganbarometer);
+    const navbar = screen.getByRole("navigation");
+    const dataNav = within(navbar).getByText("Data");
+    await userEvent.click(dataNav);
+
+    const gbTableHeading = screen.getByRole("heading", {
+      name: /ganbarometer: 0%/i,
+    });
+    expect(gbTableHeading).toBeInTheDocument();
+
+    const speedHeading = screen.getByRole("heading", {
+      name: /speed: 0\.0 s\/q/i,
+    });
+    expect(speedHeading).toBeInTheDocument();
+
+    const accuracyHeading = screen.getByRole("heading", {
+      name: /0 reviews/i,
+    });
+    expect(accuracyHeading).toBeInTheDocument();
   });
 });
