@@ -6,3 +6,4 @@ coverage/
 *.js
 !*.test.js
 !src/mocks/*.js
+!published/**/*.js
