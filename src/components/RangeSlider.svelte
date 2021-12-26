@@ -841,7 +841,7 @@
       {vertical}
       {reversed}
       {orientationStart}
-      {orientationEnd}
+      <!-- {orientationEnd} -->
       {hoverable}
       {disabled}
       {all}
