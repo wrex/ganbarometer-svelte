@@ -1,6 +1,6 @@
 import { median } from "./Utility";
 
-import type { Review, Session } from "./API";
+import type { Review, Session, SessionSummary } from "./API";
 
 const findSessionEnds = (reviews: Review[]): number[] => {
   const durations = reviews.map((r) => r.duration);
@@ -52,7 +52,7 @@ const findSessionEnds = (reviews: Review[]): number[] => {
     // Want to reate arrays of start and end indices such that:
     //   starts = [0, 4, 6]
     //   ends   = [3, 5, 12]
-    // Note that reviews 3, 5, and 12 will have a duration MAD > 2.0
+    // Note that reviews 3, 5, and 12 will have a duration MAD > MAD_CUTOFF
     const indices = reviews.map((r, i) => i);
     const filtered = indices.filter((r, i) => duration_mads[i] > MAD_CUTOFF);
     return filtered;
@@ -104,4 +104,30 @@ export const parseSessions = (reviews: Review[]): Session[] => {
       reviews: reviewSlice.reviews,
     };
   });
+};
+
+export const findSessSummaries = (reviews: Review[]): Session[] => {
+  const sessions: Session[] = parseSessions(reviews);
+  let summaries = [];
+  sessions.forEach((s) => {
+    const totalQuestions = s.reviews.reduce(
+      (acc, r) => (acc += r.questions),
+      0
+    );
+    const incorrectAnswers = s.reviews.reduce(
+      (acc, r) => (acc += r.meaning_incorrect + r.reading_incorrect),
+      0
+    );
+    const correctAnswers = totalQuestions - incorrectAnswers;
+
+    const summary: SessionSummary = {
+      start: s.startTime,
+      end: s.endTime,
+      reviewCount: s.reviews.length,
+      questionCount: totalQuestions,
+      correctAnswerCount: correctAnswers,
+    };
+    summaries.push(summary);
+  });
+  return summaries;
 };

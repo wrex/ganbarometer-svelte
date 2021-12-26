@@ -4,7 +4,6 @@
 </script>
 
 <script type="ts">
-  // import RangeSlider from "svelte-range-slider-pips.svelte";
   import RangeSlider from "./RangeSlider.svelte";
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
@@ -13,10 +12,12 @@
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
-  import { parseSessions } from '../API/Sessions';
+
+  import { findSessSummaries, parseSessions } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
 
   import { display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
+
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
@@ -36,28 +37,10 @@
     loading = false;
 
     $reviewCounts = calculateCounts(reviews);
-
-    const sessions: Session[] = parseSessions(reviews);
-
-    let summaries = [];
-    sessions.forEach(s => {
-      const totalQuestions = s.reviews.reduce((acc,r) => acc += r.questions, 0);
-      const incorrectAnswers = s.reviews.reduce((acc, r) => acc += r.meaning_incorrect + r.reading_incorrect, 0);
-      const correctAnswers = totalQuestions - incorrectAnswers;
-      
-      const summary: SessionSummary = {
-        start: s.startTime,
-        end: s.endTime,
-        reviewCount: s.reviews.length,
-        questionCount: totalQuestions,
-        correctAnswerCount: correctAnswers,
-      }
-      summaries.push(summary);
-    });
-    sessionSummaries.set(summaries);
+    $sessionSummaries = findSessSummaries(reviews);
   };
 
-  $: updateSummaries(+$daysToReview[0]);
+  $: updateSummaries($daysToReview[0]);
 
   $: suffix = $daysToReview[0] > 1 ? " days" : " day";
 
