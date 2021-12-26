@@ -99,10 +99,32 @@
 
   $: suffix = $daysToReview[0] > 1 ? " days" : " day";
 
+  let ssQuizPresent = false;
   wkof.wait_state('ss_quiz', 'ready').then(() => {
     if (typeof ss_quiz?.open === 'function')
-      console.log("found self-study quiz");
+      ssQuizPresent = true;
   });
+
+  const ss_options = {
+    ipreset: {
+      name: 'New Kanji', 
+      content: {
+        wk_items: {
+          enabled: true, 
+          filters: {
+            srs: { enabled: true, value: { appr1: true, appr2: true, } },
+            item_type: { enabled: true, value: 'kanji' },
+          },
+        },
+      },
+    },
+  };
+
+  const ssQuizLauncher = async () => {
+    await wkof.wait_state('ss_quiz', 'ready');
+    ss_quiz.open(ss_options);
+  };
+
 </script>
 
 
@@ -126,7 +148,9 @@
 
 
   <div class="action-buttons">
-    <QuizButton />
+    {#if ssQuizPresent}
+      <QuizButton on:click={ssQuizLauncher} />
+    {/if}
     <SettingsButton on:click="{() => getModal().open()}" />
   </div>
 </div>
@@ -234,13 +258,14 @@
   .spinner {
     margin-inline: 0.5em;
     position: absolute;
-    left: 35em;
+    left: 37em;
   }
 
   .controls {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    padding: 0 2em;
   }
 
   .chart-data-nav {
