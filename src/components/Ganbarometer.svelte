@@ -13,8 +13,8 @@
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
-  import { getReviews, parseSessions } from '../API/Sessions';
-  import { calculateCounts } from "../API/Reviews"; 
+  import { parseSessions } from '../API/Sessions';
+  import { getReviews, calculateCounts } from "../API/Reviews"; 
 
   import { display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
   import { fade } from  'svelte/transition';

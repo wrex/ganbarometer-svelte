@@ -1,5 +1,90 @@
-import type { Review, ReviewCount } from "../API/API";
-import { inSameDay } from "./Utility";
+import { getSubject } from "./Subjects";
+import { nDaysAgo, inSameDay, median } from "./Utility";
+
+import type {
+  Subject,
+  RawReview,
+  Review,
+  ReviewCollection,
+  ReviewCount,
+} from "../API/API";
+declare var wkof: any;
+
+// create a processed review from the raw review JSON returned from server
+// (populates everything except the duration)
+const initializeReview = (r: RawReview) => {
+  return {
+    subject_id: r.data.subject_id,
+    started: new Date(r.data.created_at),
+    duration: 0,
+    reading_incorrect: +r.data.incorrect_reading_answers,
+    meaning_incorrect: +r.data.incorrect_meaning_answers,
+    questions: 0,
+  };
+};
+
+// calculate duration of reviews by peeking at next in sequence
+// (duration is review-start to review-start)
+// NOTE: doesn't change duration of final review in array
+const calculateDuration = (r: Review, i: number, array: Review[]): Review => {
+  if (array[i + 1]) {
+    const nextms = array[i + 1].started.getTime();
+    const thisms = r.started.getTime();
+    if (nextms < thisms) {
+      throw "Reviews not in sequential creation order!";
+    }
+    return { ...r, duration: nextms - thisms };
+  } else {
+    return r; // final review unchanged
+  }
+};
+
+const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
+  let reviewsCopy = reviews.slice();
+
+  for (let review of reviewsCopy) {
+    const subject: Subject = await getSubject(+review.subject_id);
+    review.questions = subject.object === "radical" ? 1 : 2;
+    review.questions += review.meaning_incorrect + review.reading_incorrect;
+  }
+  return reviewsCopy;
+};
+
+// Turn array of RawReviews into array processed reviews
+const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
+  if (!reviews?.length) {
+    return [];
+  }
+  const converted: Review[] = reviews
+    .map(initializeReview)
+    .map(calculateDuration);
+
+  const processed: Review[] = await calculateQuestions(converted);
+
+  // Just assume the final review duration was the median of the prior reviews
+  // (no way to know actual duration)
+  let durations: number[] = processed.slice(0, -1).map((r) => r.duration);
+  let medianInterval: number = median(durations);
+  if (processed.length) {
+    processed[processed.length - 1].duration = medianInterval;
+  }
+
+  return processed;
+};
+
+export const getReviews = async (n: number) => {
+  const fromDate = nDaysAgo(n);
+  // First retrieve raw reviews
+  wkof.include("Apiv2");
+  await wkof.ready("Apiv2");
+  const collection: ReviewCollection = await wkof.Apiv2.fetch_endpoint(
+    "reviews",
+    {
+      last_update: fromDate.toISOString(),
+    }
+  );
+  return processReviews(collection?.data);
+};
 
 export const calculateCounts = (reviews: Review[]): ReviewCount[] => {
   const reviewsEachDay: Review[][] = reviews

@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { getReviews, parseSessions } from "./Sessions";
+import { parseSessions } from "./Sessions";
+import { getReviews } from "./Reviews";
 import { nDaysAgo } from "./Utility";
 import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
