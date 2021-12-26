@@ -20,10 +20,11 @@
     {#each values as val, i}
     <tr aria-label="values" style="height: {heights[i]}%">
       <th scope="row" aria-label="label">{labels[i] ? labels[i] : ''}</th>
-			<td aria-label="value"><span>{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span></td>
+			<td aria-label="value"></td>
 			{#if (percents.length)}
-			<td aria-label="percents" class="percents" style="height: {(percents[i]*100).toFixed(1)}%"></td>
+				<td aria-label="percents" class="percents" style="height: {(percents[i]*100).toFixed(1)}%"></td>
 			{/if}
+			<span class="displayBox">{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span>
 		</tr>
     {/each}
 		<div hidden={targetHeight === 0} class="target" style="height: {targetHeight}%"></div>
@@ -148,16 +149,18 @@
 			opacity: 0.2;
 		}
 
-		.graph td.percents:hover {
-			opacity: 0;
-		}
-
+		
 
 		.graph tr:hover td {
 			opacity:0.7;
 		}
 
-		.graph td span {
+		.graph tr:hover td.percents {
+			opacity: 0;
+		}
+
+
+		.graph .displayBox {
 			overflow:hidden;
 			position:absolute;
 			left:50%;
@@ -173,11 +176,11 @@
 			padding: 0.1em;
 		}
 
-		table td span,
-		.graph tr:hover td span {
+		.graph tr:hover .displayBox {
 			width:2em;
 			margin-left:-1em; /* 1/2 the declared width */
 			opacity:1;
+			z-index: 9999;
 		}
 	} /* min-width:32em */
 }

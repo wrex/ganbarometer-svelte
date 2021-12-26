@@ -10,7 +10,6 @@ import { map } from "mathjs";
   $: startDayOfWeeks = $reviewCounts.map(r => dowString(r.start));
 
   $: totalReviews = $reviewCounts.reduce((acc,r) => acc += r.review_count, 0);
-  $: targetReviews = $gbSettings.targetRevDay * $daysToReview[0];
 
   $: avgReviewsPerDay = (totalReviews / $daysToReview[0]).toFixed();
 
