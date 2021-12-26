@@ -1,9 +1,15 @@
+<script context="module" type="ts">
+  declare var ss_quiz: any;
+  declare var wkof: any;
+</script>
+
 <script type="ts">
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";
   import Modal, {getModal} from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
+  import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
   import { getReviews, parseSessions } from '../API/Sessions';
 
@@ -90,26 +96,34 @@
 
 
   $: updateSummaries(+$daysToReview);
+
+  wkof.wait_state('ss_quiz', 'ready').then(() => {
+    if (typeof ss_quiz?.open === 'function')
+      console.log("found self-study quiz");
+  });
 </script>
 
 
 <div class="controls">
-  <div class="retrieval">
-    <label for="review-days">Days to display:</label>
-    <input type="number" id="review-days" name="review-days" min="1" max="7" bind:value={$daysToReview}>
-  </div>
   
-  {#if loading}
-    <div transition:fade class="spinner">
-      <SyncLoader size="25" unit="px" />
-    </div>
-  {/if}
 
   <nav class="navigation">
     <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
   </nav>
 
+  {#if loading}
+    <div transition:fade class="spinner">
+      <SyncLoader size="25" unit="px" />
+    </div>
+  {/if}
+
+  <div class="retrieval">
+    <input type="range" id="review-days" name="review-days" min="1" max="7" bind:value={$daysToReview}>
+    <label for="review-days">{$daysToReview} days</label>
+  </div>
+
+  <QuizButton />
   <SettingsButton on:click="{() => getModal().open()}" />
 </div>
 
@@ -124,17 +138,16 @@
 </Modal>
 
 <style>
-
 .gbwidgets {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    width: 100%;
     align-items: flex-start;
     column-gap: 20px;
 
     background-color: #f4f4f4;
     border-radius: 5px;
-    margin: 0 0 30px;
     padding: 0.5em 0 0;
   }
 
@@ -197,13 +210,14 @@
 
   .spinner {
     margin-inline: 0.5em;
+    position: absolute;
+    left: 37em;
   }
 
   .controls {
     display: flex;
     justify-content: right;
     width: 100%;
-    padding: 0 1em;
   }
 
   .navigation li {
@@ -224,15 +238,17 @@
   }
 
   .retrieval {
+    width: 100%;
     display: flex;
+    justify-content: center;
   }
   .retrieval > label {
     display: inline;
     padding: 0 0.2em;
   }
   .retrieval > input {
-    padding: 0 0.2em;
-    width: 2em;
+    width: 7em;
+    margin-top: -0.5em;
   }
 
 </style>
