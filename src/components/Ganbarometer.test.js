@@ -12,10 +12,12 @@ import {
   mockReview,
   mockReviewCollection,
   clearMockedAPIData,
+  mock_ss_quiz,
 } from "../mocks/wkof";
 
 // Setup
 mockWkof();
+mock_ss_quiz();
 const wkofApiv2Mock = window.wkof.Apiv2.fetch_endpoint;
 
 describe("Ganbarometer layout", () => {
@@ -28,7 +30,7 @@ describe("Ganbarometer layout", () => {
     clearMockedAPIData();
   });
 
-  it("creates a div with the ganbarometer widgets", () => {
+  fit("creates a div with the ganbarometer widgets", () => {
     render(Ganbarometer);
     const gbSection = screen.getByTestId("gbwidgets");
     expect(gbSection).toBeInTheDocument();

@@ -21,9 +21,9 @@ export const mockWkof = () => {
       delete: jest.fn(),
       clear: jest.fn(),
     },
-    // Mock include to do nothing
     include: jest.fn(),
-    // Ready returns a promise that just resolves
+    // Ready and wait_state return a promise that just resolves
+    wait_state: jest.fn(() => new Promise((r) => r())),
     ready: jest.fn(() => new Promise((r) => r())),
   };
 };
@@ -65,3 +65,7 @@ export const mockReviewCollection = (reviews) => {
 };
 
 export const clearMockedAPIData = () => drop(wkApiFactory);
+
+export const mock_ss_quiz = () => {
+  window.ss_quiz = jest.fn();
+};
