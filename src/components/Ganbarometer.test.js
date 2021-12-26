@@ -30,7 +30,7 @@ describe("Ganbarometer layout", () => {
     clearMockedAPIData();
   });
 
-  fit("creates a div with the ganbarometer widgets", () => {
+  it("creates a div with the ganbarometer widgets", () => {
     render(Ganbarometer);
     const gbSection = screen.getByTestId("gbwidgets");
     expect(gbSection).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe("Ganbarometer layout", () => {
 
   it("has an input for entering the number of days to retrieve", () => {
     render(Ganbarometer);
-    const element = screen.getByLabelText(/Days to display/i);
+    const element = screen.getByTestId("daySlider");
     expect(element).toBeInTheDocument();
   });
 

@@ -4,7 +4,8 @@
 </script>
 
 <script type="ts">
-  import RangeSlider from "svelte-range-slider-pips";
+  // import RangeSlider from "svelte-range-slider-pips.svelte";
+  import RangeSlider from "./RangeSlider.svelte";
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";
@@ -142,7 +143,7 @@
     </div>
   {/if}
 
-  <div class="dayRange">
+  <div class="dayRange" data-testid="daySlider">
     <RangeSlider bind:values={$daysToReview} float pips {suffix} min={1} max={7} />
   </div>
 
