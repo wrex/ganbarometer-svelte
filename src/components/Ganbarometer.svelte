@@ -50,32 +50,27 @@
       ssQuizPresent = true;
   });
 
-  const ss_options = {
-    ipreset: {
-      name: 'New Kanji', 
-      content: {
-        wk_items: {
-          enabled: true, 
-          filters: {
-            srs: { enabled: true, value: { appr1: true, appr2: true, } },
-            item_type: { enabled: true, value: 'kanji' },
+  const ssQuizLauncher = async () => {
+    await wkof.wait_state('ss_quiz', 'ready');
+    ss_quiz.open({
+      ipreset: {
+        name: 'New Kanji', 
+        content: {
+          wk_items: {
+            enabled: true, 
+            filters: {
+              srs: { enabled: true, value: { appr1: true, appr2: true, } },
+              item_type: { enabled: true, value: 'kan' },
+            },
           },
         },
       },
-    },
+    });
   };
-
-  const ssQuizLauncher = async () => {
-    await wkof.wait_state('ss_quiz', 'ready');
-    ss_quiz.open(ss_options);
-  };
-
 </script>
 
 
 <div class="controls">
-  
-
   <nav class="chart-data-nav">
     <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
@@ -90,7 +85,6 @@
   <div class="dayRange" data-testid="daySlider">
     <RangeSlider bind:values={$daysToReview} float pips {suffix} min={1} max={7} />
   </div>
-
 
   <div class="action-buttons">
     {#if ssQuizPresent}
@@ -111,7 +105,6 @@
 </Modal>
 
 <style>
-
 .dayRange {
   display: flex;
   justify-content: center;
