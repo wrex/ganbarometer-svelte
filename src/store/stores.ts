@@ -7,7 +7,7 @@ export const display = writable("chart");
 
 const daysToReviewString = localStorage.getItem("daysToReview");
 export const daysToReview = writable(
-  daysToReviewString ? JSON.parse(daysToReviewString) : 4
+  daysToReviewString ? JSON.parse(daysToReviewString) : [4]
 );
 daysToReview.subscribe((val) => {
   localStorage.setItem("daysToReview", JSON.stringify(val));

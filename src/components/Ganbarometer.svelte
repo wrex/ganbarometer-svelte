@@ -4,6 +4,7 @@
 </script>
 
 <script type="ts">
+  import RangeSlider from "svelte-range-slider-pips";
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";
@@ -94,8 +95,9 @@
     sessionSummaries.set(summaries);
   };
 
+  $: updateSummaries(+$daysToReview[0]);
 
-  $: updateSummaries(+$daysToReview);
+  $: suffix = $daysToReview[0] > 1 ? " days" : " day";
 
   wkof.wait_state('ss_quiz', 'ready').then(() => {
     if (typeof ss_quiz?.open === 'function')
@@ -107,7 +109,7 @@
 <div class="controls">
   
 
-  <nav class="navigation">
+  <nav class="chart-data-nav">
     <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
   </nav>
@@ -118,13 +120,15 @@
     </div>
   {/if}
 
-  <div class="retrieval">
-    <input type="range" id="review-days" name="review-days" min="1" max="7" bind:value={$daysToReview}>
-    <label for="review-days">{$daysToReview} days</label>
+  <div class="dayRange">
+    <RangeSlider bind:values={$daysToReview} float pips {suffix} min={1} max={7} />
   </div>
 
-  <QuizButton />
-  <SettingsButton on:click="{() => getModal().open()}" />
+
+  <div class="action-buttons">
+    <QuizButton />
+    <SettingsButton on:click="{() => getModal().open()}" />
+  </div>
 </div>
 
 <div data-testid="gbwidgets" class="gbwidgets">
@@ -138,6 +142,25 @@
 </Modal>
 
 <style>
+
+.dayRange {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  --range-slider:          #d7dada; /* slider main background color */
+  --range-handle-inactive: #99a2a2; /* inactive handle color */
+  --range-handle:          green; /* non-focussed handle color */
+  --range-handle-focus:    var(--fill-color, #59c273); /* focussed handle color */
+  --range-handle-border:   var(--range-handle);
+  --range-range-inactive:  var(--range-handle-inactive); /* inactive range bar background color */
+  --range-range:           var(--range-handle-focus); /* active range bar background color */
+  --range-float-inactive:  var(--range-handle-inactive); /* inactive floating label background color */
+  --range-float:           var(--range-handle-focus); /* floating label background color */
+  --range-float-text:      white; /* text color on floating label */
+}
+:global(.rangeSlider) {
+  width: 7em;
+}
 .gbwidgets {
     display: flex;
     flex-wrap: wrap;
@@ -211,44 +234,41 @@
   .spinner {
     margin-inline: 0.5em;
     position: absolute;
-    left: 37em;
+    left: 35em;
   }
 
   .controls {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     width: 100%;
   }
 
-  .navigation li {
+  .chart-data-nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .chart-data-nav li {
     text-decoration: none;
     display: inline;
     margin-inline: 1rem;
     height: fit-content;
   }
 
-  .navigation li:hover {
+  .chart-data-nav li:hover {
     cursor: pointer;
     transform: scale(1.1);
   }
 
-  .navigation .active {
+  .chart-data-nav .active {
     font-weight: 900;
     border-bottom: 2px solid black;
   }
-
-  .retrieval {
-    width: 100%;
+  .action-buttons {
     display: flex;
-    justify-content: center;
-  }
-  .retrieval > label {
-    display: inline;
-    padding: 0 0.2em;
-  }
-  .retrieval > input {
-    width: 7em;
-    margin-top: -0.5em;
+    justify-content: flex-end;
+    width: 100%;
   }
 
 </style>
