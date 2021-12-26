@@ -1,12 +1,5 @@
 import type { Review, ReviewCount } from "../API/API";
-
-export const inSameDay = (x: Date, ref: Date): boolean => {
-  return (
-    x.getDate() === ref.getDate() &&
-    x.getMonth() === ref.getMonth() &&
-    x.getFullYear() === ref.getFullYear()
-  );
-};
+import { inSameDay } from "./Utility";
 
 export const calculateCounts = (reviews: Review[]): ReviewCount[] => {
   const reviewsEachDay: Review[][] = reviews
