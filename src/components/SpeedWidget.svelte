@@ -87,6 +87,7 @@
 }
 .scrollbox {
   padding: 0;
+  border: 2px solid var(--scrollbarBG);
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }

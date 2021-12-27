@@ -134,7 +134,7 @@
 
     background-color: #f4f4f4;
     border-radius: 5px;
-    padding: 0.5em 0 0;
+    padding: 2em 0 0.5em;
   }
 
   :global(.gbHeader) {
@@ -160,7 +160,7 @@
     padding: 0.5rem;
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 8rem;
+    height: 8em;
   }
   :global(.gbContent th,
    .gbContent td) {
@@ -185,7 +185,6 @@
     justify-content: center;
     min-width: 220px;
     max-height: 200px;
-    margin-bottom: 0.5em;
   }
 
   @media (min-width: 1200px) {
