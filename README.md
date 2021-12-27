@@ -66,8 +66,12 @@ wonderful [tampermonkey-svelte](https://github.com/lpshanley/tampermonkey-svelte
 
 It uses two primary widgets: a `Gauge.svelte` to display a dial gauge, and
 `BarChart.svelte` to render a bar chart. Both were hand developed by me using
-Test Driven Development. I stole the basic layout of the BarChart from this [Codepen
-by Ion Emil Negoita](https://codepen.io/inegoita/pen/YMrJGY).
+Test Driven Development.
+
+The basic CSS for the dial gauges came from [this excellent tutorial by
+dcode-software](https://youtu.be/FnUkVcQ_3CQ). I stole the basic layout of the
+BarChart from this [Codepen by Ion Emil
+Negoita](https://codepen.io/inegoita/pen/YMrJGY).
 
 Shout-out to Basar Buyukkahraman's wonderful course on [TDD
 with Svelte](https://www.udemy.com/course/svelte-with-test-driven-development/).
