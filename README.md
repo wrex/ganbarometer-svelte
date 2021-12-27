@@ -1,9 +1,53 @@
 # The GanbarOmeter (svelte version)
 
-This is intended for people learning to read Japanese kanji characters with
+This is a [tampermonkey](https://www.tampermonkey.net/) user script
+intended for people learning to read Japanese kanji characters with
 [Wanikani](https://www.wanikani.com/about).
 
-Install as a user script using [tampermonkey](https://www.tampermonkey.net/).
+## User interface
+
+![Graph view](./assets/graphs-view.png)
+
+This shows the three primary widgets, the navigation to display graphs or
+data-tables, a slider to change the number of days worth of reviews to retrieve,
+an icon to launch @rfindley's Self-Study quiz, and an icon to change the
+settings.
+
+The GanbarOmeter gauge is based on the number and type of items in the Apprentice queue
+(the first four SRS stages). Basically, a value of 50% (straight-up display)
+indicates a normal level of difficulty. You may want to slow down doing lessons
+if the gauge starts to increase.
+
+The speed gauge show how long on average it takes you to answer an individual
+reading or meaning question.
+
+Finally, the review accuracy graph shows the number of reviews each day as well
+as the percentage of _items_ answered correctly the first time (both reading and
+meaning).
+
+![Range slider](./assets/range-slider.png)
+
+You can retrieve between one and seven days of reviews.
+
+![Hovering over and accuracy bar](./assets/accuracy-hover.png)
+
+If you hover your mouse over an accuracy bar, it displays the number of review
+items on that day as well as how many were answered correctly the first time
+(both reading and meaning).
+
+![Data view](./assets/data-view.png)
+
+The data view shows the information in tabular form.
+
+Note that the speed gauge displays the number of _sessions_ (consecutive strings
+of reviews). It performs a statistical algorithm called the [median absolute
+deviation](https://en.wikipedia.org/wiki/Median_absolute_deviation) on the
+intervals between review records to find sessions.
+
+Note that the speed table shows the _question_ accuracy (the percentage of individual
+reading or writing questions answered correctly) while the review accuracy table
+displays _item_ accuracy (the percentage of review items where _both_ the
+reading and meaning were answered correctly the first time).
 
 ## Beta version installation
 
