@@ -49,6 +49,7 @@ reviewCounts.subscribe((val) => {
 });
 
 export const defaultSettings = {
+  position: "Top", // position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom"
   textColor: "#333333",
   bgColor: "#f4f4f4",
   fillColor: "#b4c0be",

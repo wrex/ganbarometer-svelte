@@ -134,6 +134,16 @@
   <fieldset>
     <legend>General Settings</legend>
 
+    <label for="gbPosition">Position:</label>
+    <select bind:value={values.position} name="position" id="gbPosition">
+      // position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom"
+      <option value="Top">Top</option>
+      <option value="Below Forecast">Below Forecast</option>
+      <option value="Below SRS">Below SRS</option>
+      <option value="Below Panels">Below Panels</option>
+      <option value="Bottom">Bottom</option>
+    </select>
+
     <div class="colorSample" style="background-color: {values.bgColor}">
       <h3 style="color: {values.textColor}">Sample Text</h3>
       <div class="gaugeBar" style="background-color: {values.fillColor}">
