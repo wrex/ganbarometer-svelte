@@ -1,5 +1,6 @@
 <script>
   import Gauge from "./Gauge.svelte";
+  import { fade } from "svelte/transition";
   import { display, gbSettings, apprenticeCounts } from "../store/stores";
   import { getApprenticeCounts } from "../API/Apprentice";
 
@@ -33,8 +34,8 @@
     <Gauge value={weightedValue} />
     <div class="units">of max difficulty</div>
   {:else}
-    <h1 class="gbHeader">GanbarOmeter: {(weightedValue * 100).toFixed()}%</h1>
-    <div data-testid="ganbarometer-table">
+    <h1 class="gbHeader" in:fade >GanbarOmeter: {(weightedValue * 100).toFixed()}%</h1>
+    <div data-testid="ganbarometer-table" in:fade >
       <table class="gbContent">
         <tr>
           <th>Apprentice</th>

@@ -34,7 +34,6 @@
     background-color: #f4f4f4;
     border-radius: 5px;
     margin: 0 0 30px;
-    padding: 0.5em 0 0;
   }
 
   .placeholder {

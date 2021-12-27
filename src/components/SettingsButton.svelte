@@ -35,7 +35,6 @@
   .settings {
     background-color: inherit;
     border: none;
-    margin-top: -0.5em;
   }
 
   .settings:hover {

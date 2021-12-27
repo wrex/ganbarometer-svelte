@@ -33,7 +33,7 @@
     width: 100%;
     height: 0;
     padding-bottom: 50%;
-    background: var(--body-color, #b4c0be);
+    background: var(--body-color, #e0e0e0);
     position: relative;
     border-top-left-radius: 100% 200%;
     border-top-right-radius: 100% 200%;

@@ -1,7 +1,7 @@
 <script type="ts">
   import BarChart from "./BarChart.svelte";
+  import { fade } from "svelte/transition";
   import { display, gbSettings, daysToReview, reviewCounts } from "../store/stores";
-import { map } from "mathjs";
 
   const dowString = (date) => { 
     return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
@@ -28,8 +28,8 @@ import { map } from "mathjs";
       percents={accuracyValues}
     />
   {:else}
-    <h1 class="gbHeader">{totalReviews} Reviews @{overallAccuracy.toFixed()}%</h1>
-    <div data-testid="reviews-per-day-table">
+    <h1 class="gbHeader" in:fade>{totalReviews} Reviews @{overallAccuracy.toFixed()}%</h1>
+    <div data-testid="reviews-per-day-table" in:fade>
       <table class="gbContent">
         <tr>
           <th>Average:</th>

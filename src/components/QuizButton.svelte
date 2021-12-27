@@ -15,5 +15,6 @@
   .quiz-button {
     border: none;
     background-color: inherit;
+    margin-top: 0.5em;
   }
 </style>

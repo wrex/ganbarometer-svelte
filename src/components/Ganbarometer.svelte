@@ -110,8 +110,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  --range-slider:          #d7dada; /* slider main background color */
-  --range-handle-inactive: #99a2a2; /* inactive handle color */
+  --range-slider:          #e0e0e0; /* slider main background color */
+  --range-handle-inactive: #b1b1b1; /* inactive handle color */
   --range-handle:          green; /* non-focussed handle color */
   --range-handle-focus:    var(--fill-color, #59c273); /* focussed handle color */
   --range-handle-border:   var(--range-handle);
@@ -156,7 +156,7 @@
     font-size: small;
     line-height: 1.2;
     width: 100%;
-    outline: 1px solid black;
+    border-top: 2px solid #eeeeee;
     padding: 0.5rem;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -203,8 +203,11 @@
   .controls {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    padding: 0 2em;
+    align-items: center;
+    width: calc(100% - 2em);
+    border-bottom: 2px solid #eeeeee;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
 
   .chart-data-nav {
@@ -214,6 +217,7 @@
   }
 
   .chart-data-nav li {
+    font-weight: 200;
     text-decoration: none;
     display: inline;
     margin-inline: 1rem;
@@ -226,12 +230,13 @@
   }
 
   .chart-data-nav .active {
-    font-weight: 900;
-    border-bottom: 2px solid black;
+    font-weight: normal;
+    border-bottom: 1px solid black;
   }
   .action-buttons {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     width: 100%;
   }
 

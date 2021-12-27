@@ -1,5 +1,6 @@
 <script type="ts">
   import Gauge from "./Gauge.svelte";
+  import { fade } from "svelte/transition";
   import {display, sessionSummaries, gbSettings} from "../store/stores";
 
   $: totalReviews = $sessionSummaries.reduce((acc, s) => acc += +s.reviewCount, 0);
@@ -36,8 +37,8 @@
     <Gauge value={gauge_value} label={gauge_label} />
     <div class="units">seconds/question</div>
   {:else}
-    <h1 class="gbHeader">Speed: {gauge_label} s/q</h1>
-    <div data-testid="speed-table">
+    <h1 class="gbHeader" in:fade>Speed: {gauge_label} s/q</h1>
+    <div data-testid="speed-table" in:fade>
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
         {#each $sessionSummaries as summary, i}
@@ -77,8 +78,8 @@
 
 
 .gbWidget {
-  --scrollbarBG: #CFD8DC;
-  --thumbBG: #90A4AE;
+  --scrollbarBG: #e0e0e0;
+  --thumbBG: #b1b1b1;
 }
 
 .scrollbox::-webkit-scrollbar {
@@ -86,7 +87,6 @@
 }
 .scrollbox {
   padding: 0;
-  outline: 1px solid black;
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
