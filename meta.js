@@ -1,12 +1,12 @@
 const path = require("path");
-const { pathToFileURL } = require("url");
+const { pathToFileURL, URL } = require("url");
 const pkg = require("./package.json");
 
-const distURLBase = `https://github.com/wrex/ganbarometer-svelte/dist`;
+const distURLBase = `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/beta0/`;
 const packageName = pkg.name;
 
 const production = !process.env.ROLLUP_WATCH;
-const baseUrl = !production ? path.join(__dirname, "dist") : distURLBase;
+const baseUrl = path.join(__dirname, "dist");
 
 let meta = {
   name: production ? packageName : packageName + " -> dev",
@@ -31,8 +31,9 @@ if (!production) {
 }
 
 if (production) {
-  meta.downloadURL = pathToFileURL(path.join(baseUrl, "bundle.js"));
-  meta.updateURL = pathToFileURL(path.join(baseUrl, "bundle.js"));
+  meta.downloadURL = new URL("bundle.js", distURLBase);
+  meta.updateURL = new URL("bundle.js", distURLBase);
+  meta.resource.css = new URL("bundle.css", distURLBase);
 }
 
 module.exports = meta;
