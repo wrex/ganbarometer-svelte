@@ -83,19 +83,24 @@ community helped me get started with this user script business!
 If you want to help with development or simply want to validate that nothing
 nefarious is included in the user script:
 
-1. Download the source from the [github repository](https://github.com/wrex/ganbarometer-svelte).
+1. You'll need to enable `Allow access to file URL's` in the Chrome extension
+   for tampermonkey. This is conceivably a security risk, so you may want to
+   disable the setting again after finishing your development work. See
+   [tampermonkey-svelte](https://github.com/lpshanley/tampermonkey-svelte) for details.
 
-2. Run `npm install` to install all the dependencies for compilation.
+2. Download the source from the [github repository](https://github.com/wrex/ganbarometer-svelte).
 
-3. Before compiling or running the code, you may want to type `npm run test`. All tests should pass.
+3. Run `npm install` to install all the dependencies for compilation.
 
-4. In one shell window, type `tsc -w` to run the typescript compiler in watch mode.
+4. Before compiling or running the code, you may want to type `npm run test`. All tests should pass.
 
-5. In another shell window, type `npm run dev` to compile a (un-minified) dev version of the code and prepare for "live" updates.
+5. In one shell window, type `tsc -w` to run the typescript compiler in watch mode.
 
-6. Copy the top several lines of the file `./dist/bundle.js`. Just copy the header itself, everything through and including the `// ==/UserScript==` line. Don't copy any actual code.
+6. In another shell window, type `npm run dev` to compile a (un-minified) dev version of the code and prepare for "live" updates.
 
-7. In the tampermonkey dashboard, click the "+" tab and paste in the headers (again, just the headers) from step 6. Save the file. This will install the `ganbarometer-svelte ->dev` script and prepare it for "live" updates. If you browse to the WK dashboard, and enable this version of the script, any changes you make to the source code should show up when you refresh the page.
+7. Copy the top several lines of the file `./dist/bundle.js`. Just copy the header itself, everything through and including the `// ==/UserScript==` line. Don't copy any actual code.
+
+8. In the tampermonkey dashboard, click the "+" tab and paste in the headers (again, just the headers) from step 6. Save the file. This will install the `ganbarometer-svelte ->dev` script and prepare it for "live" updates. If you browse to the WK dashboard, and enable this version of the script, any changes you make to the source code should show up when you refresh the page.
 
 This is still BETA code: I plan a fair bit of clean-up and refactoring. Please be kind (I'm just an amateur) but any thoughts or comments are quite welcome. Hopefully, it isn't too hard to figure out the current code organization. It's definitely FAR better code than the currently published version of the script.
 
