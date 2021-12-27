@@ -26,18 +26,19 @@
   let loading = false;
 
   const updateSummaries = async (days: number): Promise<void> => {
-    
-    let reviews: Review[];
     loading = true;
+
+    let reviews: Review[];
     try {
       reviews = await getReviews(days);
     } catch (error) {
       console.warn(error);
     }
-    loading = false;
 
     $reviewCounts = calculateCounts(reviews);
     $sessionSummaries = findSessSummaries(reviews);
+
+    loading = false;
   };
 
   $: updateSummaries($daysToReview[0]);
