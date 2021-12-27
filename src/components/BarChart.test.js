@@ -36,7 +36,7 @@ describe("BarChart", () => {
 
   it("creates a cell for each value passed", () => {
     render(BarChart, { values: [1, 2, 3] });
-    const cells = screen.getAllByRole("cell", { name: "value" });
+    const cells = screen.getAllByTestId("displayBox");
     expect(cells[0]).toHaveTextContent("1");
     expect(cells[1]).toHaveTextContent("2");
     expect(cells[2]).toHaveTextContent("3");

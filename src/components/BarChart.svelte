@@ -24,7 +24,7 @@
 			{#if (percents.length)}
 				<td aria-label="percents" class="percents" style="height: {(percents[i]*100).toFixed(1)}%"></td>
 			{/if}
-			<span class="displayBox">{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span>
+			<span class="displayBox" data-testid="displayBox">{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span>
 		</tr>
     {/each}
 		<div hidden={targetHeight === 0} class="target" style="height: {targetHeight}%"></div>
