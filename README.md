@@ -116,8 +116,3 @@ This is still BETA code: I plan a fair bit of clean-up and refactoring. Please b
   - use CSS variables everywhere
 - single object in localstorage?
 - Cache raw reviews (write a replacement for Review Cache)
-
-#### Other attributions
-
-The settings icon is from [Neha
-Tyagi](https://thenounproject.com/tyagineha.2112/).
