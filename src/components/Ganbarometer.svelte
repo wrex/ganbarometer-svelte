@@ -110,6 +110,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  z-index: 0; /* prevent range-slider thumb from sliding over the main nav */
   --range-slider:          #e0e0e0; /* slider main background color */
   --range-handle-inactive: #b1b1b1; /* inactive handle color */
   --range-handle:          green; /* non-focussed handle color */
