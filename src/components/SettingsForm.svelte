@@ -1,32 +1,19 @@
 <script type="ts">
+  import GanbarometerSettings from "./GanbarometerSettings.svelte";
+  import SpeedSettings from "./SpeedSettings.svelte";
+  import AccuracySettings from "./AccuracySettings.svelte";
+  import AppearanceSettings from "./AppearanceSettings.svelte";
+  import AdvancedSettings from "./AdvancedSettings.svelte";
   import { defaultSettings, gbSettings } from '../store/stores';
-  import Errors from './Errors.svelte'
-  import { validate } from './validation';
 
   let values = {...$gbSettings};
-  let errors = {};
-
-  const validateField = path => () => {
-    const res = validate(values, path);
-    errors = res.getErrors();
-  }
 
   const submit = () => {
-    const res = validate(values);
-    if (res.hasErrors()) {
-      // flatten all errors messages to one array 
-      errors = res.getErrors();
-      return; 
-    }
-    errors = {};
     $gbSettings = {...$gbSettings, ...values};
   }
 
   const reset = () => { 
-    // TODO figure out weird problem with warning about empty color values and
-    // empty weights whenever reset button is clicked
     values = { ...defaultSettings };
-    errors = {};
   };
 
   const setLightTheme = () => {
@@ -47,9 +34,107 @@
       values.alertColor = "#d94353";
   };
 
+  type navState = "Ganbarometer" | "Speed" | "Accuracy" | "Appearance" | "Advanced";
+
+  let current: navState = "Ganbarometer";
+  const switchTo = (comp: navState) => {
+    return () => current = comp;
+  };
 </script>
 
-<form on:submit|preventDefault={submit} aria-label="Settings Form" >
+<form on:submit|preventDefault={submit} aria-label="Settings Form" class="settingsForm">
+  <h1 class="title">Ganbarometer Settings</h1>
+  <div class="menu">
+    <nav class="nav">
+        <li on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
+        <li on:click={switchTo("Speed")} class:active={current === "Speed"}>Speed</li>
+        <li on:click={switchTo("Accuracy")} class:active={current === "Accuracy"}>Accuracy</li>
+        <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
+        <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
+    </nav>
+    <div class="actions">
+      <button type="submit">Save</button>
+      <button type="reset" on:click={reset}>Reset</button>
+    </div>
+  </div>
+  <div class="formInputs">
+    {#if current == "Ganbarometer"}
+      <GanbarometerSettings />
+    {:else if current == "Speed"}
+      <SpeedSettings />
+    {:else if current == "Accuracy"}
+      <AccuracySettings />
+    {:else if current == "Appearance"}
+      <AppearanceSettings />
+    {:else if current == "Advanced"}
+      <AdvancedSettings />
+    {/if}
+  </div>
+</form>
+
+<style>
+  .settingsForm {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 180px 500px;
+    grid-template-areas: 
+      "title title"
+      "menu formInputs";
+  }
+  .title {
+    background-color: #59c273;
+    color: white;
+    margin: 0;
+    text-align: center;
+    padding: 0.1em 0 0.3em;
+    grid-area: title;
+  }
+
+  .menu {
+    grid-area: menu;
+    margin: 0.5em;
+    border-radius: 0.5em;
+    background-color: #e0e0e0;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .nav {
+    margin: 0 1em 3em;
+    width: 100%;
+  }
+
+  .nav li {
+    color: #888888;
+    text-decoration: none;
+    text-align: right;
+    font-size: 20px;
+    line-height: 160%;
+  }
+
+  .nav li:hover {
+    cursor: pointer;
+  }
+
+  .nav li.active {
+    color: #333333;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    font-weight: bold;
+    cursor: default;
+  }
+
+  .formInputs {
+    grid-area: formInputs;
+    height: 100%;
+  }
+</style>
+
+<!-- <form on:submit|preventDefault={submit} aria-label="Settings Form" >
   <fieldset>
     <legend>Behavior Settings</legend>
     <label for="apprenticeItems">Desired number of apprentice items</label>
@@ -73,9 +158,7 @@
       max="3"
       step="0.25"
       bind:value={values.newRWeight}
-      on:change={validateField('newRWeight')}
     >
-    <Errors {errors} path="newRWeight" />
 
     <label for="newKWeight">Weighting factor for new kanji</label>
     <input 
@@ -86,9 +169,7 @@
       max="3"
       step="0.25"
       bind:value={values.newKWeight}
-      on:change={validateField('newKWeight')}
     >
-    <Errors {errors} path="newKWeight" />
 
     <label for="newVWeight">Weighting factor for new vocabulary</label>
     <input 
@@ -99,9 +180,7 @@
       max="3"
       step="0.25"
       bind:value={values.newVWeight}
-      on:change={validateField('newVWeight')}
     >
-    <Errors {errors} path="newVWeight" />
 
     <hr>
 
@@ -223,7 +302,6 @@
       >
     </div>
     Theme:
-    <!-- TODO: Wire up default theme colors -->
     <button on:click={setLightTheme} >Light</button>
     <button on:click={setDarkTheme} >dark</button>
   </fieldset>
@@ -241,7 +319,6 @@
     bind:value={values.madCutoff}
   >
   <p>{values.madCutoff}</p>
-  <Errors {errors} path="madCutoff" />
 
   <label for="tzOffset">Time zone offset for start-of-day calculations</label>
   <input 
@@ -253,75 +330,8 @@
     bind:value={values.tzOffset}
   >
   <p>{values.tzOffset}</p>
-  <Errors {errors} path="tzOffset" />
 </fieldset>
 
 <button type="submit">Save</button>
 <button type="reset" on:click={reset}>Reset</button>
-</form>
-
-<style>
-  :global(.invalid) {
-    border-color: red;
-    border-width: 10px;
-  }
-  .colorSample {
-    background-color: var(--bg-color, #f4f4f4);
-    padding: 2em;
-  }
-  .gaugeBar {
-    position: relative;
-    background-color: var(--fill-color, #cccccc);
-    width: 10em;
-    line-height: 0;
-    margin: 0;
-    padding: 0;
-  }
-
-  .goodBar,
-  .warnBar,
-  .errorBar {
-    display: inline-block;
-    height: 1em;
-    z-index: 1;
-    margin: 0;
-    padding: 0;
-  }
-
-  .goodBar {
-    width: 4em;
-    background-color: var(--good-color, #00aa00);
-  }
-
-  .warnBar {
-    width: 2em;
-    background-color: var(--warn-color, #ffcc00);
-  }
-
-  .errorBar {
-    width: 1em;
-    background-color: var(--warn-color, #ff0000);
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 600px;
-    height: 80vh;
-    overflow-y: scroll;
-  }
-  label {
-    display: inline-block;
-    text-align: right;
-  }
-  button {
-    padding: 0 1em;
-  }
-  input[type="color"] {
-    display: inline-block;
-    width: 3rem;
-    min-height: 20px;
-    padding: 0;
-    margin: 5px;
-}
-</style>
+</form> -->

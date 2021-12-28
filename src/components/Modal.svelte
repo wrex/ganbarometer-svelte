@@ -91,7 +91,6 @@
 		background: white;
     border: 2px solid #000;
 		filter: drop-shadow(5px 5px 5px #555);
-		padding: 1em;
 	}
 
 	.visible {
