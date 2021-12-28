@@ -76,7 +76,7 @@
   .settingsForm {
     margin: 0;
     display: grid;
-    grid-template-columns: 180px 500px;
+    grid-template-columns: 180px 520px;
     grid-template-areas: 
       "title title"
       "menu formInputs";
@@ -92,9 +92,9 @@
 
   .menu {
     grid-area: menu;
-    margin: 0.5em;
+    margin: 0.5em 0 0.5em 0.5em;
     border-radius: 0.5em;
-    background-color: #e0e0e0;
+    background-color: rgba(87, 194, 115, 0.33);
     padding: 1em;
 
     display: flex;
@@ -109,9 +109,9 @@
   }
 
   .nav li {
-    color: #888888;
+    color: rgba(48, 130, 69, 0.5);
     text-decoration: none;
-    text-align: right;
+    text-align: center;
     font-size: 20px;
     line-height: 160%;
   }
@@ -121,7 +121,7 @@
   }
 
   .nav li.active {
-    color: #333333;
+    color: rgba(34, 93, 49, 1);
     text-decoration: underline;
     text-underline-offset: 0.2em;
     font-weight: bold;
@@ -131,6 +131,17 @@
   .formInputs {
     grid-area: formInputs;
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  :global(.settingsComp) {
+    width: 100%;
+    margin: 0;
+    padding: 2em 0;
   }
 </style>
 
