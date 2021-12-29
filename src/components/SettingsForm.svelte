@@ -75,14 +75,17 @@
 <style>
   .settingsForm {
     margin: 0;
+    min-height: 450px;
     display: grid;
     grid-template-columns: 180px 520px;
+    grid-template-rows: min-content;
     grid-template-areas: 
       "title title"
       "menu formInputs";
   }
   .title {
     background-color: #59c273;
+    height: fit-content;
     color: white;
     margin: 0;
     text-align: center;
@@ -106,6 +109,7 @@
   .nav {
     margin: 0 1em 3em;
     width: 100%;
+    height: 100%;
   }
 
   .nav li {
@@ -124,6 +128,7 @@
     color: rgba(34, 93, 49, 1);
     text-decoration: underline;
     text-underline-offset: 0.2em;
+    margin-top: -0.2em;
     font-weight: bold;
     cursor: default;
   }

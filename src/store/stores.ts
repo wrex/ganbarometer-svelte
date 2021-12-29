@@ -53,6 +53,7 @@ export const defaultSettings = {
   textColor: "#333333",
   bgColor: "#f4f4f4",
   fillColor: "#b4c0be",
+  altColor: "#489c5c",
   goodColor: "#59c273",
   warnColor: "#fbb623",
   alertColor: "#ff00aa",
