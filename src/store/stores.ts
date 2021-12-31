@@ -1,4 +1,4 @@
-import { writable, readable } from "svelte/store";
+import { writable } from "svelte/store";
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
@@ -22,18 +22,31 @@ const unStringify = (summaries) => {
   });
 };
 
-const acString = localStorage.getItem("apprenticeCounts");
-export const apprenticeCounts = writable(
-  acString
-    ? JSON.parse(acString)
+const countString = localStorage.getItem("srsCounts");
+export const srsCounts = writable(
+  countString
+    ? JSON.parse(countString)
     : {
-        radicals: [0, 0, 0, 0],
-        kanji: [0, 0, 0, 0],
-        vocabulary: [0, 0, 0, 0],
+        new: {
+          radicals: 0,
+          kanji: 0,
+          vocabulary: 0,
+          total: 0,
+        },
+        apprentice: {
+          early: 0,
+          late: 0,
+          total: 0,
+        },
+        lesson: 0,
+        guru: 0,
+        master: 0,
+        enlightened: 0,
+        burned: 0,
       }
 );
-apprenticeCounts.subscribe((val) => {
-  localStorage.setItem("apprenticeCounts", JSON.stringify(val));
+srsCounts.subscribe((val) => {
+  localStorage.setItem("srsCounts", JSON.stringify(val));
 });
 
 const ssString = localStorage.getItem("sessionSummaries");

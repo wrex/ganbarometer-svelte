@@ -54,12 +54,6 @@ export interface Session {
   reviews: Review[];
 }
 
-export interface ApprenticeCounts {
-  radicals: number[];
-  kanji: number[];
-  vocabulary: number[];
-}
-
 export interface SessionSummary {
   start: Date;
   end: Date;

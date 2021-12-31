@@ -1,30 +1,17 @@
 <script>
   import Gauge from "./Gauge.svelte";
   import { fade } from "svelte/transition";
-  import { display, gbSettings, apprenticeCounts } from "../store/stores";
-  import { getApprenticeCounts } from "../API/Apprentice";
+  import { display, gbSettings, srsCounts } from "../store/stores";
+  import { getSrsCounts } from "../API/Assignments";
 
-  $: getApprenticeCounts().then(newCounts => apprenticeCounts.set(newCounts));
+  $: getSrsCounts().then(counts => srsCounts.set(counts));
 
-  $: totalApprentice = $apprenticeCounts.radicals.reduce((acc, c) => acc += c, 0)
-      + $apprenticeCounts.kanji.reduce((acc, c) => acc += c, 0)
-      + $apprenticeCounts.vocabulary.reduce((acc, c) => acc += c, 0);
+  $: weightedCount = $srsCounts.new.radicals * $gbSettings.newRWeight
+    + $srsCounts.new.kanji * $gbSettings.newKWeight
+    + $srsCounts.new.vocabulary * $gbSettings.newVWeight
+    + $srsCounts.apprentice.late;
 
-  $: newRadicals = $apprenticeCounts.radicals.slice(0,2).reduce((acc, c) => acc += c, 0);
-  $: newKanji = $apprenticeCounts.kanji.slice(0,2).reduce((acc, c) => acc += c, 0);
-  $: newVocabulary = $apprenticeCounts.vocabulary.slice(0,2).reduce((acc, c) => acc += c, 0);
-  
-  $: newItems = newRadicals + newKanji + newVocabulary;
-  
-  $: weightedCount = totalApprentice
-    - newRadicals
-    - newKanji
-    - newVocabulary
-    + newRadicals * $gbSettings.newRWeight
-    + newKanji * $gbSettings.newKWeight
-    + newVocabulary * $gbSettings.newVWeight
-
-  $: unweightedValue = totalApprentice / (2 * $gbSettings.targetApprentice);
+  $: unweightedValue = $srsCounts.apprentice.total / (2 * $gbSettings.targetApprentice);
   $: weightedValue = weightedCount / (2 * $gbSettings.targetApprentice);
 </script>
 
@@ -39,14 +26,14 @@
       <table class="gbContent">
         <tr>
           <th>Apprentice</th>
-          <td>{totalApprentice} <span
+          <td>{$srsCounts.apprentice.total} <span
           class="secondary">target: {$gbSettings.targetApprentice}</span></td>
         </tr>
         <tr>
           <th>New</th>
-          <td>{newRadicals}<span class="secondary">r</span> 
-            {newKanji}<span class="secondary">k</span> 
-            {newVocabulary}<span class="secondary">v</span>
+          <td>{$srsCounts.new.radicals}<span class="secondary">r</span> 
+            {$srsCounts.new.kanji}<span class="secondary">k</span> 
+            {$srsCounts.new.vocabulary}<span class="secondary">v</span>
           </td>
         </tr>
         <tr>

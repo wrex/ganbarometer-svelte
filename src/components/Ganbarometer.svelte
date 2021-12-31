@@ -13,7 +13,7 @@
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
 
-  import { findSessSummaries, parseSessions } from '../API/Sessions';
+  import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
 
   import { display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
@@ -21,7 +21,7 @@
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
 
-  import type { Review, Session, SessionSummary } from "../API/API";
+  import type { Review } from "../API/API";
 
   let loading = false;
 
