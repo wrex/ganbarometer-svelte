@@ -19,7 +19,7 @@
     <label for="apprTarget">
       <input id="apprTarget" type="range"><span class="value">20% min</span>
     </label>
-    <h4></h4>
+    <td></td>
     <label for="apprTarget">
       <input id="apprTarget" type="range"><span class="value">80% max</span>
     </label>

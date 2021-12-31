@@ -3,65 +3,8 @@
 </script>
 
 <div class="settingsComp">
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th>Weighting</th>
-        <th>Quiz?</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th>Radicals</th>
-        <td><input 
-          type="number"
-          min={0.2}
-          max={5}
-          step={0.2}
-        ></td>
-        <td><input 
-          type="checkbox" 
-          value="qRadicals" 
-          name="quizTypes"
-          ></td>
-      </tr>
-      <tr>
-        <th>Kanji</th>
-        <td><input 
-          type="number"
-          min={0.2}
-          max={5}
-          step={0.2}
-        ></td>
-        <td><input 
-          type="checkbox" 
-          value="qKanji" 
-          name="quizTypes"
-          checked
-          ></td>
-      </tr>
-      <tr>
-        <th>Vocabulary</th>
-        <td><input 
-          type="number"
-          min={0.2}
-          max={5}
-          step={0.2}
-        ></td>
-        <td><input 
-          type="checkbox" 
-          value="qVocabulary" 
-          name="quizTypes"
-          ></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <hr>
-
   <div class=slider>
-    <h4>Apprentice Target</h4>
+    <h4>Target value</h4>
     <label>
       <input id="apprTarget" type="range"><span class="value">100 items</span>
     </label>
@@ -74,12 +17,122 @@
     <label for="apprTarget">
       <input id="apprTarget" type="range"><span class="value">20% min</span>
     </label>
-    <h4></h4>
+    <td></td>
     <label for="apprTarget">
       <input id="apprTarget" type="range"><span class="value">80% max</span>
     </label>
-
   </div>
+
+  <hr>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Weight</th>
+        <th></th>
+        <th>Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Radicals12</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={0.6}
+        ></td>
+        <th>Appr34</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={1}
+        ></td>
+      </tr>
+      <tr>
+        <th>Kanji12</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={3.0}
+        ></td>
+        <th>Guru</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={0}
+        ></td>
+      </tr>
+      <tr>
+        <th>Vocabulary12</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={1}
+        ></td>
+        <th>Master</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={0}
+        ></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <th>Enlightened</th>
+        <td><input 
+          type="number"
+          min={0.2}
+          max={5}
+          step={0.2}
+          value={0}
+        ></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <div class="quizSection">
+    <table>
+      <thead>
+        <td></td>
+        <th>Radicals12</th>
+        <th>Kanji12</th>
+        <th>Vocabulary12</th>
+      </thead>
+      <tbody>
+        <th>Quiz?</th>
+        <td><input 
+          type="checkbox" 
+          name="quizTypes"
+        ></td>
+        <td><input 
+          type="checkbox" 
+          name="quizTypes"
+          checked
+        ></td>
+        <td><input 
+          type="checkbox" 
+          name="quizTypes"
+        ></td>
+      </tbody>
+    </table>
+  </div>
+
 </div>
         
 <style>
@@ -110,10 +163,6 @@
     margin-inline: 2em;
   }
 
-  /* table {
-    margin: auto;
-  } */
-
   input {
     width: 3em;
     text-align: center;
@@ -121,24 +170,37 @@
     margin: 0;
   }
   thead th:nth-child(1) {
-    width: 175px;
+    width: 168px;
   }
-  thead th:nth-child(2), thead th:nth-child(3) {
-    width: 80px;
+  thead th:nth-child(2), thead th:nth-child(4) {
+    width: 92px;
+  }
+
+  thead th:nth-child(3) {
+    width: 74px;
   }
 
   tbody td {
-    padding: 0.5em;
+    padding: 0.2em;
     text-align: center;
     vertical-align: middle;
   }
 
-  tbody th {
+  .quizSection {
+    margin-left: 168px;
+  }
+
+  tbody th, .quizSection thead th {
     color: #888888;
     font-weight: normal;
-    padding: 0.5em;
+    font-size: small;
+    padding: 0;
     text-align: right;
     vertical-align: middle;
+  }
+
+  .quizSection tbody th {
+    text-align: center;
   }
 
  .slider input {
