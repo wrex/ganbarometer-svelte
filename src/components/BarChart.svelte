@@ -2,11 +2,15 @@
   export let values: number[];
 	export let percents: number[] = [];
   export let labels: string[] = [];
-	export let target: number = 0;
+	export let expected: number = 0;
+	export let minTarget: number = 0;
+	export let maxTarget: number = 0;
 
 	$: max = Math.max(...values);
 	$: heights = values.map(v => Math.round(v/max * 100));
-	$: targetHeight = Math.round(target/max * 100);
+	$: expectedHeight = Math.round(expected/max * 100);
+	$: targetHeight = Math.round((maxTarget-minTarget)/max * 100);
+	$: targetBottom = 100 - targetHeight;
 </script>
 
 <table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
@@ -27,9 +31,14 @@
 			<span class="displayBox" data-testid="displayBox">{val}{#if (percents.length)}<br>{(percents[i]*100).toFixed()}%{/if}</span>
 		</tr>
     {/each}
-		<div hidden={targetHeight === 0} class="target" style="height: {targetHeight}%"></div>
+		<div class="minmax" 
+			hidden={(minTarget + maxTarget === 0)}
+			style="bottom: {targetBottom}%; height: {targetHeight}%"
+		></div>
+		<div hidden={expectedHeight === 0} class="expected" style="height: {expectedHeight}%"></div>
 	</tbody>
 </table>
+<p hidden>{minTarget} {maxTarget} {expected}</p>
   
 <style>
 .graph {
@@ -106,11 +115,19 @@
 			text-align:center;
 		}
 
-		.target {
+		.expected {
 			position: absolute;
 			border-top: 2px dashed #fbb621;
 			width: 100%;
 			padding:0;
+		}
+
+		.minmax {
+			position: absolute;
+			background-color: #59c273;
+			width: 100%;
+			opacity: 25%;
+			padding: 0;
 		}
 
 		.graph tbody th {
