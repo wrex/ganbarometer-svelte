@@ -70,7 +70,7 @@ export const defaultSettings = {
   goodColor: "#59c273",
   warnColor: "#fbb623",
   alertColor: "#ff00aa",
-  targetItems: 100,
+  targetItems: 150,
   newRWeight: 0.6,
   newKWeight: 3.0,
   newVWeight: 1.0,
