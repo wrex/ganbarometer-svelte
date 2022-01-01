@@ -165,6 +165,7 @@
   input[type="number"] {
     width: 3em;
     text-align: center;
+    margin: 0;
   }
 
 
@@ -192,6 +193,7 @@
 
   .right-align {
     text-align: right;
+    align-self: center;
   }
 
   .center {

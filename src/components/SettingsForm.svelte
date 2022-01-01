@@ -12,7 +12,7 @@
     $gbSettings = {...$gbSettings, ...values};
   }
 
-  const reset = () => { 
+  const setDefaults = () => { 
     values = { ...defaultSettings };
   };
 
@@ -53,8 +53,8 @@
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
     <div class="actions">
+      <button on:click={setDefaults} class="defaultButton">Defaults</button>
       <button type="submit">Save</button>
-      <button type="reset" on:click={reset}>Reset</button>
     </div>
   </div>
   <div class="formInputs">
@@ -97,7 +97,7 @@
     grid-area: menu;
     margin: 0.5em 0 0.5em 0.5em;
     border-radius: 0.5em;
-    background-color: rgba(87, 194, 115, 0.33);
+    background-color: hsl(44.86,46.26%,95%);
     padding: 1em;
 
     display: flex;
@@ -113,7 +113,7 @@
   }
 
   .nav li {
-    color: rgba(48, 130, 69, 0.5);
+    color: hsl(44.86,46.26%,65%);;
     text-decoration: none;
     text-align: center;
     font-size: 20px;
@@ -125,7 +125,7 @@
   }
 
   .nav li.active {
-    color: rgba(34, 93, 49, 1);
+    color: hsl(44.86,46.26%,20%);
     text-decoration: underline;
     text-underline-offset: 0.2em;
     margin-top: -0.2em;
@@ -151,4 +151,49 @@
     grid-auto-rows: max-content;
     gap: 10px;
   }
+
+  button {
+    display: inline-block;
+    border: none;
+    padding-block: 0.5rem;
+    border-radius: 5px;
+    margin: 0;
+    text-decoration: none;
+    background: #4b3f1b;
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+button:hover,
+button:focus {
+    background: #cfba7c;
+}
+
+button:focus {
+  outline: 1px solid #fff;
+  outline-offset: -4px;
+}
+
+button:active {
+  transform: scale(0.99);
+}
+
+.defaultButton {
+  background-color: transparent;
+  color: #4b3f1b;
+  outline: 2px solid #4b3f1b;
+}
+
+.defaultButton:hover,
+.defaultButton:focus {
+  background-color: #cfba7c;
+}
+
 </style>
