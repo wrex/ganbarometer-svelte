@@ -23,10 +23,12 @@
     bind:value={values.gbMaxTarget}>
   <label for="targetMax">{values.gbMaxTarget}</label>
 
+  <hr>
+
   <table>
     <tbody>
       <tr>
-        <th class="col2">Label</th>
+        <th class="col2">Labels</th>
         <td><input 
           type="text" 
           bind:value={values.belowTerm}
@@ -186,7 +188,7 @@
   label {
     grid-column: 5 / span 1;
     margin: 0;
-    text-align: center;
+    text-align: left;
   }
 
   hr {

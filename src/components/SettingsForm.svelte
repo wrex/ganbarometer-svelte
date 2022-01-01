@@ -1,7 +1,7 @@
 <script type="ts">
   import GanbarometerSettings from "./GanbarometerSettings.svelte";
   import SpeedSettings from "./SpeedSettings.svelte";
-  import AccuracySettings from "./AccuracySettings.svelte";
+  import ReviewSettings from "./ReviewSettings.svelte";
   import AppearanceSettings from "./AppearanceSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import { defaultSettings, gbSettings } from '../store/stores';
@@ -18,7 +18,7 @@
 
   
 
-  type navState = "Ganbarometer" | "Speed" | "Accuracy" | "Appearance" | "Advanced";
+  type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
 
   let current: navState = "Ganbarometer";
   const switchTo = (comp: navState) => {
@@ -32,7 +32,7 @@
     <nav class="nav">
         <li on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
         <li on:click={switchTo("Speed")} class:active={current === "Speed"}>Speed</li>
-        <li on:click={switchTo("Accuracy")} class:active={current === "Accuracy"}>Reviews</li>
+        <li on:click={switchTo("Reviews")} class:active={current === "Reviews"}>Reviews</li>
         <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
@@ -46,8 +46,8 @@
       <GanbarometerSettings {values} />
     {:else if current == "Speed"}
       <SpeedSettings {values} />
-    {:else if current == "Accuracy"}
-      <AccuracySettings {values} />
+    {:else if current == "Reviews"}
+      <ReviewSettings {values} />
     {:else if current == "Appearance"}
       <AppearanceSettings {values} />
     {:else if current == "Advanced"}
