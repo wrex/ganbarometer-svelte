@@ -5,64 +5,43 @@
 
 <div class="settingsComp">
 
-  <div class=slider>
-    <h4>Speed Target</h4>
-    <label>
-      <input id="apprTarget" type="range"><span class="value">6.0 seconds</span>
-    </label>
-  </div>
+  <h4>Speed Target</h4>
+  <input id="speedTarget" type="range">
+  <label for="speedTarget">6.0 seconds</label>
 
   <hr>
 
-  <div class=slider>
-    <h4>Warning Levels</h4>
-    <label for="apprTarget">
-      <input id="apprTarget" type="range"><span class="value">20% min</span>
-    </label>
-    <td></td>
-    <label for="apprTarget">
-      <input id="apprTarget" type="range"><span class="value">80% max</span>
-    </label>
+  <h4>Warning Levels</h4>
+  <input id="minWarning" type="range">
+  <label for="minWarning">20% minimum</label>
 
-  </div>
+  <input id="maxWarning" type="range">
+  <label for="maxWarning">80% maximum</label>
+
 </div>
-        
-<style>
-  .slider {
-    display: grid;
-    margin-inline: 10px;
-    grid-template-columns: repeat(6, 1fr);
-    column-gap: 10px;
-  }
 
-  .slider h4 {
+<style>
+  h4 {
     font-size: small;
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
   }
 
-  .slider label {
-    grid-column: 3 / span 4;
+  label {
+    grid-column: 5 / span 2;
+    margin: 0;
   }
-
-  .value {
-    font-size: small;
-    padding-left: 10px;
-  }
-
-  hr {
-    margin-inline: 2em;
-  }
-
-  input {
-    width: 3em;
+  input[type="range"] {
+    grid-column: 3 / span 2;
+    width: 100%;
     text-align: center;
     vertical-align: middle;
     margin: 0;
   }
- .slider input {
-   width: 160px;
- }
 
+  hr {
+    grid-column: 1 / span 6;
+  }
 </style>
+        
