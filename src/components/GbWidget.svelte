@@ -11,8 +11,8 @@
     + $srsCounts.new.vocabulary * $gbSettings.newVWeight
     + $srsCounts.apprentice.late;
 
-  $: unweightedValue = $srsCounts.apprentice.total / (2 * $gbSettings.targetApprentice);
-  $: weightedValue = weightedCount / (2 * $gbSettings.targetApprentice);
+  $: unweightedValue = $srsCounts.apprentice.total / (2 * $gbSettings.targetItems);
+  $: weightedValue = weightedCount / (2 * $gbSettings.targetItems);
 </script>
 
 <div class="gbWidget">
@@ -27,7 +27,7 @@
         <tr>
           <th>Apprentice</th>
           <td>{$srsCounts.apprentice.total} <span
-          class="secondary">target: {$gbSettings.targetApprentice}</span></td>
+          class="secondary">target: {$gbSettings.targetItems}</span></td>
         </tr>
         <tr>
           <th>New</th>

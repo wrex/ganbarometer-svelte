@@ -1,12 +1,24 @@
 <script type= "ts">
-  let values = {
-    bgColor: "#f4f4f4",
-    textColor: "#333333",
-    fillColor: "#b4c0be",
-    goodColor: "#59c273",
-    altColor: "#489c5c",
-    warnColor: "#fbb623",
-    alertColor: "#ff00aa",
+  export let values;
+
+  const setLightTheme = () => {
+      values.textColor = "#333333";
+      values.bgColor = "#f4f4f4";
+      values.fillColor = "#b4c0be";
+      values.altColor = "#489c5c",
+      values.goodColor = "#59c273";
+      values.warnColor = "#fbb623";
+      values.alertColor = "#ff00aa";
+  };
+
+  const setDarkTheme = () => {
+      values.textColor = "#ffffff";
+      values.bgColor = "#232629";
+      values.altColor = "#489c5c",
+      values.fillColor = "#747474";
+      values.goodColor = "#59c273";
+      values.warnColor = "#fcbd4b";
+      values.alertColor = "#d94353";
   };
 </script>
 
@@ -64,14 +76,14 @@
     </label>
   </div>
 
-  <button class="light">Set light</button>
-  <button class="dark">Set dark</button>
+  <button class="light" on:click={setLightTheme}>Set light</button>
+  <button class="dark" on:click={setDarkTheme}>Set dark</button>
     
   <hr>
   <!-- position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom" -->
 
   <label for="position-select" class="col2">Position</label>
-  <select name="positions" id="position-select" class="position">
+  <select name="positions" id="position-select" class="position" bind:value={values.position}>
     <option value="Top">Top</option>
     <option value="Below Forecast">Below Forecast</option>
     <option value="Below SRS">Below SRS</option>

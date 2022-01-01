@@ -1,20 +1,17 @@
 <script type= "ts">
-  let something = "something";
+  export let values;
 </script>
 
 <div class="settingsComp">
   <h4>Target value</h4>
-  <input id="apprTarget" type="range">
-  <label for="apprTarget">100 items</label>
-
-  <hr>
-
-  <h4>Warning Levels</h4>
-  <input id="minWarning" type="range">
-  <label for="minWarning">20% minimum</label>
-
-  <input id="maxWarning" type="range">
-  <label for="maxWarning">80% maximum</label>
+  <input 
+    id="targetItems" 
+    type="range"
+    min={10}
+    max={300}
+    step={10}
+    bind:value={values.targetItems}>
+  <label for="targetItems">{values.targetItems} items</label>
 
   <hr>
 
@@ -33,19 +30,19 @@
         <td><input 
           class="col3"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={0.6}
+          step={0.1}
+          bind:value={values.newRWeight}
         ></td>
         <th class="secondary right-align col4">Appr34</th>
         <td><input 
           class="col5"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={1}
+          step={0.1}
+          bind:value={values.apprWeight}
         ></td>
       </tr>
       <tr>
@@ -53,19 +50,19 @@
         <td><input 
           class="col3"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={3.0}
+          step={0.1}
+          bind:value={values.newKWeight}
         ></td>
         <th class="secondary right-align col4">Guru</th>
         <td><input 
           class="col5"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={0}
+          step={0.1}
+          bind:value={values.guruWeight}
         ></td>
       </tr>
       <tr>
@@ -73,19 +70,19 @@
         <td><input 
           class="col3"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={1}
+          step={0.1}
+          bind:value={values.newVWeight}
         ></td>
         <th class="secondary right-align col4">Master</th>
         <td><input 
           class="col4"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={0}
+          step={0.1}
+          bind:value={values.masterWeight}
         ></td>
       </tr>
       <tr>
@@ -95,10 +92,10 @@
         <td><input 
           class="col5"
           type="number"
-          min={0.2}
+          min={0}
           max={5}
-          step={0.2}
-          value={0}
+          step={0.1}
+          bind:value={values.enlightenedWeight}
         ></td>
       </tr>
     </tbody>
@@ -121,15 +118,17 @@
         <td><input 
           type="checkbox" 
           name="quizTypes"
+          bind:checked={values.rQuiz}
         ></td>
         <td><input 
           type="checkbox" 
           name="quizTypes"
-          checked
+          bind:checked={values.kQuiz}
         ></td>
         <td><input 
           type="checkbox" 
           name="quizTypes"
+          bind:checked={values.vQuiz}
         ></td>
       </tr>
     </tbody>

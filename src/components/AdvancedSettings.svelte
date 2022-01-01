@@ -1,18 +1,28 @@
 <script type= "ts">
-  let something = "something";
+  export let values;
 </script>
 
 <div class="settingsComp">
 
   <h4>MAD cutoff</h4>
-  <input id="madCutoff" type="range">
-  <label for="madCutoff">10</label>
+  <input 
+    id="madCutoff" 
+    type="range" 
+    min="2"
+    max="15"
+    bind:value={values.madCutoff} >
+  <label for="madCutoff">{values.madCutoff}</label>
 
   <hr>
 
   <h4>Timezone Offset</h4>
-  <input id="tzOffset" type="range">
-  <label for="tzOffset">0 hours</label>
+  <input 
+    id="tzOffset" 
+    type="range"
+    min="-23"
+    max="23"
+    bind:value={values.tzOffset}>
+  <label for="tzOffset">{values.tzOffset} hours</label>
 </div>
         
 <style>

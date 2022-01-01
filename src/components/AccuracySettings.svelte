@@ -1,18 +1,27 @@
 <script type= "ts">
-  let something = "something";
+  export let values;
 </script>
 
 <div class="settingsComp">
 
   <h4>Target Reviews-per-day</h4>
-  <input id="rpdTarget" type="range">
-  <label for="rpdTarget">150 reviews</label>
+  <input 
+    id="rpdMin" 
+    type="range"
+    min={10}
+    max={290}
+    step={10}
+    bind:value={values.rpdMin}>
+  <label for="rpdTarget">{values.rpdMin} reviews min</label>
 
-  <hr>
-
-  <h4>Warning Level</h4>
-  <input id="minWarning" type="range">
-  <label for="minWarning">20% min</label>
+  <input 
+    id="rpdMax" 
+    type="range"
+    min={20}
+    max={300}
+    step={10}
+    bind:value={values.rpdMax}>
+  <label for="rpdTarget">{values.rpdMax} reviews max</label>
 </div>
         
 <style>

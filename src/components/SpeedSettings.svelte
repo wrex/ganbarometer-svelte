@@ -1,22 +1,40 @@
 <script type= "ts">
-  let something = "something";
+  export let values;
 </script>
 
 
 <div class="settingsComp">
 
   <h4>Speed Target</h4>
-  <input id="speedTarget" type="range">
-  <label for="speedTarget">6.0 seconds</label>
+  <input 
+    id="speedTarget" 
+    type="range"
+    min="1"
+    max="15"
+    step="0.2"
+    bind:value={values.targetSpeed}>
+  <label for="speedTarget">{values.targetSpeed} seconds</label>
 
   <hr>
 
   <h4>Warning Levels</h4>
-  <input id="minWarning" type="range">
-  <label for="minWarning">20% minimum</label>
+  <input 
+    id="minWarning" 
+    type="range"
+    min={0}
+    max={1}
+    step={0.1}
+    bind:value={values.speedMin}>
+  <label for="minWarning">{values.speedMin * 100}% minimum</label>
 
-  <input id="maxWarning" type="range">
-  <label for="maxWarning">80% maximum</label>
+  <input 
+    id="maxWarning" 
+    type="range"
+    min={0}
+    max={1}
+    step={0.1}
+    bind:value={values.speedMax}>
+  <label for="maxWarning">{values.speedMax * 100}% maximum</label>
 
 </div>
 

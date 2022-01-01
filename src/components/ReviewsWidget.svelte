@@ -24,7 +24,7 @@
     <BarChart 
       values={displayValues} 
       labels={startDayOfWeeks}
-      target={$gbSettings.targetRevDay}
+      target={($gbSettings.rpdMin + $gbSettings.rpdMax) / 2}
       percents={accuracyValues}
     />
   {:else}

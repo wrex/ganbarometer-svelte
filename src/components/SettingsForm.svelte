@@ -16,23 +16,7 @@
     values = { ...defaultSettings };
   };
 
-  const setLightTheme = () => {
-      values.textColor = "#333333";
-      values.bgColor = "#f4f4f4";
-      values.fillColor = "#b4c0be";
-      values.goodColor = "#59c273";
-      values.warnColor = "#fbb623";
-      values.alertColor = "#ff00aa";
-  };
-
-  const setDarkTheme = () => {
-      values.textColor = "#ffffff";
-      values.bgColor = "#232629";
-      values.fillColor = "#747474";
-      values.goodColor = "#59c273";
-      values.warnColor = "#fcbd4b";
-      values.alertColor = "#d94353";
-  };
+  
 
   type navState = "Ganbarometer" | "Speed" | "Accuracy" | "Appearance" | "Advanced";
 
@@ -59,15 +43,15 @@
   </div>
   <div class="formInputs">
     {#if current == "Ganbarometer"}
-      <GanbarometerSettings />
+      <GanbarometerSettings {values} />
     {:else if current == "Speed"}
-      <SpeedSettings />
+      <SpeedSettings {values} />
     {:else if current == "Accuracy"}
-      <AccuracySettings />
+      <AccuracySettings {values} />
     {:else if current == "Appearance"}
-      <AppearanceSettings />
+      <AppearanceSettings {values} />
     {:else if current == "Advanced"}
-      <AdvancedSettings />
+      <AdvancedSettings {values} />
     {/if}
   </div>
 </form>
@@ -135,11 +119,10 @@
 
   .formInputs {
     grid-area: formInputs;
-    min-height: 570px;
+    min-height: 415px;
 
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
   }
 
