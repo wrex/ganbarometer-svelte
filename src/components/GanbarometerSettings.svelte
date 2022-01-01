@@ -3,15 +3,53 @@
 </script>
 
 <div class="settingsComp">
-  <h4>Target value</h4>
+  <h4>Target minimum</h4>
   <input 
-    id="targetItems" 
+    id="targetMin" 
     type="range"
     min={10}
     max={300}
     step={10}
-    bind:value={values.targetItems}>
-  <label for="targetItems">{values.targetItems}</label>
+    bind:value={values.gbMinTarget}>
+  <label for="targetMin">{values.gbMinTarget}</label>
+
+  <h4>Target maximum</h4>
+  <input 
+    id="targetMax" 
+    type="range"
+    min={10}
+    max={300}
+    step={10}
+    bind:value={values.gbMaxTarget}>
+  <label for="targetMax">{values.gbMaxTarget}</label>
+
+  <table>
+    <tbody>
+      <tr>
+        <th class="col2">Label</th>
+        <td><input 
+          type="text" 
+          bind:value={values.belowTerm}
+        ></td>
+        <td><input 
+          type="text" 
+          bind:value={values.inRangeTerm}
+        ></td>
+        <td><input 
+          type="text" 
+          bind:value={values.aboveTerm}
+        ></td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <td></td>
+        <th class="secondary center col3">Below</th>
+        <th class="secondary center">In range</th>
+        <th class="secondary center">Above</th>
+      </tr>
+    </thead>
+  </table>
 
   <hr>
 
@@ -146,16 +184,20 @@
   }
 
   label {
-    grid-column: 5 / span 2;
+    grid-column: 5 / span 1;
     margin: 0;
+    text-align: center;
   }
 
   hr {
     grid-column: 1 / span 6;
+    margin: 5px 0;
+    padding: 0;
   }
   input[type="range"] {
     grid-column: 3 / span 2;
-    width: 100%;
+    width: 80%;
+    justify-self: center;
     text-align: center;
     vertical-align: middle;
     margin: 0;
@@ -167,16 +209,28 @@
     margin: 0;
   }
 
+  input[type="text"] {
+    width: 3em;
+    text-align: center;
+    margin: 0;
+  }
+
 
   table {
     grid-column: 1 / span 6;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: max-content;
+    gap: 5px 10px;
   }
 
   thead, tbody, tr {
     display: contents;
+  }
+
+  tbody th {
+    align-self: center;
+    text-align: right;
   }
 
   td {

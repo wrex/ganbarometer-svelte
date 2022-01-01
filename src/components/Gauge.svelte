@@ -2,6 +2,8 @@
   export let value = 0.5;
   export let label = null;
   export let needle = false;
+  export let lowZone = false; 
+  export let hiZone = 0; 
 
   $: rotate = `transform: rotate(${value / 2}turn)`;
 </script>
@@ -11,6 +13,12 @@
     <div class="gauge__fill" style="{rotate}" class:needle={needle}></div>
     {#if needle}
       <div class="gauge__fill centerMark"></div>
+    {/if}
+    {#if lowZone}
+      <div class="gauge__fill lowZone"></div>
+    {/if}
+    {#if hiZone}
+      <div class="gauge__fill hiZone"></div>
     {/if}
     {#if label !== null}
       <div class="gauge__cover">{label}</div>
@@ -82,6 +90,17 @@
   .centerMark {
     background-color: transparent;
     border-top: 1px dashed #888888;
+  }
+
+  .lowZone {
+    background-color: var(--warn-color, #fbb623);
+    opacity: 10%;
+    transform: rotate(0.167turn);
+  }
+  .hiZone {
+    background-color: var(--alert-color, #ff00aa);
+    opacity: 10%;
+    transform: rotate(-0.167turn);
   }
 </style>
 

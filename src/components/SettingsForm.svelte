@@ -32,7 +32,7 @@
     <nav class="nav">
         <li on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
         <li on:click={switchTo("Speed")} class:active={current === "Speed"}>Speed</li>
-        <li on:click={switchTo("Accuracy")} class:active={current === "Accuracy"}>Accuracy</li>
+        <li on:click={switchTo("Accuracy")} class:active={current === "Accuracy"}>Reviews</li>
         <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
@@ -119,7 +119,7 @@
 
   .formInputs {
     grid-area: formInputs;
-    min-height: 415px;
+    min-height: 500px;
 
     display: flex;
     flex-direction: column;
@@ -132,7 +132,7 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: max-content;
-    gap: 10px;
+    gap: 5px 10px;
   }
 
   button {
@@ -172,6 +172,7 @@ button:active {
   background-color: transparent;
   color: #4b3f1b;
   outline: 2px solid #4b3f1b;
+  outline-offset: -2px;
 }
 
 .defaultButton:hover,

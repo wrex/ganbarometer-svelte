@@ -13,17 +13,23 @@
     + $srsCounts.guru * $gbSettings.guruWeight
     + $srsCounts.master * $gbSettings.masterWeight
     + $srsCounts.enlightened * $gbSettings.enlightenedWeight;
+  
+  $: target = ($gbSettings.gbMaxTarget + $gbSettings.gbMinTarget) / 2;
 
-  $: rotValue = weightedCount / (2 * $gbSettings.targetItems);
-  $: delta = (weightedCount - $gbSettings.targetItems) / $gbSettings.targetItems;
+  $: rotValue = weightedCount / (2 * target);
+  $: delta = (weightedCount - target) / target;
   $: numericLabel = (delta < 0 ? "" : "+") + (delta*100).toFixed();
-  $: label = "良";
+  $: label = (weightedCount < $gbSettings.gbMinTarget) 
+    ? $gbSettings.belowTerm
+    : (weightedCount > $gbSettings.gbMinTarget)
+      ? $gbSettings.aboveTerm
+      : $gbSettings.inRangeTerm;
 </script>
 
 <div class="gbWidget">
   {#if $display === "chart" }
     <h1 class="gbHeader">GanbarOmeter</h1>
-    <Gauge value={rotValue} {label} needle={true} />
+    <Gauge value={rotValue} {label} needle lowZone hiZone />
     <div class="units"><span class="left-aligned">遅</span><span class=right-aligned>早</span></div>
   {:else}
     <h1 class="gbHeader" in:fade >GanbarOmeter: {numericLabel}</h1>
@@ -33,8 +39,7 @@
           <th>Apprentice</th>
           <td>{$srsCounts.new.radicals}<span class="secondary">r</span> 
             {$srsCounts.new.kanji}<span class="secondary">k</span> 
-            {$srsCounts.new.vocabulary}<span class="secondary">v</span>
-            + {$srsCounts.apprentice.late}
+            {$srsCounts.new.vocabulary}<span class="secondary">v +</span>{$srsCounts.apprentice.late}
           </td>
         </tr>
         <tr>
@@ -46,10 +51,10 @@
         </tr>
         <tr>
           <th>Target</th>
-          <td>{$gbSettings.targetItems}</td>
+          <td>{$gbSettings.gbMinTarget}<span class="secondary"> &ndash; </span>{$gbSettings.gbMaxTarget}</td>
         </tr>
         <tr>
-          <th>Weighted</th>
+          <th>Actual</th>
           <td>{weightedCount.toFixed()} <span class="secondary">({numericLabel}
           on -100 to +100 scale)</span></td>
         </tr>
