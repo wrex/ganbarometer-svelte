@@ -9,7 +9,10 @@
   $: weightedCount = $srsCounts.new.radicals * $gbSettings.newRWeight
     + $srsCounts.new.kanji * $gbSettings.newKWeight
     + $srsCounts.new.vocabulary * $gbSettings.newVWeight
-    + $srsCounts.apprentice.late;
+    + $srsCounts.apprentice.late * $gbSettings.apprWeight
+    + $srsCounts.guru * $gbSettings.guruWeight
+    + $srsCounts.master * $gbSettings.masterWeight
+    + $srsCounts.enlightened * $gbSettings.enlightenedWeight;
 
   $: unweightedValue = $srsCounts.apprentice.total / (2 * $gbSettings.targetItems);
   $: weightedValue = weightedCount / (2 * $gbSettings.targetItems);
@@ -25,11 +28,6 @@
     <div data-testid="ganbarometer-table" in:fade >
       <table class="gbContent">
         <tr>
-          <th>Apprentice</th>
-          <td>{$srsCounts.apprentice.total} <span
-          class="secondary">target: {$gbSettings.targetItems}</span></td>
-        </tr>
-        <tr>
           <th>New</th>
           <td>{$srsCounts.new.radicals}<span class="secondary">r</span> 
             {$srsCounts.new.kanji}<span class="secondary">k</span> 
@@ -37,19 +35,20 @@
           </td>
         </tr>
         <tr>
-          <th>Weights</th>
-          <td>{$gbSettings.newRWeight}<span class="secondary">r</span> 
-            {$gbSettings.newKWeight}<span class="secondary">k</span> 
-            {$gbSettings.newVWeight}<span class="secondary">v</span>
-          </td>
+          <th>Late Apprentice</th>
+          <td>{$srsCounts.apprentice.late} <span class="secondary">items</span></td>
         </tr>
         <tr>
-          <th>Unweighted</th>
-          <td>{(unweightedValue * 100).toFixed()}<span class="secondary">%</span></td>
+          <th>Guru</th>
+          <td>{$srsCounts.guru} <span class="secondary">items</span></td>
         </tr>
         <tr>
-          <th>Weighted</th>
-          <td>{(weightedValue * 100).toFixed()}<span class="secondary">%</span></td>
+          <th>Master</th>
+          <td>{$srsCounts.master} <span class="secondary">items</span></td>
+        </tr>
+        <tr>
+          <th>Enlightened</th>
+          <td>{$srsCounts.enlightened} <span class="secondary">items</span></td>
         </tr>
       </table>
     </div>
