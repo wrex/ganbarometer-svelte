@@ -1,17 +1,18 @@
 <script lang="ts">
   export let value = 0.5;
   export let label = null;
+  export let needle = false;
 
   $: rotate = `transform: rotate(${value / 2}turn)`;
 </script>
 
 <div class="gauge" data-testid="gauge">
   <div class="gauge__body">
-    <div class="gauge__fill" style="{rotate}"></div>
+    <div class="gauge__fill" style="{rotate}" class:needle={needle}></div>
     {#if label !== null}
       <div class="gauge__cover">{label}</div>
     {:else}
-      <div class="gauge__cover">{(value * 100).toFixed()}%</div>
+      <div class="gauge__cover" >{(value * 100).toFixed()}%</div>
     {/if}
   </div>
 </div>
@@ -68,6 +69,11 @@
     box-sizing: border-box;
     font-size: 25px;
     color: var(--text-color, #004033);
+  }
+
+  .needle {
+    background-color: transparent;
+    border-top: 4px solid var(--fill-color, #59c273);
   }
 </style>
 

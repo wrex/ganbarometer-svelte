@@ -20,7 +20,7 @@
 
 <div class="gbWidget" data-testid="reviews-per-day-gauge">
   {#if ($display === "chart")}
-    <h1 class="gbHeader">Accuracy</h1>
+    <h1 class="gbHeader">Reviews</h1>
     <BarChart 
       values={displayValues} 
       labels={startDayOfWeeks}

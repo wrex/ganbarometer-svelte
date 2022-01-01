@@ -135,12 +135,12 @@
 			position:absolute;
 			left:0;
 			width:100%;
-			font-size:10px;
-			font-weight:normal;
+			font-size: x-small;
+			font-weight: 200;
 			text-align:center;
       white-space:nowrap;
 			text-indent:0;
-      bottom: -2em;
+      bottom: -2.2em;
 		}
 
 		.graph tbody th:after {

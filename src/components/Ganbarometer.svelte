@@ -130,6 +130,7 @@
     flex-wrap: wrap;
     justify-content: space-around;
     width: 100%;
+    min-height: 155px;
     align-items: flex-start;
     column-gap: 20px;
 
@@ -148,8 +149,10 @@
   }
 
   :global(.units) {
-    font-size: x-small;
-    margin: auto;
+    font-size: small;
+    font-weight: 200;
+    margin: 0 62px;
+    text-align: center;
   }
 
   :global(.gbContent) {

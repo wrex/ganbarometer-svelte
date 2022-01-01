@@ -14,43 +14,61 @@
     + $srsCounts.master * $gbSettings.masterWeight
     + $srsCounts.enlightened * $gbSettings.enlightenedWeight;
 
-  $: unweightedValue = $srsCounts.apprentice.total / (2 * $gbSettings.targetItems);
   $: weightedValue = weightedCount / (2 * $gbSettings.targetItems);
+  $: delta = ((weightedValue - 0.5) * 100);
+  $: label = (delta < 0 ? "" : "+") + delta.toFixed() + "%";
 </script>
 
 <div class="gbWidget">
   {#if $display === "chart" }
     <h1 class="gbHeader">GanbarOmeter</h1>
-    <Gauge value={weightedValue} />
-    <div class="units">of max difficulty</div>
+    <Gauge value={weightedValue} {label} needle={true} />
+    <div class="units"><span class="left-aligned">遅</span><span class=right-aligned>速</span></div>
   {:else}
-    <h1 class="gbHeader" in:fade >GanbarOmeter: {(weightedValue * 100).toFixed()}%</h1>
+    <h1 class="gbHeader" in:fade >GanbarOmeter: {label}</h1>
     <div data-testid="ganbarometer-table" in:fade >
       <table class="gbContent">
         <tr>
-          <th>New</th>
+          <th>Apprentice</th>
           <td>{$srsCounts.new.radicals}<span class="secondary">r</span> 
             {$srsCounts.new.kanji}<span class="secondary">k</span> 
             {$srsCounts.new.vocabulary}<span class="secondary">v</span>
+            + {$srsCounts.apprentice.late}
           </td>
         </tr>
         <tr>
-          <th>Late Apprentice</th>
-          <td>{$srsCounts.apprentice.late} <span class="secondary">items</span></td>
+          <th>Guru'ed</th>
+          <td>{$srsCounts.guru}<span class="secondary">g</span>
+            {$srsCounts.master}<span class="secondary">m</span>
+            {$srsCounts.enlightened}<span class="secondary">e</span>
+          </td>
         </tr>
         <tr>
-          <th>Guru</th>
-          <td>{$srsCounts.guru} <span class="secondary">items</span></td>
+          <th>Target Value</th>
+          <td>{$gbSettings.targetItems}</td>
         </tr>
         <tr>
-          <th>Master</th>
-          <td>{$srsCounts.master} <span class="secondary">items</span></td>
-        </tr>
-        <tr>
-          <th>Enlightened</th>
-          <td>{$srsCounts.enlightened} <span class="secondary">items</span></td>
+          <th>Weighted Value</th>
+          <td>{weightedCount.toFixed()}</td>
         </tr>
       </table>
     </div>
   {/if}
 </div>
+
+<style>
+.units {
+  font-size: small;
+  margin: 0 65px;
+  text-align: center;
+  display: flex;
+}
+.left-aligned {
+  text-align: left;
+  width: 100%;
+}
+.right-aligned {
+  text-align: right;
+  width: 100%;
+}
+</style>
