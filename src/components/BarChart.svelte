@@ -6,7 +6,7 @@
 	export let minTarget: number = 0;
 	export let maxTarget: number = 0;
 
-	$: max = Math.max(...values);
+	$: max = Math.max(...values, expected, maxTarget);
 	$: heights = values.map(v => Math.round(v/max * 100));
 	$: expectedHeight = Math.round(expected/max * 100);
 	$: targetHeight = Math.round((maxTarget-minTarget)/max * 100);
