@@ -11,7 +11,7 @@
     max={300}
     step={10}
     bind:value={values.targetItems}>
-  <label for="targetItems">{values.targetItems} items</label>
+  <label for="targetItems">{values.targetItems}</label>
 
   <hr>
 

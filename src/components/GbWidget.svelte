@@ -14,18 +14,19 @@
     + $srsCounts.master * $gbSettings.masterWeight
     + $srsCounts.enlightened * $gbSettings.enlightenedWeight;
 
-  $: weightedValue = weightedCount / (2 * $gbSettings.targetItems);
-  $: delta = ((weightedValue - 0.5) * 100);
-  $: label = (delta < 0 ? "" : "+") + delta.toFixed() + "%";
+  $: rotValue = weightedCount / (2 * $gbSettings.targetItems);
+  $: delta = (weightedCount - $gbSettings.targetItems) / $gbSettings.targetItems;
+  $: numericLabel = (delta < 0 ? "" : "+") + (delta*100).toFixed();
+  $: label = "良";
 </script>
 
 <div class="gbWidget">
   {#if $display === "chart" }
     <h1 class="gbHeader">GanbarOmeter</h1>
-    <Gauge value={weightedValue} {label} needle={true} />
-    <div class="units"><span class="left-aligned">遅</span><span class=right-aligned>速</span></div>
+    <Gauge value={rotValue} {label} needle={true} />
+    <div class="units"><span class="left-aligned">遅</span><span class=right-aligned>早</span></div>
   {:else}
-    <h1 class="gbHeader" in:fade >GanbarOmeter: {label}</h1>
+    <h1 class="gbHeader" in:fade >GanbarOmeter: {numericLabel}</h1>
     <div data-testid="ganbarometer-table" in:fade >
       <table class="gbContent">
         <tr>
@@ -44,12 +45,13 @@
           </td>
         </tr>
         <tr>
-          <th>Target Value</th>
+          <th>Target</th>
           <td>{$gbSettings.targetItems}</td>
         </tr>
         <tr>
-          <th>Weighted Value</th>
-          <td>{weightedCount.toFixed()}</td>
+          <th>Weighted</th>
+          <td>{weightedCount.toFixed()} <span class="secondary">({numericLabel}
+          on -100 to +100 scale)</span></td>
         </tr>
       </table>
     </div>

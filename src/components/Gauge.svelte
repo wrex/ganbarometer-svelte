@@ -9,6 +9,9 @@
 <div class="gauge" data-testid="gauge">
   <div class="gauge__body">
     <div class="gauge__fill" style="{rotate}" class:needle={needle}></div>
+    {#if needle}
+      <div class="gauge__fill centerMark"></div>
+    {/if}
     {#if label !== null}
       <div class="gauge__cover">{label}</div>
     {:else}
@@ -74,6 +77,11 @@
   .needle {
     background-color: transparent;
     border-top: 4px solid var(--fill-color, #59c273);
+  }
+
+  .centerMark {
+    background-color: transparent;
+    border-top: 1px dashed #888888;
   }
 </style>
 
