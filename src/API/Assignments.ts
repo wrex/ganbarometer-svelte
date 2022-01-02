@@ -1,3 +1,4 @@
+import { forEach } from "mathjs";
 import type { Subject } from "./API";
 
 declare var wkof: any;
@@ -27,10 +28,16 @@ export const getSrsCounts = async () => {
   //Burned: 0 days
   const srs_intervals = [0, 0.5, 1, 1, 2, 7, 14, 30, 120, 0];
 
+  const allStages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const reviewingStages = [1, 2, 3, 4, 5, 6, 7, 8];
 
+  let counts: number[] = [];
+  allStages.forEach((stage) => {
+    counts[stage] = bySRS[stage]?.length ?? 0;
+  });
+
   const expectedCount = reviewingStages
-    .map((stage) => (bySRS[stage]?.length || 0) / srs_intervals[stage])
+    .map((stage) => counts[stage] / srs_intervals[stage])
     .reduce((acc, count) => (acc += count));
 
   return {
@@ -42,15 +49,14 @@ export const getSrsCounts = async () => {
       total: newItems.length,
     },
     apprentice: {
-      early: bySRS[1].length + bySRS[2].length,
-      late: bySRS[3].length + bySRS[4].length,
-      total:
-        bySRS[1].length + bySRS[2].length + bySRS[3].length + bySRS[4].length,
+      early: counts[1] + counts[2],
+      late: counts[3] + counts[4],
+      total: counts[1] + counts[2] + counts[3] + counts[4],
     },
-    lesson: bySRS[0].length,
-    guru: bySRS[5].length + bySRS[6].length,
-    master: bySRS[7].length,
-    enlightened: bySRS[8].length,
-    burned: bySRS[9].length,
+    lesson: counts[0],
+    guru: counts[5] + counts[6],
+    master: counts[7],
+    enlightened: counts[8],
+    burned: counts[9],
   };
 };
