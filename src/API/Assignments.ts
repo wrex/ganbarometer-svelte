@@ -30,7 +30,7 @@ export const getSrsCounts = async () => {
   const reviewingStages = [1, 2, 3, 4, 5, 6, 7, 8];
 
   const expectedCount = reviewingStages
-    .map((stage) => bySRS[stage].length / srs_intervals[stage])
+    .map((stage) => (bySRS[stage]?.length || 0) / srs_intervals[stage])
     .reduce((acc, count) => (acc += count));
 
   return {
