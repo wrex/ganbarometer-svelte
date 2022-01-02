@@ -72,7 +72,7 @@ export const defaultSettings = {
   alertColor: "#ff00aa",
   gbMinTarget: 130,
   gbMaxTarget: 170,
-  belowTerm: "不足",
+  belowTerm: "努力",
   inRangeTerm: "良",
   aboveTerm: "休",
   newRWeight: 0.6,
