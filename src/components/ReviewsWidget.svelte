@@ -36,7 +36,7 @@
         <tr>
           <th>Expected Daily:</th>
           <td>{ $srsCounts.expectedDaily.toFixed() }
-            <span class="secondary">reviews (real avg.: {avgReviewsPerDay})</span>
+            <span class="secondary"> (avg.: {avgReviewsPerDay}, target: {$gbSettings.rpdMin}&ndash;{$gbSettings.rpdMax})</span>
           </td>
         </tr>
         <tr>
