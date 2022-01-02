@@ -15,7 +15,12 @@ export const getSrsCounts = async () => {
     "srs_stage"
   );
 
-  const newItems = [...bySRS[1], ...bySRS[2]];
+  let newItems: Subject[];
+  if (bySRS[1] && bySRS[2]) {
+    newItems = [...bySRS[1], ...bySRS[2]];
+  } else if (bySRS[1]) {
+    newItems = [...bySRS[1]];
+  }
   const newRadicals = newItems.filter((s) => s.object == "radicals");
   const newKanji = newItems.filter((s) => s.object == "kanji");
   const newVocabulary = newItems.filter((s) => s.object == "vocabulary");
