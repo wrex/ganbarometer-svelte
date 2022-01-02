@@ -19,7 +19,22 @@ export const getSrsCounts = async () => {
   const newKanji = newItems.filter((s) => s.object == "kanji");
   const newVocabulary = newItems.filter((s) => s.object == "vocabulary");
 
+  //This list means that for each SRS level this is how many days it takes until the item comes back
+  //For example: only 1/30 of master items are expected to be reviewed in any given day
+  //Notable figures
+  //Lessons: 0 days (they are not accounted for)
+  //Apprentice 1: 0.5 days (they come back as Apprentice 2 and will count as two reviews)
+  //Burned: 0 days
+  const srs_intervals = [0, 0.5, 1, 1, 2, 7, 14, 30, 120, 0];
+
+  const reviewingStages = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  const expectedCount = reviewingStages
+    .map((stage) => bySRS[stage].length / srs_intervals[stage])
+    .reduce((acc, count) => (acc += count));
+
   return {
+    expectedDaily: expectedCount,
     new: {
       radicals: newRadicals.length,
       kanji: newKanji.length,

@@ -1,7 +1,7 @@
 <script type="ts">
   import BarChart from "./BarChart.svelte";
   import { fade } from "svelte/transition";
-  import { display, gbSettings, daysToReview, reviewCounts } from "../store/stores";
+  import { display, gbSettings, daysToReview, srsCounts, reviewCounts } from "../store/stores";
 
   const dowString = (date) => { 
     return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
@@ -24,7 +24,7 @@
     <BarChart 
       values={displayValues} 
       labels={startDayOfWeeks}
-      expected={($gbSettings.rpdMin + $gbSettings.rpdMax) / 2}
+      expected={$srsCounts.expectedDaily}
       minTarget={$gbSettings.rpdMin}
       maxTarget={$gbSettings.rpdMax}
       percents={accuracyValues}
@@ -34,9 +34,9 @@
     <div data-testid="reviews-per-day-table" in:fade>
       <table class="gbContent">
         <tr>
-          <th>Average:</th>
-          <td>{ avgReviewsPerDay }
-            <span class="secondary">reviews @ {overallAccuracy.toFixed()}%</span>
+          <th>Expected Daily:</th>
+          <td>{ $srsCounts.expectedDaily.toFixed() }
+            <span class="secondary">reviews (real avg.: {avgReviewsPerDay})</span>
           </td>
         </tr>
         <tr>

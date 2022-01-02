@@ -27,6 +27,7 @@ export const srsCounts = writable(
   countString
     ? JSON.parse(countString)
     : {
+        expectedDaily: 0,
         new: {
           radicals: 0,
           kanji: 0,
@@ -72,9 +73,9 @@ export const defaultSettings = {
   alertColor: "#ff00aa",
   gbMinTarget: 130,
   gbMaxTarget: 170,
+  aboveTerm: "休",
   belowTerm: "努力",
   inRangeTerm: "良",
-  aboveTerm: "休",
   newRWeight: 0.6,
   newKWeight: 3.0,
   newVWeight: 1.0,
