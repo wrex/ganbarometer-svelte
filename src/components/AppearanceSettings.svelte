@@ -1,78 +1,88 @@
 <script type= "ts">
+  import Gauge from "./Gauge.svelte";
+  import BarChart from "./BarChart.svelte";
   export let values;
 
   const setLightTheme = () => {
-      values.textColor = "#333333";
       values.bgColor = "#f4f4f4";
-      values.fillColor = "#b4c0be";
-      values.altColor = "#489c5c",
-      values.goodColor = "#59c273";
+      values.trackColor = "#e0e0e0",
+      values.textColor = "#333333";
+      values.hlTextColor = "#fbb623";
+      values.fillColor = "#59c273";
       values.warnColor = "#fbb623";
-      values.alertColor = "#ff00aa";
+      values.lTrackColor = "#e6d7be";
+      values.hTrackColor = "#e9bbd5";
   };
 
   const setDarkTheme = () => {
-      values.textColor = "#ffffff";
       values.bgColor = "#232629";
-      values.altColor = "#489c5c",
-      values.fillColor = "#747474";
-      values.goodColor = "#59c273";
+      values.trackColor = "#e0e0e0",
+      values.textColor = "#ffffff";
+      values.hlTextColor = "#fcbd4b";
+      values.fillColor = "#59c273";
       values.warnColor = "#fcbd4b";
-      values.alertColor = "#d94353";
+      values.lTrackColor = "#e6d7be";
+      values.hTrackColor = "#e9bbd5";
   };
 </script>
 
 <div class="settingsComp">
-  <div class="colorSample" style="background-color: {values.bgColor}">
-    <h3 style="color: {values.textColor}">Sample Text <small>small</small> and <strong>STRONG</strong></h3>
-    <div class="gaugeBar" style="background-color: {values.fillColor}">
-      <div 
-        class="altBar" 
-        style="background-color: {values.altColor}"
-      ></div><div
-        class="goodBar" 
-        style="background-color: {values.goodColor}"
-      ></div><div
-        class="warnBar"
-        style="background-color: {values.warnColor}"
-      ></div><div
-        class="errorBar"
-        style="background-color: {values.alertColor}"
-      ></div>
-    </div>
+  <div class="colorSample" style={` 
+      background-color: ${values.bgColor};
+      --bgColor: ${values.bgColor}; 
+      --trackColor: ${values.trackColor}; 
+      --textColor: ${values.textColor}; 
+      --hlTextColor: ${values.hlTextColor}; 
+      --fillColor: ${values.fillColor}; 
+      --warnColor: ${values.warnColor}; 
+      --lTrackColor: ${values.lTrackColor}; 
+      --hTrackColor: ${values.hTrackColor};` 
+    }>
+    <div class="warnBox">Warning Color</div>
+    <Gauge value={0.4} label="Sample" needle lowZone hiZone />
+    <BarChart 
+      values={[7, 10, 8]} 
+      labels={["Mon", "Tue", "Wed"]}
+      expected={7}
+      minTarget={2}
+      maxTarget={9}
+      percents={[0.66, 0.8, 0.75]}
+    />
   </div>
   <div class="colorInputs">
     <label>
-      Background
+      Bgnd
       <input type="color" bind:value={values.bgColor}>
     </label>
     <label>
-      Fill
-      <input type="color" bind:value={values.fillColor}>
+      Track
+    <input type="color" bind:value={values.trackColor}>
     </label>
     <label>
       Text
       <input type="color" bind:value={values.textColor}>
     </label>
+    <label>
+      hlText
+      <input type="color" bind:value={values.hlTextColor}>
+    </label>
   </div>
   <div class="colorInputs">
     <label>
-      Alt
-      <input type="color" bind:value={values.altColor}>
-    </label>
-    <label>
-      Good
-      <input type="color" bind:value={values.goodColor}>
+      Fill
+      <input type="color" bind:value={values.fillColor}>
     </label>
     <label>
       Warn
       <input type="color" bind:value={values.warnColor}>
     </label>
-  </div>
-  <div class="colorInputs">
     <label>
-      Alert
-      <input type="color" bind:value={values.alertColor}>
+      lTrack
+      <input type="color" bind:value={values.lTrackColor}>
+    </label>
+    <label>
+      hTrack
+      <input type="color" bind:value={values.hTrackColor}>
     </label>
   </div>
 
@@ -82,41 +92,63 @@
   <hr>
   <!-- position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom" -->
 
-  <label for="position-select" class="col2">Position</label>
-  <select name="positions" id="position-select" class="position" bind:value={values.position}>
-    <option value="Top">Top</option>
-    <option value="Below Forecast">Below Forecast</option>
-    <option value="Below SRS">Below SRS</option>
-    <option value="Below Panels">Below Panels</option>
-    <option value="Bottom">Bottom</option>
-  </select>
+  <div class="position">
+    <label for="position-select">Position</label>
+    <select name="positions" id="position-select" bind:value={values.position}>
+      <option value="Top">Top</option>
+      <option value="Below Forecast">Below Forecast</option>
+      <option value="Below SRS">Below SRS</option>
+      <option value="Below Panels">Below Panels</option>
+      <option value="Bottom">Bottom</option>
+    </select>
+  </div>
 
 </div>
 
 <style>
 
-  .colorSample {
-    grid-column: 2 / span 4;
+  .warnBox {
+    text-align: center;
+    height: 20px;
+    grid-column: 1 / span 6;
+    color: #ffffff;
+    background-color: var(--warnColor);
   }
-
   .colorSample {
+    grid-column: 1 / span 6;
     position: relative;
     min-height: 100px;
+    padding: 10px;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
     justify-content: center;
+    margin: -22px 10px 30px;
   }
 
   label {
+    display: inline-block;
     align-self: center;
-    width: 100px;
     font-size: small;
     text-align: right;
   }
 
   .position {
     width: 100%;
-    grid-column: 3 / span 2;
+    grid-column: 2 / span 4;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .position label {
+    width: 100%;
+    grid-column: 1;
+  }
+
+  .position select {
+    width: 100%;
+    grid-column: 2 / span 3;
   }
 
   input[type="color"] {
@@ -128,65 +160,16 @@
 
   .colorInputs {
     grid-column: 2 / span 4;
-    display: flex;
-    column-gap: 10px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
     text-align: right;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
 
   hr {
     grid-column: 1 / span 6;
   }
 
-
-  .gaugeBar {
-    position: absolute;
-    bottom: 20px;
-    width: 80%;
-    height: 30px;
-    margin-left: 1em;
-  }
-
-  .gaugeBar > * {
-    display: inline-block;
-    height: 30px;
-  }
-
-  .altBar {
-    position: absolute;
-    z-index: 1;
-    width: 40%;
-  }
-
-  .goodBar {
-    width: 60%;
-  }
-
-  .warnBar {
-    width: 15%;
-  }
-
-  .errorBar {
-    width: 5%;
-  }
-
-  .col1 {
-    grid-column: 1 / span 1;
-  }
-  .col2 {
-    grid-column: 2 / span 1;
-  }
-  .col3 {
-    grid-column: 3 / span 1;
-  }
-  .col4 {
-    grid-column: 4 / span 1;
-  }
-  .col5 {
-    grid-column: 5 / span 1;
-  }
 
   /* Buttons styles start */
   .light {
@@ -200,7 +183,7 @@ button {
     border: none;
     padding-block: 0.5rem;
     border-radius: 5px;
-    margin: 0;
+    margin: 30px 0 0;
     text-decoration: none;
     background: #59c273;
     color: #ffffff;

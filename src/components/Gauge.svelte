@@ -3,7 +3,7 @@
   export let label = null;
   export let needle = false;
   export let lowZone = false; 
-  export let hiZone = 0; 
+  export let hiZone = false; 
 
   $: rotate = `transform: rotate(${value / 2}turn)`;
 </script>
@@ -45,7 +45,7 @@
     width: 100%;
     height: 0;
     padding-bottom: 50%;
-    background: var(--body-color, #e0e0e0);
+    background: var(--trackColor);
     position: relative;
     border-top-left-radius: 100% 200%;
     border-top-right-radius: 100% 200%;
@@ -58,7 +58,7 @@
     left: 0;
     width: inherit;
     height: 100%;
-    background: var(--fill-color, #59c273);
+    background: var(--fillColor);
     transform-origin: center top;
     transform: rotate(0.25turn);
   }
@@ -66,7 +66,7 @@
   .gauge__cover {
     width: 75%;
     height: 150%;
-    background-color: var(--bg-color, #f4f4f4);
+    background-color: var(--bgColor);
     border-radius: 50%;
     position: absolute;
     top: 25%;
@@ -79,27 +79,25 @@
     padding-bottom: 25%;
     box-sizing: border-box;
     font-size: 25px;
-    color: var(--text-color, #004033);
+    color: var(--textColor);
   }
 
   .needle {
     background-color: transparent;
-    border-top: 4px solid var(--fill-color, #59c273);
+    border-top: 4px solid var(--fillColor);
   }
 
   .centerMark {
     background-color: transparent;
-    border-top: 1px dashed #888888;
+    border-top: 1px dashed var(--textColor);
   }
 
   .lowZone {
-    background-color: var(--warn-color, #fbb623);
-    opacity: 10%;
+    background-color: var(--lTrackColor);
     transform: rotate(0.167turn);
   }
   .hiZone {
-    background-color: var(--alert-color, #ff00aa);
-    opacity: 10%;
+    background-color: var(--hTrackColor);
     transform: rotate(-0.167turn);
   }
 </style>

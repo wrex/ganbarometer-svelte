@@ -10,7 +10,7 @@
 	$: heights = values.map(v => Math.round(v/max * 100));
 	$: expectedHeight = Math.round(expected/max * 100);
 	$: targetHeight = Math.round((maxTarget-minTarget)/max * 100);
-	$: targetBottom = 100 - targetHeight;
+	$: targetBottom = Math.round((minTarget/max) * 100);
 </script>
 
 <table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
@@ -70,7 +70,7 @@
 			align-items:end;
 			min-height: 75px;
 			padding:0 1em;
-			border-bottom:2px solid rgba(0,0,0,0.5);
+			border-bottom:2px solid var(--textColor);
 			background:repeating-linear-gradient(
 				180deg,
 				rgba(170,170,170,0.7) 0,
@@ -117,21 +117,21 @@
 
 		.expected {
 			position: absolute;
-			border-top: 2px dashed #fbb621;
+			border-top: 2px dashed var(--hlTextColor);
 			width: 100%;
 			padding:0;
 		}
 
 		.minmax {
 			position: absolute;
-			background-color: #59c273;
+			background-color: var(--fillColor);
 			width: 100%;
 			opacity: 25%;
 			padding: 0;
 		}
 
 		.graph tbody th {
-			color:var(--text-color, #004033);
+			color:var(--textColor);
 			position:absolute;
 			left:0;
 			width:100%;
@@ -151,7 +151,7 @@
 		.graph td {
 			width:100%;
 			height:100%;
-			background:var(--fill-color, #59c273);
+			background: var(--fillColor);
 			border-radius:0.5em 0.5em 0 0;
 			transition:background 0.5s;
 			padding: 0;
@@ -189,8 +189,9 @@
 			font-weight:bold;
 			opacity:0;
 			transition:opacity 0.5s;
-      color:#333;
+      color: var(--textColor);
 			padding: 0.1em;
+			text-align: center;
 		}
 
 		.graph tr:hover .displayBox {

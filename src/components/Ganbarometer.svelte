@@ -111,10 +111,10 @@
   justify-content: center;
   width: 100%;
   z-index: 0; /* prevent range-slider thumb from sliding over the main nav */
-  --range-slider:          #e0e0e0; /* slider main background color */
-  --range-handle-inactive: #b1b1b1; /* inactive handle color */
-  --range-handle:          green; /* non-focussed handle color */
-  --range-handle-focus:    var(--fill-color, #59c273); /* focussed handle color */
+  --range-slider:          var(--trackColor); /* slider main background color */
+  --range-handle-inactive: var(--fillColor); /* inactive handle color */
+  --range-handle:          var(--fillColor); /* non-focussed handle color */
+  --range-handle-focus:    var(--fillColor); /* focussed handle color */
   --range-handle-border:   var(--range-handle);
   --range-range-inactive:  var(--range-handle-inactive); /* inactive range bar background color */
   --range-range:           var(--range-handle-focus); /* active range bar background color */
@@ -134,8 +134,8 @@
     align-items: flex-start;
     column-gap: 20px;
 
-    background-color: #f4f4f4;
-    border-radius: 5px;
+    background-color: var(--bgColor);
+    border-radius: 0 0 5px 5px;
     padding: 2em 0 0.5em;
   }
 
@@ -145,7 +145,8 @@
     margin: 0;
     text-align: center;
     display: inline-block;
-    color: var(--text-color, #004033);
+    text-shadow: none;
+    color: var(--textColor);
   }
 
   :global(.units) {
@@ -189,6 +190,7 @@
     justify-content: center;
     min-width: 220px;
     max-height: 200px;
+    color: var(--textColor);
   }
 
   @media (min-width: 1200px) {
@@ -205,9 +207,11 @@
 
   .controls {
     display: flex;
+    background-color: var(--bgColor);
     justify-content: space-between;
     align-items: center;
-    width: calc(100% - 2em);
+    width: 100%;
+    color: var(--textColor);
     border-bottom: 2px solid #eeeeee;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -234,7 +238,7 @@
 
   .chart-data-nav .active {
     font-weight: normal;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--textColor);
   }
   .action-buttons {
     display: flex;

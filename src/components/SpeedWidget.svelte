@@ -29,9 +29,12 @@
     return percent.toFixed(1);
   };
 
+  $: dialColor = (secondsPerQ < $gbSettings.speedMin || secondsPerQ > $gbSettings.speedMax) ? $gbSettings.warnColor : $gbSettings.goodColor;
+
+
 </script>
 
-<div class="gbWidget" data-testid="speedWidget">
+<div class="gbWidget" data-testid="speedWidget" style="--goodColor: {dialColor};">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
     <Gauge value={gauge_value} label={gauge_label} />
@@ -78,8 +81,8 @@
 
 
 .gbWidget {
-  --scrollbarBG: #e0e0e0;
-  --thumbBG: #b1b1b1;
+  --scrollbarBG: var(--trackColor);
+  --thumbBG: var(--fillColor);
 }
 
 .scrollbox::-webkit-scrollbar {

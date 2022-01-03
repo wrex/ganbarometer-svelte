@@ -1,10 +1,20 @@
 <script>
   import Ganbarometer from "./components/Ganbarometer.svelte";
+  import {gbSettings} from "./store/stores";
 
   let wkofLoaded = wkof ? true : false;
 </script>
 
-<section data-testid="ganbarometer">
+<section data-testid="ganbarometer" class="ganbarometer" style={` 
+    --bgColor: ${$gbSettings.bgColor}; 
+    --trackColor: ${$gbSettings.trackColor}; 
+    --textColor: ${$gbSettings.textColor}; 
+    --hlTextColor: ${$gbSettings.hlTextColor}; 
+    --fillColor: ${$gbSettings.fillColor}; 
+    --warnColor: ${$gbSettings.warnColor}; 
+    --lTrackColor: ${$gbSettings.lTrackColor}; 
+    --hTrackColor: ${$gbSettings.hTrackColor};`
+  } > 
   {#if wkofLoaded }
   <Ganbarometer />
   {:else}
@@ -24,21 +34,21 @@
 
 
 <style>
-  section {
+  .ganbarometer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: flex-start;
     column-gap: 20px;
 
-    background-color: #f4f4f4;
+    background-color: --var(bgColor, #f2f2f2);
     border-radius: 5px;
     margin: 0 0 30px;
   }
 
   .placeholder {
     height: 150px;
-    color: red;
+    color: --var(alertColor, #ff00aa);
     align-content: center;
   }
 </style>

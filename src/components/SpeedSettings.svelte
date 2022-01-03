@@ -21,20 +21,20 @@
   <input 
     id="minWarning" 
     type="range"
-    min={0}
-    max={1}
+    min={1}
+    max={15}
     step={0.1}
     bind:value={values.speedMin}>
-  <label for="minWarning">{values.speedMin * 100}% minimum</label>
+  <label for="minWarning">{values.speedMin} seconds</label>
 
   <input 
     id="maxWarning" 
     type="range"
-    min={0}
-    max={1}
+    min={1}
+    max={15}
     step={0.1}
     bind:value={values.speedMax}>
-  <label for="maxWarning">{values.speedMax * 100}% maximum</label>
+  <label for="maxWarning">{values.speedMax} seconds</label>
 
 </div>
 
