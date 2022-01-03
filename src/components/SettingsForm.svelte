@@ -56,11 +56,11 @@
   </div>
   <div class="formInputs">
     {#if current == "Ganbarometer"}
-      <GanbarometerSettings {values} {errors} {result} />
+      <GanbarometerSettings {values} {errors} bind:result />
     {:else if current == "Speed"}
-      <SpeedSettings {values} {errors} {result} />
+      <SpeedSettings {values} {errors} bind:result />
     {:else if current == "Reviews"}
-      <ReviewSettings {values} {errors} {result} />
+      <ReviewSettings {values} {errors} bind:result />
     {:else if current == "Appearance"}
       <AppearanceSettings {values} />
     {:else if current == "Advanced"}
