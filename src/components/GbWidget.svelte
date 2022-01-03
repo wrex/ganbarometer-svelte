@@ -39,7 +39,7 @@
 
   </script>
 
-  <div class="gbWidget">
+  <div class="gbWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
     {#if $display === "chart" }
       <h1 class="gbHeader">GanbarOmeter</h1>
       <Gauge value={rotValue} {label} needle lowZone hiZone />
@@ -77,6 +77,7 @@
 </div>
 
 <style>
+
 .units {
   font-size: small;
   margin: 0 65px;

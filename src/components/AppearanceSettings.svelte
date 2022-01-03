@@ -5,13 +5,12 @@
 
   const setLightTheme = () => {
       values.bgColor = "#f4f4f4";
-      values.trackColor = "#e0e0e0",
+      values.trackColor = "#d1e8d4",
       values.textColor = "#333333";
       values.hlTextColor = "#fbb623";
       values.fillColor = "#59c273";
       values.warnColor = "#fbb623";
-      values.lTrackColor = "#e6d7be";
-      values.hTrackColor = "#e9bbd5";
+      values.hlTrackColor = "#d1e8d4";
   };
 
   const setDarkTheme = () => {
@@ -21,8 +20,7 @@
       values.hlTextColor = "#fcbd4b";
       values.fillColor = "#59c273";
       values.warnColor = "#fcbd4b";
-      values.lTrackColor = "#e6d7be";
-      values.hTrackColor = "#e9bbd5";
+      values.hlTrackColor = "#d1e8d4";
   };
 </script>
 
@@ -30,13 +28,12 @@
   <div class="colorSample" style={` 
       background-color: ${values.bgColor};
       --bgColor: ${values.bgColor}; 
-      --trackColor: ${values.trackColor}; 
+      --trackColor: ${values.hlTrackColor}; 
       --textColor: ${values.textColor}; 
       --hlTextColor: ${values.hlTextColor}; 
       --fillColor: ${values.fillColor}; 
       --warnColor: ${values.warnColor}; 
-      --lTrackColor: ${values.lTrackColor}; 
-      --hTrackColor: ${values.hTrackColor};` 
+      --hlTrackColor: ${values.trackColor};` 
     }>
     <div class="warnBox">Warning Color</div>
     <Gauge value={0.4} label="Sample" needle lowZone hiZone />
@@ -77,12 +74,8 @@
       <input type="color" bind:value={values.warnColor}>
     </label>
     <label>
-      lTrack
-      <input type="color" bind:value={values.lTrackColor}>
-    </label>
-    <label>
-      hTrack
-      <input type="color" bind:value={values.hTrackColor}>
+      hlTrack
+      <input type="color" bind:value={values.hlTrackColor}>
     </label>
   </div>
 

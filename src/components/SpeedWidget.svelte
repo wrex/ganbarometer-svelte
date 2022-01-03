@@ -29,12 +29,12 @@
     return percent.toFixed(1);
   };
 
-  $: dialColor = (secondsPerQ < $gbSettings.speedMin || secondsPerQ > $gbSettings.speedMax) ? $gbSettings.warnColor : $gbSettings.goodColor;
+  $: dialColor = (secondsPerQ < $gbSettings.speedMin || secondsPerQ > $gbSettings.speedMax) ? $gbSettings.warnColor : $gbSettings.fillColor;
 
 
 </script>
 
-<div class="gbWidget" data-testid="speedWidget" style="--goodColor: {dialColor};">
+<div class="gbWidget" data-testid="speedWidget" style="--fillColor: {dialColor}; ">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
     <Gauge value={gauge_value} label={gauge_label} />

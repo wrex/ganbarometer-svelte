@@ -17,7 +17,7 @@
 
   <hr>
 
-  <h4>Warning Levels</h4>
+  <h4>Warnings</h4>
   <input 
     id="minWarning" 
     type="range"
@@ -25,7 +25,7 @@
     max={15}
     step={0.1}
     bind:value={values.speedMin}>
-  <label for="minWarning">{values.speedMin} seconds</label>
+  <label for="minWarning">below {values.speedMin} seconds</label>
 
   <input 
     id="maxWarning" 
@@ -34,7 +34,7 @@
     max={15}
     step={0.1}
     bind:value={values.speedMax}>
-  <label for="maxWarning">{values.speedMax} seconds</label>
+  <label for="maxWarning">above {values.speedMax} seconds</label>
 
 </div>
 

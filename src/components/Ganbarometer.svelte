@@ -16,7 +16,7 @@
   import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
 
-  import { display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
+  import { gbSettings, display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
 
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
@@ -79,7 +79,7 @@
 
   {#if loading}
     <div transition:fade class="spinner">
-      <SyncLoader size="25" unit="px" />
+      <SyncLoader color={$gbSettings.warnColor} size="25" unit="px" />
     </div>
   {/if}
 
@@ -111,16 +111,6 @@
   justify-content: center;
   width: 100%;
   z-index: 0; /* prevent range-slider thumb from sliding over the main nav */
-  --range-slider:          var(--trackColor); /* slider main background color */
-  --range-handle-inactive: var(--fillColor); /* inactive handle color */
-  --range-handle:          var(--fillColor); /* non-focussed handle color */
-  --range-handle-focus:    var(--fillColor); /* focussed handle color */
-  --range-handle-border:   var(--range-handle);
-  --range-range-inactive:  var(--range-handle-inactive); /* inactive range bar background color */
-  --range-range:           var(--range-handle-focus); /* active range bar background color */
-  --range-float-inactive:  var(--range-handle-inactive); /* inactive floating label background color */
-  --range-float:           var(--range-handle-focus); /* floating label background color */
-  --range-float-text:      white; /* text color on floating label */
 }
 :global(.rangeSlider) {
   width: 7em;

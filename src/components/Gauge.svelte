@@ -93,11 +93,11 @@
   }
 
   .lowZone {
-    background-color: var(--lTrackColor);
+    background-color: var(--hlTrackColor);
     transform: rotate(0.167turn);
   }
   .hiZone {
-    background-color: var(--hTrackColor);
+    background-color: var(--hlTrackColor);
     transform: rotate(-0.167turn);
   }
 </style>
