@@ -4,17 +4,33 @@ export const validate = create(
   "Settings Form",
   (data = {}, field = undefined) => {
     only(field);
-    test("newRWeight", "Must be between 0 and 3", () => {
-      enforce(data.newRWeight).gte(0);
-      enforce(data.newRWeight).lte(3);
+    test("gbMinTarget", "Min can't exceed max", () => {
+      enforce(data.gbMinTarget).lt(data.gbMaxTarget);
     });
-    test("newKWeight", "Must be between 0 and 3", () => {
-      enforce(data.newKWeight).gte(0);
-      enforce(data.newKWeight).lte(3);
+    test("gbMaxTarget", "Min can't exceed max", () => {
+      enforce(data.gbMinTarget).lt(data.gbMaxTarget);
     });
-    test("newVWeight", "Must be between 0 and 3", () => {
-      enforce(data.newVWeight).gte(0);
-      enforce(data.newVWeight).lte(3);
+    test("targetSpeed", "Not between min&max", () => {
+      enforce(data.targetSpeed).gt(data.speedMin);
+      enforce(data.targetSpeed).lt(data.speedMax);
+    });
+    test("speedMin", "Min can't exceed target", () => {
+      enforce(data.speedMin).lt(data.targetSpeed);
+    });
+    test("speedMin", "Min can't exceed max", () => {
+      enforce(data.speedMin).lt(data.speedMax);
+    });
+    test("speedMax", "Target can't exceed max", () => {
+      enforce(data.speedMax).gt(data.targetSpeed);
+    });
+    test("speedMax", "Min can't exceed max", () => {
+      enforce(data.speedMax).gt(data.targetSpeed);
+    });
+    test("rpdMin", "Min can't exceed max", () => {
+      enforce(data.rpdMin).lt(data.rpdMax);
+    });
+    test("rpdMax", "Min can't exceed max", () => {
+      enforce(data.rpdMin).lt(data.rpdMax);
     });
   }
 );

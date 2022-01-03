@@ -1,5 +1,15 @@
 <script type= "ts">
+  import { validate } from './validation';
+  import Errors from './Errors.svelte';
+
   export let values;
+  export let errors;
+  export let result;
+
+  const validateField = path => () => {
+    result = validate(values, path);
+    errors = result.getErrors();
+  }
 </script>
 
 
@@ -12,8 +22,10 @@
     min="1"
     max="15"
     step="0.2"
-    bind:value={values.targetSpeed}>
+    bind:value={values.targetSpeed}
+    on:change={validateField("targetSpeed")}>
   <label for="speedTarget">{values.targetSpeed} seconds</label>
+  <Errors {errors} path="targetSpeed" />
 
   <hr>
 
@@ -24,8 +36,10 @@
     min={1}
     max={15}
     step={0.1}
-    bind:value={values.speedMin}>
+    bind:value={values.speedMin}
+    on:change={validateField("speedMin")}>
   <label for="minWarning">below {values.speedMin} seconds</label>
+  <Errors {errors} path="speedMin" />
 
   <input 
     id="maxWarning" 
@@ -33,8 +47,10 @@
     min={1}
     max={15}
     step={0.1}
-    bind:value={values.speedMax}>
+    bind:value={values.speedMax}
+    on:change={validateField("speedMax")}>
   <label for="maxWarning">above {values.speedMax} seconds</label>
+  <Errors {errors} path="speedMax" />
 
 </div>
 

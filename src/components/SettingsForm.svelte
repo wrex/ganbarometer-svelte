@@ -6,9 +6,22 @@
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import { defaultSettings, gbSettings } from '../store/stores';
 
+  import { validate } from './validation';
+
   let values = {...$gbSettings};
 
+  let errors = {};
+
+  let result = validate.get(); // initialize empty validation state
+
   const submit = () => {
+    result = validate(values);
+    if (result.hasErrors()) {
+      // flatten all errors messages to one array 
+      errors = result.getErrors();
+      return; 
+    }
+    errors = {};
     $gbSettings = {...$gbSettings, ...values};
   }
 
@@ -16,14 +29,14 @@
     values = { ...defaultSettings };
   };
 
-  
-
   type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
 
   let current: navState = "Ganbarometer";
   const switchTo = (comp: navState) => {
     return () => current = comp;
   };
+
+  $: disabled = result.hasErrors();
 </script>
 
 <form on:submit|preventDefault={submit} aria-label="Settings Form" class="settingsForm">
@@ -38,16 +51,16 @@
     </nav>
     <div class="actions">
       <button on:click={setDefaults} class="defaultButton">Defaults</button>
-      <button type="submit">Save</button>
+      <button type="submit" {disabled}>Save</button>
     </div>
   </div>
   <div class="formInputs">
     {#if current == "Ganbarometer"}
-      <GanbarometerSettings {values} />
+      <GanbarometerSettings {values} {errors} {result} />
     {:else if current == "Speed"}
-      <SpeedSettings {values} />
+      <SpeedSettings {values} {errors} {result} />
     {:else if current == "Reviews"}
-      <ReviewSettings {values} />
+      <ReviewSettings {values} {errors} {result} />
     {:else if current == "Appearance"}
       <AppearanceSettings {values} />
     {:else if current == "Advanced"}
@@ -57,6 +70,11 @@
 </form>
 
 <style>
+  :global(.errors) {
+    grid-column: 3 / span 2;
+    margin-bottom: 1.5em;
+    text-align: center;
+  }
   .settingsForm {
     margin: 0;
     min-height: 450px;
@@ -166,6 +184,11 @@ button:focus {
 
 button:active {
   transform: scale(0.99);
+}
+
+button:disabled {
+  cursor: none;
+  background-color: #888888;
 }
 
 .defaultButton {

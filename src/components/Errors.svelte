@@ -14,5 +14,6 @@
 <style>
   .errors {
     color: red;
+    font-size: xx-small;
   }
 </style>

@@ -1,5 +1,15 @@
 <script type= "ts">
+  import { validate } from './validation';
+  import Errors from './Errors.svelte';
+
   export let values;
+  export let errors;
+  export let result;
+
+  const validateField = path => () => {
+    result = validate(values, path);
+    errors = result.getErrors();
+  } 
 </script>
 
 <div class="settingsComp">
@@ -11,8 +21,10 @@
     min={10}
     max={290}
     step={10}
-    bind:value={values.rpdMin}>
+    bind:value={values.rpdMin}
+    on:change={validateField("rpdMin")}>
   <label for="rpdTarget">{values.rpdMin} reviews min</label>
+  <Errors {errors} path="rpdMin" />
 
   <input 
     id="rpdMax" 
@@ -20,8 +32,10 @@
     min={20}
     max={300}
     step={10}
-    bind:value={values.rpdMax}>
+    bind:value={values.rpdMax}
+    on:change={validateField("rpdMax")}>
   <label for="rpdTarget">{values.rpdMax} reviews max</label>
+  <Errors {errors} path="rpdMax" />
 </div>
         
 <style>

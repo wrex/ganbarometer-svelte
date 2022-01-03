@@ -1,5 +1,16 @@
 <script type= "ts">
+  import { validate } from './validation';
+  import Errors from './Errors.svelte';
+
   export let values;
+  export let errors;
+  export let result;
+
+  const validateField = path => () => {
+    result = validate(values, path);
+    errors = result.getErrors();
+  }
+
 </script>
 
 <div class="settingsComp">
@@ -10,8 +21,10 @@
     min={10}
     max={300}
     step={10}
-    bind:value={values.gbMinTarget}>
+    bind:value={values.gbMinTarget}
+    on:change={validateField("gbMinTarget")}>
   <label for="targetMin">{values.gbMinTarget}</label>
+  <Errors {errors} path="gbMinTarget" />
 
   <h4>Target maximum</h4>
   <input 
@@ -20,8 +33,10 @@
     min={10}
     max={300}
     step={10}
-    bind:value={values.gbMaxTarget}>
+    bind:value={values.gbMaxTarget}
+    on:change={validateField("gbMaxTarget")}>
   <label for="targetMax">{values.gbMaxTarget}</label>
+  <Errors {errors} path="gbMaxTarget" />
 
   <hr>
 
