@@ -15,8 +15,10 @@
 
   <hr>
 
+  <!-- Maybe someday, but date manipulation is an utter PITA in Javascript -->
   <h4>Timezone Offset</h4>
   <input 
+    disabled 
     id="tzOffset" 
     type="range"
     min="-23"
