@@ -44,7 +44,4 @@
     margin: 0;
   }
 
-  hr {
-    grid-column: 1 / span 6;
-  }
 </style>

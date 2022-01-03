@@ -152,17 +152,8 @@ This is still BETA code: I plan a fair bit of clean-up and refactoring. Please b
 
 ## TODO
 
-- make all settings functional:
-  - speed warning levels
-  - appearance settings
-  - tz offset
-- Style the settings dialog
-  - use CSS variables everywhere
-  - add warn/error color ranges to gauges
-  - add warn/error color to accuracy bars if % too low
-  - disable the save button on validation errors, close modal on save
+- disable the save button on validation errors, close modal on save
 - more tests
-- code cleanup (remove unused CSS selectors, etc.)
 - update readme (ready to publish)
 - "debounce" changes to retrieval days setting (?)
 - Write a [[new version of review-cache]]

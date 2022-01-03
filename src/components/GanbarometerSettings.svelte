@@ -255,9 +255,6 @@
     text-align: center;
   }
 
-  .col1 {
-    grid-column: 1 / span 1;
-  }
   .col2 {
     grid-column: 2 / span 1;
   }
