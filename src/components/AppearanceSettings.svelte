@@ -16,11 +16,11 @@
   const setDarkTheme = () => {
       values.bgColor = "#232629";
       values.trackColor = "#e0e0e0",
-      values.textColor = "#ffffff";
+      values.textColor = "#bcbcbc";
       values.hlTextColor = "#fcbd4b";
       values.fillColor = "#59c273";
       values.warnColor = "#fcbd4b";
-      values.hlTrackColor = "#d1e8d4";
+      values.hlTrackColor = "#aad4b0";
   };
 </script>
 
