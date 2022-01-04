@@ -56,8 +56,9 @@
             </td>
           </tr>
           <tr>
-            <th>Late Apprentice</th>
-            <td>{$srsCounts.apprentice.late} <span class="secondary">items</span>
+            <th>Apprentice</th>
+            <td>{$srsCounts.apprentice.total} <span class="secondary">items
+            ({$srsCounts.apprentice.early} early-stage)</span>
             </td>
         </tr>
         <tr>
