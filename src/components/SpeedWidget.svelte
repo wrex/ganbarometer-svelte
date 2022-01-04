@@ -16,10 +16,16 @@
   $: secondsPerQ = (totalQuestions > 0)
     ? (totalDuration / totalQuestions)
     : 0;
+  
+  $: qPerMinute = 60 / secondsPerQ;
+  
+  $: targetQperMin = 60 / $gbSettings.targetSpeed;
 
-  $: gauge_label = `${secondsPerQ.toFixed(1)}`;
+  // $: gauge_label = `${secondsPerQ.toFixed(1)}`;
+  // $: gauge_value = secondsPerQ / (2 * $gbSettings.targetSpeed);
 
-  $: gauge_value = secondsPerQ / (2 * $gbSettings.targetSpeed);
+  $: gauge_label = `${qPerMinute.toFixed(1)}`;
+  $: gauge_value = qPerMinute / (2 * targetQperMin);
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -31,6 +37,8 @@
 
   $: dialColor = (secondsPerQ < $gbSettings.speedMin || secondsPerQ > $gbSettings.speedMax) ? $gbSettings.warnColor : $gbSettings.fillColor;
 
+  const spq = (duration: number, count: number): string => (duration/count).toFixed(1);
+  const qpm = (duration: number, count: number): string => (60*count/duration).toFixed(1);
 
 </script>
 
@@ -38,9 +46,9 @@
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
     <Gauge value={gauge_value} label={gauge_label} />
-    <div class="units">seconds/question</div>
+    <div class="units">questions/min</div>
   {:else}
-    <h1 class="gbHeader" in:fade>Speed: {gauge_label} s/q</h1>
+    <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} s/q • {qPerMinute.toFixed(1)} q/m</h1>
     <div data-testid="speed-table" in:fade>
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
@@ -49,7 +57,8 @@
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
             ({(durationS(summary) / 60).toFixed()}m)</h5>
             <p>{summary.reviewCount} items • {summary.questionCount} questions •
-            {(durationS(summary) / summary.questionCount).toFixed(1)} s/q <br>
+            {spq(durationS(summary), summary.questionCount)} s/q •
+            {qpm(durationS(summary), summary.questionCount)} q/m<br>
             {summary.correctAnswerCount}/{summary.questionCount} =
             {percentCorrect(summary)}% correct </p>
           </article>
