@@ -50,6 +50,12 @@ const calculateQuestions = async (reviews: Review[]): Promise<Review[]> => {
   return reviewsCopy;
 };
 
+const compareReviewDates = (a: RawReview, b: RawReview): number => {
+  const a_date = new Date(a?.data?.created_at).getTime();
+  const b_date = new Date(b?.data?.created_at).getTime();
+  return a_date - b_date;
+};
+
 // Turn array of RawReviews into array processed reviews
 const processReviews = async (reviews: RawReview[]): Promise<Review[]> => {
   if (!reviews?.length) {
@@ -83,7 +89,15 @@ export const getReviews = async (n: number) => {
       last_update: fromDate.toISOString(),
     }
   );
-  return processReviews(collection?.data);
+
+  // Need to filter and sort reviews in case they are using an offline review app
+  const sortedReviews = collection?.data
+    .filter(
+      (r) => new Date(r?.data?.created_at).getTime() >= fromDate.getTime()
+    )
+    .sort(compareReviewDates);
+
+  return processReviews(sortedReviews);
 };
 
 export const calculateCounts = (reviews: Review[]): ReviewCount[] => {
