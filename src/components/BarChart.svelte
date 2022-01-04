@@ -13,7 +13,7 @@
 	$: targetBottom = Math.round((minTarget/max) * 100);
 </script>
 
-<table class="graph" aria-label="bar-chart" style="--max-label: {max}" >
+<table class="graph" aria-label="bar-chart" style="--max-label: {max.toFixed()};" >
   <thead>
     <tr>
       <th scope="col">Item</th>
