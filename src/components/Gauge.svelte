@@ -84,7 +84,8 @@
 
   .needle {
     background-color: transparent;
-    border-top: 4px solid var(--fillColor);
+    border-top: 2px solid var(--fillColor);
+    z-index: 1;
   }
 
   .centerMark {

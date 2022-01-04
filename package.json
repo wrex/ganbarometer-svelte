@@ -1,7 +1,7 @@
 {
   "name": "ganbarometer-svelte",
-  "version": "0.1.4",
-  "description": "Svelte version of the GanbarOmeter for Wanikani",
+  "version": "4.0.0",
+  "description": "The GanbarOmeter (Wanikani dashboard widgets)",
   "author": "Rex Walters -- rw [at] pobox.com",
   "homepage": "https://github.com/wrex/ganbarometer-svelte#readme",
   "scripts": {
