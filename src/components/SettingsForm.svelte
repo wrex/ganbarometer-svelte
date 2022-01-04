@@ -195,9 +195,12 @@ button:disabled {
   outline-offset: -2px;
 }
 
-.defaultButton:hover,
-.defaultButton:focus {
+.defaultButton:hover {
   font-weight: bold;
+}
+
+.defaultButton:focus {
+  outline: 4px solid #4b3f1b;
 }
 
 </style>

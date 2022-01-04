@@ -53,17 +53,27 @@
       ssQuizPresent = true;
   });
 
+  $: filter = 
+      $gbSettings.rQuiz && $gbSettings.kQuiz && $gbSettings.vQuiz ? "rad,kan,voc"
+      : $gbSettings.rQuiz && $gbSettings.kQuiz && !$gbSettings.vQuiz ? "rad,kan"
+      : $gbSettings.rQuiz && !$gbSettings.kQuiz && $gbSettings.vQuiz ? "rad,voc"
+      : $gbSettings.rQuiz && !$gbSettings.kQuiz && !$gbSettings.vQuiz ? "rad"
+      : !$gbSettings.rQuiz && $gbSettings.kQuiz && $gbSettings.vQuiz ? "kan,voc"
+      : !$gbSettings.rQuiz && $gbSettings.kQuiz && !$gbSettings.vQuiz ? "kan"
+      : !$gbSettings.rQuiz && !$gbSettings.kQuiz && $gbSettings.vQuiz ? "voc"
+      : "rad,kan,voc"
+
   const ssQuizLauncher = async () => {
     await wkof.wait_state('ss_quiz', 'ready');
     ss_quiz.open({
       ipreset: {
-        name: 'New Kanji', 
+        name: `New ${filter}`, 
         content: {
           wk_items: {
             enabled: true, 
             filters: {
               srs: { enabled: true, value: { appr1: true, appr2: true, } },
-              item_type: { enabled: true, value: 'kan' },
+              item_type: { enabled: true, value: filter },
             },
           },
         },
