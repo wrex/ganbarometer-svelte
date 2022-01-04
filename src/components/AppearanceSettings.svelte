@@ -79,8 +79,8 @@
     </label>
   </div>
 
-  <button class="light" on:click={setLightTheme}>Set light</button>
-  <button class="dark" on:click={setDarkTheme}>Set dark</button>
+  <button class="light" on:click|preventDefault={setLightTheme}>Set light</button>
+  <button class="dark" on:click|preventDefault={setDarkTheme}>Set dark</button>
     
   <hr>
   <!-- position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom" -->

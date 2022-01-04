@@ -8,6 +8,8 @@
 
   import { validate } from './validation';
 
+  export let modal;
+
   let values = {...$gbSettings};
 
   let errors = {};
@@ -23,6 +25,7 @@
     }
     errors = {};
     $gbSettings = {...$gbSettings, ...values};
+    modal.hide();
   }
 
   const setDefaults = () => { 
@@ -50,7 +53,7 @@
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
     <div class="actions">
-      <button on:click={setDefaults} class="defaultButton">Defaults</button>
+      <button on:click|preventDefault={setDefaults} class="defaultButton">Defaults</button>
       <button type="submit" {disabled}>Save</button>
     </div>
   </div>
@@ -93,6 +96,7 @@
     text-align: center;
     padding: 0.1em 0 0.3em;
     grid-area: title;
+    border-radius: 5px 5px 0 0;
   }
 
   .menu {
@@ -174,24 +178,17 @@
 
 button:hover,
 button:focus {
-    background: #cfba7c;
-}
-
-button:focus {
   outline: 1px solid #fff;
   outline-offset: -4px;
 }
-
-button:active {
-  transform: scale(0.99);
-}
-
 button:disabled {
   cursor: none;
   background-color: #888888;
 }
 
-.defaultButton {
+.defaultButton, 
+.defaultButton:hover,
+.defaultButton:focus  {
   background-color: transparent;
   color: #4b3f1b;
   outline: 2px solid #4b3f1b;
@@ -200,7 +197,7 @@ button:disabled {
 
 .defaultButton:hover,
 .defaultButton:focus {
-  background-color: #cfba7c;
+  font-weight: bold;
 }
 
 </style>

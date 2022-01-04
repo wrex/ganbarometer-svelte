@@ -1,6 +1,8 @@
 <script context="module" type="ts">
   declare var ss_quiz: any;
   declare var wkof: any;
+
+  let modal;
 </script>
 
 <script type="ts">
@@ -8,7 +10,7 @@
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";
-  import Modal, {getModal} from './Modal.svelte';
+  import Modal from './Modal.svelte';
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
@@ -91,7 +93,7 @@
     {#if ssQuizPresent}
       <QuizButton on:click={ssQuizLauncher} />
     {/if}
-    <SettingsButton on:click="{() => getModal().open()}" />
+    <SettingsButton on:click="{() => modal.show()}" />
   </div>
 </div>
 
@@ -101,8 +103,8 @@
   <ReviewsWidget />
 </div>
   
-<Modal>
-  <SettingsForm />
+<Modal bind:this={modal} >
+  <SettingsForm {modal} />
 </Modal>
 
 <style>

@@ -6,6 +6,7 @@
 
 <style>
   .settings {
+    margin-right: 10px;
     width: 36px;
     height: 36px;
     background-color: inherit;
