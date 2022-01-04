@@ -2,7 +2,7 @@ const path = require("path");
 const { pathToFileURL, URL } = require("url");
 const pkg = require("./package.json");
 
-const distURLBase = `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/beta0/`;
+const distURLBase = `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/`;
 const packageName = pkg.name;
 
 const production = !process.env.ROLLUP_WATCH;

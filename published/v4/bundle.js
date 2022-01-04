@@ -2,16 +2,16 @@
 // @name        ganbarometer-svelte
 // @description The GanbarOmeter (Wanikani dashboard widgets)
 // @namespace   https://github.com/wrex/
-// @version     4.0.0
+// @version     4.0.1
 // @homepage    https://github.com/wrex/ganbarometer-svelte#readme
 // @author      Rex Walters -- rw [at] pobox.com
 // @license     MIT-0
-// @resource    css https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/beta0/bundle.css
+// @resource    css https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.css
 // @include     /^https://(www|preview).wanikani.com/(dashboard)?$/
 // @connect     github.com
 // @run-at      document-idle
-// @downloadURL https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/beta0/bundle.js
-// @updateURL   https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/beta0/bundle.js
+// @downloadURL https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.js
+// @updateURL   https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.js
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
