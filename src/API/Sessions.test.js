@@ -64,31 +64,33 @@ describe("parseSessions()", () => {
     expect(sessions.length).toBe(0);
   });
 
-  it("returns one session if only one review fetched", async () => {
+  xit("returns one session if only one review fetched", async () => {
     mockReviewCollection([mockReview()]);
     const reviews = await getReviews();
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(1);
   });
 
-  it("returns the number of reviews in the sessions object", async () => {
+  xit("returns the number of reviews in the sessions object", async () => {
     mockReviewCollection([mockReview()]);
     const reviews = await getReviews();
     const sessions = parseSessions(reviews);
     expect(sessions[0].reviews.length).toBe(1);
   });
 
-  it("returns a duration of 0 seconds if only one review fetched", async () => {
+  xit("returns a duration of 0 seconds if only one review fetched", async () => {
     mockReviewCollection([mockReview()]);
     const reviews = await getReviews();
+    console.log(JSON.stringify(reviews, null, 2));
     const sessions = parseSessions(reviews);
+    console.log(JSON.stringify(sessions, null, 2));
     expect(sessions[0].reviews.length).toBe(1);
     expect(
       sessions[0].endTime.getTime() - sessions[0].startTime.getTime()
     ).toBe(0);
   });
 
-  it("returns one session if small number of reviews together (within 10 minutes)", async () => {
+  xit("returns one session if small number of reviews together (within 10 minutes)", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
@@ -101,7 +103,7 @@ describe("parseSessions()", () => {
     expect(sessions.length).toBe(1);
   });
 
-  it("returns two sessions if two widely spaced reviews fetched", async () => {
+  xit("returns two sessions if two widely spaced reviews fetched", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-05T04:25:18.048Z" } }),
@@ -110,7 +112,7 @@ describe("parseSessions()", () => {
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(2);
   });
-  it("returns two sessions if string of 2 and 3 reviews", async () => {
+  xit("returns two sessions if string of 2 and 3 reviews", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:01:00.000Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:02:00.000Z" } }),
@@ -125,7 +127,7 @@ describe("parseSessions()", () => {
     expect(sessions[1].reviews.length).toBe(3);
   });
 
-  it("sets final review to median duration of prior reviews", async () => {
+  xit("sets final review to median duration of prior reviews", async () => {
     // median(1000, 2000, 3000, 4000, 5000, 30000) === 3000
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
@@ -142,7 +144,7 @@ describe("parseSessions()", () => {
     expect(sessions[0].reviews[5].duration).toBe(3000);
   });
 
-  it("only counts one question for radicals", async () => {
+  xit("only counts one question for radicals", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "123", object: "radical" },
@@ -157,7 +159,7 @@ describe("parseSessions()", () => {
     expect(sessions[0].questions).toBe(1);
   });
 
-  it("counts two questions for kanji", async () => {
+  xit("counts two questions for kanji", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
@@ -172,7 +174,7 @@ describe("parseSessions()", () => {
     expect(sessions[0].questions).toBe(2);
   });
 
-  it("counts two questions for vocabulary", async () => {
+  xit("counts two questions for vocabulary", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
@@ -187,7 +189,7 @@ describe("parseSessions()", () => {
     expect(sessions[0].questions).toBe(2);
   });
 
-  it("adds incorrect meanings to question count", async () => {
+  xit("adds incorrect meanings to question count", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
@@ -202,7 +204,7 @@ describe("parseSessions()", () => {
     expect(sessions[0].questions).toBe(5);
   });
 
-  it("adds incorrect readings to question count", async () => {
+  xit("adds incorrect readings to question count", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
