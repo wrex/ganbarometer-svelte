@@ -14,16 +14,16 @@ describe("Speed Widget", () => {
     sessionSummaries.set([]);
   });
 
-  it("displays a gauge with speed of 0.0 by default", () => {
+  it("displays a gauge with speed of Infinity Q/m by default", () => {
     render(SpeedWidget);
-    const value = screen.getByText("0.0");
+    const value = screen.getByText("Infinity");
     expect(value).toBeInTheDocument;
   });
 
-  it("displays a gauge with a speed of 6.3 with real data", () => {
+  it("displays a gauge with a speed of 9.6 Q/m with real data", () => {
     sessionSummaries.set(realData);
     render(SpeedWidget);
-    const value = screen.getByText("6.3");
+    const value = screen.getByText("9.6");
     expect(value).toBeInTheDocument;
   });
 
@@ -31,6 +31,7 @@ describe("Speed Widget", () => {
     sessionSummaries.set(realData);
     display.set("data");
     render(SpeedWidget);
+    screen.logTestingPlaygroundURL();
     const header = screen.getByRole("heading", {
       name: /7 sessions • 528 items • 1204 questions/i,
     });
@@ -38,13 +39,13 @@ describe("Speed Widget", () => {
       name: /1: 12\/13\/21, 2:30 pm – 2:45 pm \(15m\)/i,
     });
     const firstSessionText = screen.getByText(
-      /65 items • 142 questions • 6\.2 s\/q 106\/142 = 74\.6% correct/i
+      /65 items • 142 questions • 6\.2 s\/q • 9\.7 q\/m 106\/142 = 74\.6% correct/i
     );
     const lastSessionHeader = screen.getByRole("heading", {
       name: /7: 12\/17\/21, 10:21 am – 10:52 am \(31m\)/i,
     });
     const lastSessionText = screen.getByText(
-      /123 items • 288 questions • 6\.4 s\/q 173\/288 = 60\.1% correct/i
+      /123 items • 288 questions • 6\.4 s\/q • 9\.4 q\/m 173\/288 = 60\.1% correct/i
     );
 
     expect(header).toBeInTheDocument();

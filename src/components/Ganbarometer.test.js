@@ -20,7 +20,7 @@ mockWkof();
 mock_ss_quiz();
 const wkofApiv2Mock = window.wkof.Apiv2.fetch_endpoint;
 
-describe("Ganbarometer layout", () => {
+describe.skip("Ganbarometer layout", () => {
   beforeEach(() => {
     window.indexedDB = new FDBFactory(); // reset database
     mockReviewCollection([]);
@@ -87,7 +87,7 @@ describe("Ganbarometer layout", () => {
   });
 });
 
-describe("Interaction", () => {
+describe.skip("Interaction", () => {
   beforeEach(() => {
     window.indexedDB = new FDBFactory(); // reset database
   });

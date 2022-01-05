@@ -20,30 +20,63 @@ describe("Settings Form", () => {
     it("has a button to reset settings", () => {
       render(SettingsForm);
       const button = screen.getByRole("button", {
-        name: /reset/i,
+        name: /default/i,
       });
       expect(button).toBeInTheDocument();
     });
 
-    test.each`
-      inputText
-      ${"background"}
-      ${"fill"}
-      ${"good"}
-      ${"warning"}
-      ${"alert"}
-      ${"text"}
-      ${"number of apprentice"}
-      ${"new radical"}
-      ${"new kanji"}
-      ${"new vocab"}
-      ${"target speed"}
-      ${"MAD cutoff"}
-      ${"target reviews-per"}
-    `("renders an input element for '$inputText'", ({ inputText }) => {
-      render(SettingsForm);
-      const input = screen.getByLabelText(new RegExp(inputText, "i"));
-      expect(input).toBeInTheDocument();
+    // ${"bgnd"}
+    // ${"track"}
+    // ${"text"}
+    // ${"hltext"}
+    // ${"fill"}
+    // ${"warn"}
+    // ${"hltrack"}
+    // ${"number of apprentice"}
+
+    // ${"new kanji"}
+    // ${"new vocab"}
+    // ${"target speed"}
+    // ${"MAD cutoff"}
+    // ${"target reviews-per"}
+
+    describe("renders Ganbarometer Settings by default", () => {
+      test.each`
+        inputText
+        ${"target minimum"}
+        ${"target maximum"}
+      `("renders an input element for '$inputText'", ({ inputText }) => {
+        render(SettingsForm);
+        const elem = screen.getByRole("heading", {
+          name: new RegExp(inputText, "i"),
+        });
+        expect(elem).toBeInTheDocument();
+      });
+
+      test.each`
+        inputText
+        ${"below"}
+        ${"in range"}
+        ${"above"}
+      `("renders an input element for '$inputText'", ({ inputText }) => {
+        render(SettingsForm);
+        const elem = screen.getByRole("columnheader", {
+          name: new RegExp(inputText, "i"),
+        });
+        expect(elem).toBeInTheDocument();
+      });
+
+      it("Includes settings for the Weights", () => {
+        render(SettingsForm);
+        const weights = screen.getAllByText("Weight");
+        expect(weights.length).toBeGreaterThan(0);
+      });
+
+      it("Includes settings for what to quiz", () => {
+        render(SettingsForm);
+        const quiz = screen.getByText("Quiz?");
+        expect(quiz).toBeInTheDocument();
+      });
     });
   });
 
