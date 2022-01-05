@@ -27,12 +27,12 @@ let meta = {
 };
 
 if (!production) {
-  meta.require = [pathToFileURL(path.join(baseUrl, "bundle.js"))];
+  meta.require = [pathToFileURL(path.join(baseUrl, "bundle.user.js"))];
 }
 
 if (production) {
-  meta.downloadURL = new URL("bundle.js", distURLBase);
-  meta.updateURL = new URL("bundle.js", distURLBase);
+  meta.downloadURL = new URL("bundle.user.js", distURLBase);
+  meta.updateURL = new URL("bundle.user.js", distURLBase);
   meta.resource.css = new URL("bundle.css", distURLBase);
 }
 

@@ -5,10 +5,8 @@
   "author": "Rex Walters -- rw [at] pobox.com",
   "homepage": "https://github.com/wrex/ganbarometer-svelte#readme",
   "scripts": {
-    "publish": "tsc && rollup -c && cp ./dist/bundle.js ./published/v4/bundle.user.js && cp ./dist/bundle.css ./published/v4/bundle.css",
-    "build": "tsc && rollup -c",
-    "dev": "rollup -c -w",
-    "test": "jest src",
+    "publish": "tsc && rollup -c && cp ./dist/bundle.user.js ./published/v4/ && cp ./dist/bundle.css ./published/v4/",
+    "publishdev": "tsc && rollup -c && cp ./dist/bundle.css ./published/dev/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/dev/:' > ./published/dev/bundle.user.js",
     "test:watch": "npm run test -- --watch",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
