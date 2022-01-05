@@ -8,17 +8,27 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { SETTINGSKEY } from "../store/stores";
 
+const renderIt = () => {
+  render(SettingsForm, {
+    modal: {
+      hide: () => {
+        return;
+      },
+    },
+  });
+};
+
 describe("Settings Form", () => {
   describe("layout", () => {
+    renderIt();
     it("has a button to save settings", () => {
-      render(SettingsForm);
       const button = screen.getByRole("button", {
         name: /save/i,
       });
       expect(button).toBeInTheDocument();
     });
     it("has a button to reset settings", () => {
-      render(SettingsForm);
+      renderIt();
       const button = screen.getByRole("button", {
         name: /default/i,
       });
@@ -46,7 +56,7 @@ describe("Settings Form", () => {
         ${"target minimum"}
         ${"target maximum"}
       `("renders an input element for '$inputText'", ({ inputText }) => {
-        render(SettingsForm);
+        renderIt();
         const elem = screen.getByRole("heading", {
           name: new RegExp(inputText, "i"),
         });
@@ -59,7 +69,7 @@ describe("Settings Form", () => {
         ${"in range"}
         ${"above"}
       `("renders an input element for '$inputText'", ({ inputText }) => {
-        render(SettingsForm);
+        renderIt();
         const elem = screen.getByRole("columnheader", {
           name: new RegExp(inputText, "i"),
         });
@@ -67,13 +77,13 @@ describe("Settings Form", () => {
       });
 
       it("Includes settings for the Weights", () => {
-        render(SettingsForm);
+        renderIt();
         const weights = screen.getAllByText("Weight");
         expect(weights.length).toBeGreaterThan(0);
       });
 
       it("Includes settings for what to quiz", () => {
-        render(SettingsForm);
+        renderIt();
         const quiz = screen.getByText("Quiz?");
         expect(quiz).toBeInTheDocument();
       });
@@ -86,7 +96,7 @@ describe("Settings Form", () => {
 
     // Setup a form with valid input values, and grab the inputs
     const setup = () => {
-      const { debug } = render(SettingsForm);
+      const { debug } = renderIt();
 
       inputs = {
         // retrieveDays: screen.getByLabelText(/days to retrieve/i),

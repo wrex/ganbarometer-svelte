@@ -31,7 +31,6 @@ describe("Speed Widget", () => {
     sessionSummaries.set(realData);
     display.set("data");
     render(SpeedWidget);
-    screen.logTestingPlaygroundURL();
     const header = screen.getByRole("heading", {
       name: /7 sessions • 528 items • 1204 questions/i,
     });
