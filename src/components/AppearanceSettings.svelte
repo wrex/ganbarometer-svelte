@@ -5,12 +5,12 @@
 
   const setLightTheme = () => {
       values.bgColor = "#f4f4f4";
-      values.trackColor = "#d1e8d4",
+      values.hlTrackColor = "#d1e8d4",
+      values.trackColor = "#e0e0e0";
       values.textColor = "#333333";
       values.hlTextColor = "#fbb623";
       values.fillColor = "#59c273";
       values.warnColor = "#fbb623";
-      values.hlTrackColor = "#d1e8d4";
   };
 
   const setDarkTheme = () => {
@@ -46,6 +46,11 @@
       percents={[0.66, 0.8, 0.75]}
     />
   </div>
+
+  <button class="light" on:click|preventDefault={setLightTheme}>Light theme</button>
+  <button class="dark" on:click|preventDefault={setDarkTheme}>Dark Theme</button>
+    
+  <h3>Individual overrides</h3>
   <div class="colorInputs">
     <label>
       Bgnd
@@ -79,11 +84,8 @@
     </label>
   </div>
 
-  <button class="light" on:click|preventDefault={setLightTheme}>Set light</button>
-  <button class="dark" on:click|preventDefault={setDarkTheme}>Set dark</button>
-    
   <hr>
-  <!-- position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom" -->
+
 
   <div class="position">
     <label for="position-select">Position</label>
@@ -99,7 +101,12 @@
 </div>
 
 <style>
-
+  h3 {
+    grid-column: 1 / span 6;
+    text-align: center;
+    text-decoration: underline;
+    margin: 30px 0 5px;
+  }
   .warnBox {
     text-align: center;
     height: 20px;
@@ -167,19 +174,22 @@
   /* Buttons styles start */
   .light {
     grid-column: 2 / span 2;
+    color: #4b3f1b;
+    background-color: white;
+    border: 2px solid #4b3f1b;
   }
   .dark {
     grid-column: 4 / span 2;
+    color: white;
+    background-color: #4b3f1b;
   }
 button {
     display: inline-block;
     border: none;
     padding-block: 0.5rem;
     border-radius: 5px;
-    margin: 30px 0 0;
+    margin: 0;
     text-decoration: none;
-    background: #59c273;
-    color: #ffffff;
     font-family: sans-serif;
     font-size: 1rem;
     line-height: 1;
@@ -192,7 +202,7 @@ button {
 
 button:hover,
 button:focus {
-    background: #489c5c;
+  background-color: rgba(75, 63, 27, 0.4);
 }
 
 button:focus {
