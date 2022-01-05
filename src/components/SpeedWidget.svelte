@@ -19,13 +19,8 @@
   
   $: qPerMinute = 60 / secondsPerQ;
   
-  $: targetQperMin = 60 / $gbSettings.targetSpeed;
-
-  // $: gauge_label = `${secondsPerQ.toFixed(1)}`;
-  // $: gauge_value = secondsPerQ / (2 * $gbSettings.targetSpeed);
-
   $: gauge_label = `${qPerMinute.toFixed(1)}`;
-  $: gauge_value = qPerMinute / (2 * targetQperMin);
+  $: gauge_value = qPerMinute / (2 * $gbSettings.targetQPM);
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -35,7 +30,7 @@
     return percent.toFixed(1);
   };
 
-  $: dialColor = (secondsPerQ < $gbSettings.speedMin || secondsPerQ > $gbSettings.speedMax) ? $gbSettings.warnColor : $gbSettings.fillColor;
+  $: dialColor = (qPerMinute < $gbSettings.minQPM || secondsPerQ > $gbSettings.maxQPM) ? $gbSettings.warnColor : $gbSettings.fillColor;
 
   const spq = (duration: number, count: number): string => (duration/count).toFixed(1);
   const qpm = (duration: number, count: number): string => (60*count/duration).toFixed(1);

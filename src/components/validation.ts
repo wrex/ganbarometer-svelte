@@ -10,21 +10,21 @@ export const validate = create(
     test("gbMaxTarget", "Min can't exceed max", () => {
       enforce(data.gbMinTarget).lt(data.gbMaxTarget);
     });
-    test("targetSpeed", "Not between min&max", () => {
-      enforce(data.targetSpeed).gt(data.speedMin);
-      enforce(data.targetSpeed).lt(data.speedMax);
+    test("targetQPM", "Not between min&max", () => {
+      enforce(data.targetQPM).gt(data.minQPM);
+      enforce(data.targetQPM).lt(data.maxQPM);
     });
-    test("speedMin", "Min can't exceed target", () => {
-      enforce(data.speedMin).lt(data.targetSpeed);
+    test("minQPM", "Min can't exceed target", () => {
+      enforce(data.minQPM).lt(data.targetQPM);
     });
-    test("speedMin", "Min can't exceed max", () => {
-      enforce(data.speedMin).lt(data.speedMax);
+    test("minQPM", "Min can't exceed max", () => {
+      enforce(data.minQPM).lt(data.maxQPM);
     });
-    test("speedMax", "Target can't exceed max", () => {
-      enforce(data.speedMax).gt(data.targetSpeed);
+    test("maxQPM", "Target can't exceed max", () => {
+      enforce(data.maxQPM).gt(data.targetQPM);
     });
-    test("speedMax", "Min can't exceed max", () => {
-      enforce(data.speedMax).gt(data.targetSpeed);
+    test("maxQPM", "Min can't exceed max", () => {
+      enforce(data.maxQPM).gt(data.targetQPM);
     });
     test("rpdMin", "Min can't exceed max", () => {
       enforce(data.rpdMin).lt(data.rpdMax);

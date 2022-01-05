@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
+const SETTINGS_VERSION = "4.0.3";
 
 export const display = writable("chart");
 
@@ -63,6 +64,7 @@ reviewCounts.subscribe((val) => {
 });
 
 export const defaultSettings = {
+  version: SETTINGS_VERSION;
   position: "Top", // position: "Top" | "Below Forecast" | "Below SRS" | "Below Panels" | "Bottom"
   bgColor: "#f4f4f4",
   trackColor: "#e0e0e0",
@@ -83,9 +85,9 @@ export const defaultSettings = {
   guruWeight: 0.1,
   masterWeight: 0,
   enlightenedWeight: 0,
-  targetSpeed: 7.0,
-  speedMin: 6,
-  speedMax: 8,
+  targetQPM: 8.5,
+  minQPM: 7.0,
+  maxQPM: 10.0,
   madCutoff: 10.0,
   rpdMin: 120,
   rpdMax: 180,
@@ -99,6 +101,10 @@ export const defaultSettings = {
 export const gbSettings = writable(
   JSON.parse(localStorage.getItem(SETTINGSKEY)) ?? defaultSettings
 );
-gbSettings.subscribe((val) =>
-  localStorage.setItem(SETTINGSKEY, JSON.stringify(val))
-);
+gbSettings.subscribe((val) => {
+  if (val.version === SETTINGS_VERSION) {
+    localStorage.setItem(SETTINGSKEY, JSON.stringify(val))
+  } else {
+    localStorage.setItem(SETTINGSKEY, JSON.stringify(defaultSettings));
+  }
+});
