@@ -16,7 +16,7 @@
   <hr>
 
   <!-- Maybe someday, but date manipulation is an utter PITA in Javascript -->
-  <h4>Timezone Offset</h4>
+  <!-- <h4>Timezone Offset</h4>
   <input 
     disabled 
     id="tzOffset" 
@@ -24,7 +24,7 @@
     min="-23"
     max="23"
     bind:value={values.tzOffset}>
-  <label for="tzOffset">{values.tzOffset} hours</label>
+  <label for="tzOffset">{values.tzOffset} hours</label> -->
 </div>
         
 <style>
