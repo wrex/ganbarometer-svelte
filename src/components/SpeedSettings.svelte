@@ -5,6 +5,14 @@
   export let values;
   export let errors;
   export let result;
+  
+  let targetQPM = 60 / values.targetSpeed;
+  let minQPM = 60 / values.speedMax;
+  let maxQPM = 60 / values.speedMin;
+
+  $: values.targetSpeed = 60 / targetQPM;
+  $: values.speedMax = 60 / minQPM;
+  $: values.speedMin = 60 / maxQPM;
 
   const validateField = path => () => {
     result = validate(values, path);
@@ -22,10 +30,9 @@
     min="1"
     max="15"
     step="0.2"
-    bind:value={values.targetSpeed}
-    on:change={validateField("targetSpeed")}>
-  <label for="speedTarget">{values.targetSpeed} seconds</label>
-  <Errors {errors} path="targetSpeed" />
+    bind:value={targetQPM}>
+  <label for="speedTarget">{targetQPM.toFixed(1)} q/m ({values.targetSpeed.toFixed(1)} s/q)</label>
+  <!-- <Errors {errors} path="targetSpeed" /> -->
 
   <hr>
 
@@ -36,10 +43,10 @@
     min={1}
     max={15}
     step={0.1}
-    bind:value={values.speedMin}
-    on:change={validateField("speedMin")}>
-  <label for="minWarning">below {values.speedMin} seconds</label>
-  <Errors {errors} path="speedMin" />
+    bind:value={minQPM}>
+    <!-- on:change={validateField("speedMax")}> -->
+  <label for="minWarning">below {minQPM.toFixed(1)} q/m ({values.speedMax.toFixed(1)} s/q) </label>
+  <!-- <Errors {errors} path="speedMax" /> -->
 
   <input 
     id="maxWarning" 
@@ -47,10 +54,10 @@
     min={1}
     max={15}
     step={0.1}
-    bind:value={values.speedMax}
-    on:change={validateField("speedMax")}>
-  <label for="maxWarning">above {values.speedMax} seconds</label>
-  <Errors {errors} path="speedMax" />
+    bind:value={maxQPM}>
+    <!-- on:change={validateField("speedMin")}> -->
+  <label for="maxWarning">above {maxQPM.toFixed(1)} q/m ({values.speedMin.toFixed(1)} s/q)</label>
+  <!-- <Errors {errors} path="speedMin" /> -->
 
 </div>
 
@@ -58,16 +65,17 @@
   h4 {
     font-size: small;
     margin: 0;
-    grid-column: 1 / span 2;
+    grid-column: 1;
     text-align: right;
   }
 
   label {
-    grid-column: 5 / span 2;
+    grid-column: 4 / span 3;
+    align-self: center;
     margin: 0;
   }
   input[type="range"] {
-    grid-column: 3 / span 2;
+    grid-column: 2 / span 2;
     width: 100%;
     text-align: center;
     vertical-align: middle;
