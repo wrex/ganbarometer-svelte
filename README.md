@@ -170,7 +170,7 @@ and your prefered colors).
 
 5. At the very bottom you will see "Install from URL". Cut and
    paste this URL into the box, and click "Install":
-   `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.js`
+   `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.user.js`
 
 6. Click "Install" on the next page to actually add the script. Then navigate back to your dashboard and
    refresh the page. You should now see the Ganbarometer!
@@ -338,7 +338,7 @@ nefarious is included in the user script:
 
 6. In another shell window, type `npm run dev` to compile a (un-minified) dev version of the code and prepare for "live" updates.
 
-7. Copy the top several lines of the file `./dist/bundle.js`. Just copy the header itself, everything through and including the `// ==/UserScript==` line. Don't copy any actual code.
+7. Copy the top several lines of the file `./dist/bundle.user.js`. Just copy the header itself, everything through and including the `// ==/UserScript==` line. Don't copy any actual code.
 
 8. In the tampermonkey dashboard, click the "+" tab and paste in the headers (again, just the headers) from step 6. Save the file. This will install the `ganbarometer-svelte ->dev` script and prepare it for "live" updates. If you browse to the WK dashboard, and enable this version of the script, any changes you make to the source code should show up when you refresh the page.
 
