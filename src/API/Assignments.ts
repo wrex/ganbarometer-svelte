@@ -1,4 +1,3 @@
-import { forEach } from "mathjs";
 import type { Subject } from "./API";
 
 declare var wkof: any;
@@ -21,9 +20,9 @@ export const getSrsCounts = async () => {
   } else if (bySRS[1]) {
     newItems = [...bySRS[1]];
   }
-  const newRadicals = newItems.filter((s) => s.object == "radicals");
-  const newKanji = newItems.filter((s) => s.object == "kanji");
-  const newVocabulary = newItems.filter((s) => s.object == "vocabulary");
+  const newRadicals = newItems.filter((s) => s.object === "radical");
+  const newKanji = newItems.filter((s) => s.object === "kanji");
+  const newVocabulary = newItems.filter((s) => s.object === "vocabulary");
 
   //This list means that for each SRS level this is how many days it takes until the item comes back
   //For example: only 1/30 of master items are expected to be reviewed in any given day

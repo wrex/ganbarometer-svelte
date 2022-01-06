@@ -70,13 +70,13 @@
   <div class="formInputs">
     {#if current == "Ganbarometer"}
       <GanbarometerSettings {values} bind:result />
-    {:else if current == "Speed"}
+    {:else if current === "Speed"}
       <SpeedSettings {values} bind:result />
-    {:else if current == "Reviews"}
+    {:else if current === "Reviews"}
       <ReviewSettings {values} bind:result />
-    {:else if current == "Appearance"}
+    {:else if current === "Appearance"}
       <AppearanceSettings {values} />
-    {:else if current == "Advanced"}
+    {:else if current === "Advanced"}
       <AdvancedSettings {values} />
     {/if}
   </div>
