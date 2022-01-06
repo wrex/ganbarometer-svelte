@@ -1,10 +1,11 @@
-<script type="ts">
+<script lang="ts">
   import GanbarometerSettings from "./GanbarometerSettings.svelte";
   import SpeedSettings from "./SpeedSettings.svelte";
   import ReviewSettings from "./ReviewSettings.svelte";
   import AppearanceSettings from "./AppearanceSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import { defaultSettings, gbSettings } from '../store/stores';
+  import { onDestroy } from "svelte";
 
   import { validate } from './validation';
 
@@ -30,6 +31,8 @@
 
   const setDefaults = () => { 
     values = { ...defaultSettings };
+    result = validate(values);
+    errors = {};
   };
 
   type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
@@ -40,6 +43,11 @@
   };
 
   $: disabled = result.hasErrors();
+
+  onDestroy(() => {
+    errors = {}
+    validate.reset();
+  })
 </script>
 
 <form on:submit|preventDefault={submit} aria-label="Settings Form" class="settingsForm">
@@ -52,6 +60,13 @@
         <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
+
+    {#if result.hasErrors()}
+      <div class="validation-errors">
+        {result.errorCount} validation error{result.errorCount > 1 ? "s" : ""}
+      </div>
+    {/if}
+
     <div class="actions">
       <button on:click|preventDefault={setDefaults} class="defaultButton">Defaults</button>
       <button type="submit" {disabled}>Save</button>
@@ -94,7 +109,7 @@
     color: white;
     margin: 0;
     text-align: center;
-    padding: 0.1em 0 0.3em;
+    padding: 0.5em 0;
     grid-area: title;
     border-radius: 5px 5px 0 0;
   }
@@ -195,12 +210,15 @@ button:disabled {
   outline-offset: -2px;
 }
 
+.defaultButton:focus,
 .defaultButton:hover {
-  font-weight: bold;
+  outline: 4px solid #4b3f1b;
 }
 
-.defaultButton:focus {
-  outline: 4px solid #4b3f1b;
+.validation-errors {
+  color: red;
+  font-size: x-small;
+  text-align: center;
 }
 
 </style>
