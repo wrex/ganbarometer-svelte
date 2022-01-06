@@ -1,16 +1,18 @@
 <script type= "ts">
   import { validate } from './validation';
   import Errors from './Errors.svelte';
+  import { onMount } from 'svelte';
 
   export let values;
   export let result;
 
-  let errors = {};
-
   const validateField = path => () => {
     result = validate(values, path);
-    errors = result.getErrors();
   } 
+
+  onMount(() => {
+    result = validate(values);
+  });
 </script>
 
 <div class="settingsComp">
@@ -25,7 +27,7 @@
     bind:value={values.rpdMin}
     on:change={validateField("rpdMin")}>
   <label for="rpdTarget">{values.rpdMin} reviews min</label>
-  <Errors {errors} path="rpdMin" />
+  <Errors bind:result path="rpdMin" />
 
   <input 
     id="rpdMax" 
@@ -36,7 +38,7 @@
     bind:value={values.rpdMax}
     on:change={validateField("rpdMax")}>
   <label for="rpdTarget">{values.rpdMax} reviews max</label>
-  <Errors {errors} path="rpdMax" />
+  <Errors bind:result path="rpdMax" />
 </div>
         
 <style>

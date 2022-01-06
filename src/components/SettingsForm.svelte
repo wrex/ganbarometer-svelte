@@ -27,7 +27,8 @@
 
   const setDefaults = () => { 
     values = { ...defaultSettings };
-    result = validate(values);
+    validate.reset();
+    result = validate.get();
   };
 
   type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
@@ -191,8 +192,8 @@ button:focus {
   outline-offset: -4px;
 }
 button:disabled {
-  cursor: none;
-  background-color: #888888;
+  cursor: default;
+  background-color: #e0e0e0 !important;
 }
 
 .defaultButton, 

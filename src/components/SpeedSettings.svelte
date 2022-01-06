@@ -1,18 +1,20 @@
 <script lang= "ts">
   import { validate } from './validation';
   import Errors from './Errors.svelte';
+  import { onMount } from 'svelte';
 
   export let values;
   export let result;
-
-  let errors = {};
 
   const spq = (qpm) => (60 /  qpm).toFixed(1);
   
   const validateField = path => () => {
     result = validate(values, path);
-    errors = result.getErrors();
   }
+
+  onMount(() => {
+    result = validate(values);
+  })
 </script>
 
 
@@ -28,7 +30,7 @@
     bind:value={values.targetQPM}
     on:change={validateField("targetQPM")}>
   <label for="speedTarget">{values.targetQPM.toFixed(1)} q/m ({spq(values.targetQPM)} s/q)</label>
-  <Errors {errors} path="targetQPM" />
+  <Errors bind:result path="targetQPM" />
 
   <hr>
 
@@ -42,7 +44,7 @@
     bind:value={values.minQPM}
     on:change={validateField("minQPM")}>
   <label for="minWarning">below {values.minQPM.toFixed(1)} q/m ({spq(values.minQPM)} s/q) </label>
-  <Errors {errors} path="minQPM" />
+  <Errors bind:result path="minQPM" />
 
   <input 
     id="maxWarning" 
@@ -53,7 +55,7 @@
     bind:value={values.maxQPM}
     on:change={validateField("maxQPM")}>
   <label for="maxWarning">above {values.maxQPM.toFixed(1)} q/m ({spq(values.minQPM)} s/q)</label>
-  <Errors {errors} path="minQPM" />
+  <Errors bind:result path="minQPM" />
 
 </div>
 
