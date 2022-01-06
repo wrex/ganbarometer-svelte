@@ -3,8 +3,9 @@
   import Errors from './Errors.svelte';
 
   export let values;
-  export let errors;
   export let result;
+
+  let errors = {};
 
   const validateField = path => () => {
     result = validate(values, path);

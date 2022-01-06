@@ -13,18 +13,14 @@
 
   let values = {...$gbSettings};
 
-  let errors = {};
-
   let result = validate.get(); // initialize empty validation state
 
   const submit = () => {
     result = validate(values);
     if (result.hasErrors()) {
       // flatten all errors messages to one array 
-      errors = result.getErrors();
       return; 
     }
-    errors = {};
     $gbSettings = {...$gbSettings, ...values};
     modal.hide();
   }
@@ -32,7 +28,6 @@
   const setDefaults = () => { 
     values = { ...defaultSettings };
     result = validate(values);
-    errors = {};
   };
 
   type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
@@ -45,7 +40,6 @@
   $: disabled = result.hasErrors();
 
   onDestroy(() => {
-    errors = {}
     validate.reset();
   })
 </script>
@@ -74,11 +68,11 @@
   </div>
   <div class="formInputs">
     {#if current == "Ganbarometer"}
-      <GanbarometerSettings {values} {errors} bind:result />
+      <GanbarometerSettings {values} bind:result />
     {:else if current == "Speed"}
-      <SpeedSettings {values} {errors} bind:result />
+      <SpeedSettings {values} bind:result />
     {:else if current == "Reviews"}
-      <ReviewSettings {values} {errors} bind:result />
+      <ReviewSettings {values} bind:result />
     {:else if current == "Appearance"}
       <AppearanceSettings {values} />
     {:else if current == "Advanced"}
