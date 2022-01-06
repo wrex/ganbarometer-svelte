@@ -1,7 +1,7 @@
 <script lang="ts">
   export let value = 0.5;
   export let label = null;
-  export let needle = false;
+  export let indicator = "slidefill"; // "slidefill" | "needle" | "short-needle"
   export let lowZone = false; 
   export let hiZone = false; 
 
@@ -10,10 +10,7 @@
 
 <div class="gauge" data-testid="gauge">
   <div class="gauge__body">
-    <div class="gauge__fill" style="{rotate}" class:needle={needle}></div>
-    {#if needle}
-      <div class="gauge__fill centerMark"></div>
-    {/if}
+    <div class="gauge__fill {indicator}" style="{rotate}"></div>
     {#if lowZone}
       <div class="gauge__fill lowZone"></div>
     {/if}
@@ -72,6 +69,7 @@
     top: 25%;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
   
     display: flex;
     align-items: center;
@@ -82,15 +80,15 @@
     color: var(--textColor);
   }
 
-  .needle {
+  .needle,
+  .short-needle {
     background-color: transparent;
     border-top: 2px solid var(--fillColor);
-    z-index: 1;
+    z-index: 2;
   }
 
-  .centerMark {
-    background-color: transparent;
-    border-top: 1px dashed var(--textColor);
+  .short-needle {
+    z-index: 0;
   }
 
   .lowZone {
