@@ -114,7 +114,7 @@ gbSettings.subscribe((val) => {
   if (val.version === VERSION) {
     localStorage.setItem(SETTINGSKEY, JSON.stringify(val));
   } else {
-    localStorage.setItem(SETTINGSKEY, JSON.stringify(defaultSettings));
+    gbSettings.set(defaultSettings);
     daysToReview.set(defaults.daysToReview);
     srsCounts.set(defaults.srsCounts);
     sessionSummaries.set(defaults.sessionSummaries);
