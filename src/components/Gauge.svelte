@@ -5,7 +5,9 @@
   export let lowZone = false; 
   export let hiZone = false; 
 
-  $: rotate = `transform: rotate(${value / 2}turn)`;
+  const clampedValue = (+value < 0 ? 0 : +value > 1 ? 1 : +value);
+
+  $: rotate = `transform: rotate(${(clampedValue / 2).toFixed(4)}turn)`;
 </script>
 
 <div class="gauge" data-testid="gauge">
