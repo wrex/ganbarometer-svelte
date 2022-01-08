@@ -6,12 +6,12 @@
 // @homepage    https://github.com/wrex/ganbarometer-svelte#readme
 // @author      Rex Walters -- rw [at] pobox.com
 // @license     MIT-0
-// @resource    css https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4beta/bundle.css
+// @resource    css https://github.com/wrex/ganbarometer-svelte/raw/v4.0/published/v4beta/bundle.css
 // @include     /^https://(www|preview).wanikani.com/(dashboard)?$/
 // @connect     github.com
 // @run-at      document-idle
-// @downloadURL https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4beta/bundle.user.js
-// @updateURL   https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4beta/bundle.user.js
+// @downloadURL https://github.com/wrex/ganbarometer-svelte/raw/v4.0/published/v4beta/bundle.user.js
+// @updateURL   https://github.com/wrex/ganbarometer-svelte/raw/v4.0/published/v4beta/bundle.user.js
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @grant       GM_xmlhttpRequest
