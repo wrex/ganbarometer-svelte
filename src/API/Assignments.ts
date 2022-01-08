@@ -10,17 +10,30 @@ export const getSrsCounts = async () => {
   const allItems: Subject[] = await wkof.ItemData.get_items(
     "subjects,assignments"
   );
-  const bySRS: { [key: string]: Subject[] } = await wkof.ItemData.get_index(
-    allItems,
-    "srs_stage"
-  );
+  const partialSRS: { [key: string]: Subject[] } =
+    await wkof.ItemData.get_index(allItems, "srs_stage");
 
-  let newItems: Subject[];
-  if (bySRS[1] && bySRS[2]) {
-    newItems = [...bySRS[1], ...bySRS[2]];
-  } else if (bySRS[1]) {
-    newItems = [...bySRS[1]];
-  }
+  const allStages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1];
+  const reviewingStages = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  // Ensure bySRS[stage] has an entry for all 11 stages
+  const bySRS = {
+    "0": [],
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": [],
+    "-1": [],
+    ...partialSRS,
+  };
+
+  const newItems = [...bySRS[1], ...bySRS[2]];
+
   const newRadicals = newItems.filter((s) => s.object == "radicals");
   const newKanji = newItems.filter((s) => s.object == "kanji");
   const newVocabulary = newItems.filter((s) => s.object == "vocabulary");
@@ -33,12 +46,9 @@ export const getSrsCounts = async () => {
   //Burned: 0 days
   const srs_intervals = [0, 0.5, 1, 1, 2, 7, 14, 30, 120, 0];
 
-  const allStages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const reviewingStages = [1, 2, 3, 4, 5, 6, 7, 8];
-
   let counts: number[] = [];
   allStages.forEach((stage) => {
-    counts[stage] = bySRS[stage]?.length ?? 0;
+    counts[stage] = bySRS[stage].length;
   });
 
   const expectedCount = reviewingStages
