@@ -12,7 +12,7 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "publish": "tsc && rollup -c && cp ./dist/bundle.user.js ./published/v4/ && cp ./dist/bundle.css ./published/v4/",
     "publishdev": "tsc && rollup -c && cp ./dist/bundle.css ./published/dev/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/dev/:' > ./published/dev/bundle.user.js",
-    "publishbeta": "tsc && rollup -c && cp ./dist/bundle.css ./published/v4beta/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/v4beta/:' > ./published/dev/bundle.user.js"
+    "publishbeta": "tsc && rollup -c && cp ./dist/bundle.css ./published/v4beta/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/v4beta/:' > ./published/v4beta/bundle.user.js"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
