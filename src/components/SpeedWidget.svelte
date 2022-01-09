@@ -20,7 +20,12 @@
   $: qPerMinute = 60 / secondsPerQ;
   
   $: gauge_label = `${qPerMinute.toFixed(1)}`;
-  $: gauge_value = qPerMinute / (2 * $gbSettings.targetQPM);
+
+  // 0.5 is needle straight up, want needle to be 2/3rds of the way to vertical
+  // at low target
+  const lowTurns = 2/3 * 0.5;
+  $: scaling = lowTurns / ($gbSettings.maxQPM - $gbSettings.minQPM);
+  $: gauge_value = lowTurns + (qPerMinute - $gbSettings.minQPM) * scaling;
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -30,17 +35,15 @@
     return percent.toFixed(1);
   };
 
-  $: dialColor = (qPerMinute < $gbSettings.minQPM || secondsPerQ > $gbSettings.maxQPM) ? $gbSettings.warnColor : $gbSettings.fillColor;
-
   const spq = (duration: number, count: number): string => (duration/count).toFixed(1);
   const qpm = (duration: number, count: number): string => (60*count/duration).toFixed(1);
 
 </script>
 
-<div class="gbWidget" data-testid="speedWidget" style="--fillColor: {dialColor}; ">
+<div class="gbWidget" data-testid="speedWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
-    <Gauge value={gauge_value} label={gauge_label} />
+    <Gauge value={gauge_value} label={gauge_label} needle lowZone hiZone />
     <div class="units">questions/min</div>
   {:else}
     <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} s/q • {qPerMinute.toFixed(1)} q/m</h1>
