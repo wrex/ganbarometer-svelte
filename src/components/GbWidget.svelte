@@ -62,7 +62,7 @@
             </td>
         </tr>
         <tr>
-          <th>Guru'd</th>
+          <th>Learned</th>
           <td>{$srsCounts.guru}<span class="secondary">g</span>
             {$srsCounts.master}<span class="secondary">m</span>
             {$srsCounts.enlightened}<span class="secondary">e</span>

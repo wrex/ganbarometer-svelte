@@ -47,7 +47,7 @@
     <div data-testid="speed-table" in:fade>
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
-        {#each $sessionSummaries as summary, i}
+        {#each $sessionSummaries.reverse() as summary, i}
           <article>
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
             ({(durationS(summary) / 60).toFixed()}m)</h5>
