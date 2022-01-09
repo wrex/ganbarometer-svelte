@@ -45,7 +45,7 @@
   .modal {
 		position: relative;
 		left: 0;
-		width: fit-content;
+		width: auto;
 		border-radius: 6px;
 		background: white;
     border: 2px solid #000;

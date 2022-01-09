@@ -230,7 +230,7 @@
     text-decoration: none;
     display: inline;
     margin-inline: 1rem;
-    height: fit-content;
+    height: auto;
   }
 
   .chart-data-nav li:hover {

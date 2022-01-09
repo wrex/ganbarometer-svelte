@@ -100,7 +100,7 @@
   }
   .title {
     background-color: #59c273;
-    height: fit-content;
+    height: auto;
     color: white;
     margin: 0;
     text-align: center;
