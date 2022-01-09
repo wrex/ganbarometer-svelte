@@ -5,7 +5,7 @@
   export let lowZone = false; 
   export let hiZone = false; 
 
-  const clampedValue = (+value < 0 ? 0 : +value > 1 ? 1 : +value);
+  $: clampedValue = (+value <= 0 ? 0.02 : +value >= 1 ? 0.98 : +value);
 
   $: rotate = `transform: rotate(${(clampedValue / 2).toFixed(4)}turn)`;
 </script>
