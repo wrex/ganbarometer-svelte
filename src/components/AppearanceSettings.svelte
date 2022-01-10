@@ -24,7 +24,7 @@
   };
 </script>
 
-<div class="settingsComp">
+<div class="gbSettingsComp">
   <div class="colorSample" style={` 
       background-color: ${values.bgColor};
       --bgColor: ${values.bgColor}; 

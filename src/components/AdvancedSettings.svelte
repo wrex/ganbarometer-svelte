@@ -1,22 +1,29 @@
 <script type= "ts">
+  import RangeSlider from "./RangeSlider.svelte";
+
   export let values;
+
+  let range_value = [values.madCutoff];
+  $: [values.madCutoff] = range_value;
 </script>
 
-<div class="settingsComp">
+<div class="gbSettingsComp">
 
   <h4>MAD cutoff</h4>
-  <input 
-    id="madCutoff" 
-    type="range" 
-    min="2"
-    max="15"
-    bind:value={values.madCutoff} >
-  <label for="madCutoff">{values.madCutoff}</label>
 
-  <hr>
+  <RangeSlider 
+    id="madRange" 
+    float
+    min={1}
+    max={15}
+    bind:values={range_value} />
+  <div class="rangeLabel">{values.madCutoff}</div>
+
 
   <!-- Maybe someday, but date manipulation is an utter PITA in Javascript -->
-  <!-- <h4>Timezone Offset</h4>
+  <!-- 
+  <hr>
+  <h4>Timezone Offset</h4>
   <input 
     disabled 
     id="tzOffset" 
@@ -28,27 +35,19 @@
 </div>
         
 <style>
+:global(#madRange),
+  .rangeLabel {
+    grid-column: 3 / span 3;
+    width: 100%;
+    margin: 0;
+    align-self: center;
+    text-align: center;
+  }
   h4 {
     font-size: small;
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
-  }
-
-  label {
-    grid-column: 5 / span 2;
-    margin: 0;
-  }
-  input[type="range"] {
-    grid-column: 3 / span 2;
-    width: 100%;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0;
-  }
-
-  hr {
-    grid-column: 1 / span 6;
   }
 </style>
         
