@@ -71,9 +71,9 @@
     {#if current === "Ganbarometer"}
       <GanbarometerSettings {values} />
     {:else if current === "Speed"}
-      <SpeedSettings {values} bind:result />
+      <SpeedSettings {values} />
     {:else if current === "Reviews"}
-      <ReviewSettings {values} bind:result />
+      <ReviewSettings {values} />
     {:else if current === "Appearance"}
       <AppearanceSettings {values} />
     {:else if current === "Advanced"}
@@ -83,11 +83,25 @@
 </form>
 
 <style>
-  :global(.errors) {
-    grid-column: 3 / span 2;
-    margin-bottom: 1.5em;
-    text-align: center;
+  :global(.gbSettingsComp) {
+    --range-slider:          #d7dada; /* slider main background color */
+    --range-handle-inactive: #99a2a2; /* inactive handle color */
+    --range-handle:          #59c273; /* non-focussed handle color */
+    --range-handle-focus:    #489c5c; /* focussed handle color */
+    --range-handle-border:   var(--range-handle);
+    --range-range-inactive:  var(--range-handle-inactive); /* inactive range bar background color */
+    --range-range:           var(--range-handle-focus); /* active range bar background color */
+    --range-float-inactive:  var(--range-handle-inactive); /* inactive floating label background color */
+    --range-float:           var(--range-handle-focus); /* floating label background color */
+    --range-float-text:      white; /* text color on floating label */
+    width: calc(100% - 20px);
+    margin: 30px 10px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: max-content;
+    gap: 5px 10px;
   }
+
   .settingsForm {
     margin: 0;
     min-height: 450px;
@@ -158,14 +172,6 @@
     align-items: center;
   }
 
-  :global(.settingsComp) {
-    width: calc(100% - 20px);
-    margin: 30px 10px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: max-content;
-    gap: 5px 10px;
-  }
 
   button {
     display: inline-block;

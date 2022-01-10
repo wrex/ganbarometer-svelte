@@ -1,44 +1,23 @@
 <script type= "ts">
-  import { validate } from './validation';
-  import Errors from './Errors.svelte';
-  import { onMount } from 'svelte';
+  import RangeSlider from "./RangeSlider.svelte";
 
   export let values;
-  export let result;
 
-  const validateField = path => () => {
-    result = validate(values, path);
-  }
-
-  onMount(() => {
-    result = validate(values);
-  });
+  let range_values = [values.gbMinTarget, values.gbMaxTarget];
+  $: [values.gbMinTarget, values.gbMaxTarget] = range_values;
 </script>
 
-<div class="settingsComp">
-  <h4>Target minimum</h4>
-  <input 
-    id="targetMin" 
-    type="range"
-    min={10}
+<div class="gbSettingsComp">
+  <h4>Target range</h4>
+  <RangeSlider 
+    id="gbRange" 
+    range
+    pushy
+    float
+    min={1}
     max={300}
-    step={10}
-    bind:value={values.gbMinTarget}
-    on:change={validateField("gbMinTarget")}>
-  <label for="targetMin">{values.gbMinTarget}</label>
-  <Errors bind:result path="gbMinTarget" />
-
-  <h4>Target maximum</h4>
-  <input 
-    id="targetMax" 
-    type="range"
-    min={10}
-    max={300}
-    step={10}
-    bind:value={values.gbMaxTarget}
-    on:change={validateField("gbMaxTarget")}>
-  <label for="targetMax">{values.gbMaxTarget}</label>
-  <Errors bind:result path="gbMaxTarget" />
+    bind:values={range_values} />
+  <div class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
 
   <hr>
 
@@ -194,18 +173,21 @@
 </div>
         
 <style>
-  
+
+  :global(#gbRange),
+  .rangeLabel {
+    grid-column: 3 / span 3;
+    width: 100%;
+    margin: 0;
+    align-self: center;
+    text-align: center;
+  }
   h4 {
     font-size: small;
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
-  }
-
-  label {
-    grid-column: 5 / span 1;
-    margin: 0;
-    text-align: left;
+    align-self: center;
   }
 
   hr {
@@ -213,15 +195,6 @@
     margin: 5px 0;
     padding: 0;
   }
-  input[type="range"] {
-    grid-column: 3 / span 2;
-    width: 80%;
-    justify-self: center;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0;
-  }
-
   input[type="number"] {
     width: 3em;
     text-align: center;

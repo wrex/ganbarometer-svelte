@@ -1,64 +1,42 @@
 <script type= "ts">
-  import { validate } from './validation';
-  import Errors from './Errors.svelte';
-  import { onMount } from 'svelte';
+  import RangeSlider from "./RangeSlider.svelte";
 
   export let values;
-  export let result;
 
-  const validateField = path => () => {
-    result = validate(values, path);
-  } 
-
-  onMount(() => {
-    result = validate(values);
-  });
+  let range_values = [values.rpdMin, values.rpdMax];
+  $: [values.rpdMin, values.rpdMax] = range_values;
 </script>
 
-<div class="settingsComp">
+<div class="gbSettingsComp">
 
-  <h4>Target Reviews-per-day</h4>
-  <input 
-    id="rpdMin" 
-    type="range"
-    min={10}
-    max={290}
-    step={10}
-    bind:value={values.rpdMin}
-    on:change={validateField("rpdMin")}>
-  <label for="rpdTarget">{values.rpdMin} reviews min</label>
-  <Errors bind:result path="rpdMin" />
-
-  <input 
-    id="rpdMax" 
-    type="range"
-    min={20}
+  <h4>Target range</h4>
+  <RangeSlider 
+    id="rpdRange" 
+    range
+    pushy
+    float
+    min={1}
     max={300}
-    step={10}
-    bind:value={values.rpdMax}
-    on:change={validateField("rpdMax")}>
-  <label for="rpdTarget">{values.rpdMax} reviews max</label>
-  <Errors bind:result path="rpdMax" />
+    bind:values={range_values} />
+  <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} reviews/day</div>
+
 </div>
         
 <style>
+
+:global(#rpdRange),
+  .rangeLabel {
+    grid-column: 3 / span 3;
+    width: 100%;
+    margin: 0;
+    align-self: center;
+    text-align: center;
+  }
   h4 {
     font-size: small;
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
-  }
-
-  label {
-    grid-column: 5 / span 2;
-    margin: 0;
-  }
-  input[type="range"] {
-    grid-column: 3 / span 2;
-    width: 100%;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0;
   }
 
 </style>
