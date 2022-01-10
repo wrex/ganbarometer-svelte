@@ -8,6 +8,8 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { SETTINGSKEY } from "../store/stores";
 
+let speedNav, appearanceNav, advancedNav;
+
 const renderIt = () => {
   render(SettingsForm, {
     modal: {
@@ -16,12 +18,15 @@ const renderIt = () => {
       },
     },
   });
+  speedNav = screen.getByRole("listitem", {
+    name: "Speed/Reviews",
+  });
 };
 
 describe("Settings Form", () => {
   describe("layout", () => {
-    renderIt();
     it("has a button to save settings", () => {
+      renderIt();
       const button = screen.getByRole("button", {
         name: /save/i,
       });
@@ -33,6 +38,20 @@ describe("Settings Form", () => {
         name: /default/i,
       });
       expect(button).toBeInTheDocument();
+    });
+
+    test.each`
+      inputText
+      ${"Ganbarometer"}
+      ${"Speed/Reviews"}
+      ${"Appearance"}
+      ${"Advanced"}
+    `("renders a menu link for '$inputText'", ({ inputText }) => {
+      renderIt();
+      const elem = screen.getByRole("listitem", {
+        name: new RegExp(inputText, "i"),
+      });
+      expect(elem).toBeInTheDocument();
     });
 
     // ${"bgnd"}
@@ -53,8 +72,7 @@ describe("Settings Form", () => {
     describe("renders Ganbarometer Settings by default", () => {
       test.each`
         inputText
-        ${"target minimum"}
-        ${"target maximum"}
+        ${"target range"}
       `("renders an input element for '$inputText'", ({ inputText }) => {
         renderIt();
         const elem = screen.getByRole("heading", {
@@ -63,11 +81,27 @@ describe("Settings Form", () => {
         expect(elem).toBeInTheDocument();
       });
 
+      it("Uses the default ganbarometer range", () => {
+        renderIt();
+        const elem = screen.getByTestId("gbRangeLabel");
+        expect(elem.innerHTML).toEqual("130 – 170");
+      });
+
       test.each`
         inputText
         ${"below"}
         ${"in range"}
         ${"above"}
+        ${"Radical1-2 Weight"}
+        ${"Radical1-2 Quiz"}
+        ${"Kanji1-2 Weight"}
+        ${"Kanji1-2 Quiz"}
+        ${"Vocab1-2 Weight"}
+        ${"Vocab1-2 Quiz"}
+        ${"Appr3-4"}
+        ${"Guru"}
+        ${"Master"}
+        ${"Enlightened"}
       `("renders an input element for '$inputText'", ({ inputText }) => {
         renderIt();
         const elem = screen.getByRole("columnheader", {
@@ -86,6 +120,22 @@ describe("Settings Form", () => {
         renderIt();
         const quiz = screen.getByText("Quiz?");
         expect(quiz).toBeInTheDocument();
+      });
+    });
+
+    describe("Renders the Speed/Reviews dialog when clicked", () => {
+      test.only.each`
+        inputText
+        ${"Reviews to examine"}
+        ${"Target answer speed"}
+        ${"Target daily load"}
+      `("has a slider for '$inputText'", async ({ inputText }) => {
+        renderIt();
+        userEvent.click(speedNav);
+        const elem = await screen.findByRole("heading", {
+          name: new RegExp(inputText, "i"),
+        });
+        expect(elem).toBeInTheDocument();
       });
     });
   });

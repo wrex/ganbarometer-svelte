@@ -1,5 +1,5 @@
-<script type= "ts">
-  import RangeSlider from "svelte-range-slider-pips";
+<script lang= "ts">
+  import RangeSlider from "./RangeSlider.svelte";
 
   export let values;
 
@@ -18,7 +18,7 @@
     max={300}
     step={5}
     bind:values={range_values} />
-  <div class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
+  <div data-testid="gbRangeLabel" class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
 
   <hr>
 
@@ -63,7 +63,7 @@
     </thead>
     <tbody>
       <tr>
-        <th class="secondary right-align col2">Radical1-2</th>
+        <th aria-label="Radical1-2 Weight" class="secondary right-align col2">Radical1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -83,7 +83,7 @@
         ></td>
       </tr>
       <tr>
-        <th class="secondary right-align col2">Kanji1-2</th>
+        <th aria-label="Kanji1-2 Weight" class="secondary right-align col2">Kanji1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -103,7 +103,7 @@
         ></td>
       </tr>
       <tr>
-        <th class="secondary right-align col2">Vocab1-2</th>
+        <th aria-label="Vocab1-2 Weight" class="secondary right-align col2">Vocab1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -144,9 +144,9 @@
     <thead>
       <tr>
         <td></td>
-        <th class="secondary center col3">Radical1-2</th>
-        <th class="secondary center">Kanji1-2</th>
-        <th class="secondary center">Vocab1-2</th>
+        <th aria-label="Radical1-2 Quiz" class="secondary center col3">Radical1-2</th>
+        <th aria-label="Kanji1-2 Quiz" class="secondary center">Kanji1-2</th>
+        <th aria-label="Vocab1-2 Quiz" class="secondary center">Vocab1-2</th>
       </tr>
     </thead>
     <tbody>

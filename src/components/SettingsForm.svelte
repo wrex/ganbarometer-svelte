@@ -1,6 +1,5 @@
 <script lang="ts">
   import GanbarometerSettings from "./GanbarometerSettings.svelte";
-  import SpeedSettings from "./SpeedSettings.svelte";
   import ReviewSettings from "./ReviewSettings.svelte";
   import AppearanceSettings from "./AppearanceSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
@@ -32,10 +31,10 @@
   <h1 class="title">Ganbarometer Settings</h1>
   <div class="menu">
     <nav class="nav">
-        <li on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
-        <li on:click={switchTo("Reviews")} class:active={current === "Reviews"}>Speed/Reviews</li>
-        <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
-        <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
+        <li aria-label="Ganbarometer" on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
+        <li aria-label="Speed/Reviews" on:click={switchTo("Reviews")} class:active={current === "Reviews"}>Speed/Reviews</li>
+        <li aria-label="Appearance" on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
+        <li aria-label="Advanced" on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
 
     <div class="actions">
