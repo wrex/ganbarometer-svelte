@@ -18,7 +18,7 @@
   import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
 
-  import { gbSettings, display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
+  import { gbSettings, display, sessionSummaries, reviewCounts } from '../store/stores';
 
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
@@ -43,9 +43,7 @@
     loading = false;
   };
 
-  $: updateSummaries($daysToReview[0]);
-
-  $: suffix = $daysToReview[0] > 1 ? " days" : " day";
+  $: updateSummaries($gbSettings.daysToReview);
 
   let ssQuizPresent = false;
   wkof.wait_state('ss_quiz', 'ready').then(() => {
@@ -95,10 +93,6 @@
     </div>
   {/if}
 
-  <div class="dayRange" data-testid="daySlider">
-    <RangeSlider bind:values={$daysToReview} float pips {suffix} min={1} max={7} />
-  </div>
-
   <div class="action-buttons">
     {#if ssQuizPresent}
       <QuizButton on:click={ssQuizLauncher} />
@@ -118,15 +112,6 @@
 </Modal>
 
 <style>
-.dayRange {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  z-index: 0; /* prevent range-slider thumb from sliding over the main nav */
-}
-:global(.rangeSlider) {
-  width: 7em;
-}
 .gbwidgets {
     display: flex;
     flex-wrap: wrap;

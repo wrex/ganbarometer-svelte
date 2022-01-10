@@ -2,12 +2,11 @@ import { writable } from "svelte/store";
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
-const VERSION = "4.0.3"; // Increment whenever incompatible changes made to stuff in localstorage
+const VERSION = "4.0.4"; // Increment whenever incompatible changes made to stuff in localstorage
 
 export const display = writable("chart");
 
 const defaults = {
-  daysToReview: [4],
   srsCounts: {
     expectedDaily: 0,
     new: {
@@ -31,6 +30,7 @@ const defaults = {
   reviewCounts: [],
   gbSettings: {
     version: VERSION,
+    daysToReview: 4,
     position: "Top",
     bgColor: "#f4f4f4",
     trackColor: "#e0e0e0",
@@ -63,14 +63,6 @@ const defaults = {
     vQuiz: false,
   },
 };
-
-const daysToReviewString = localStorage.getItem("daysToReview");
-export const daysToReview = writable(
-  daysToReviewString ? JSON.parse(daysToReviewString) : defaults.daysToReview
-);
-daysToReview.subscribe((val) => {
-  localStorage.setItem("daysToReview", JSON.stringify(val));
-});
 
 // Grr. JSON.stringify() is NOT reversible with JSON.parse()
 // because Dates get turned into strings
@@ -115,7 +107,6 @@ gbSettings.subscribe((val) => {
     localStorage.setItem(SETTINGSKEY, JSON.stringify(val));
   } else {
     gbSettings.set(defaultSettings);
-    daysToReview.set(defaults.daysToReview);
     srsCounts.set(defaults.srsCounts);
     sessionSummaries.set(defaults.sessionSummaries);
     reviewCounts.set(defaults.reviewCounts);

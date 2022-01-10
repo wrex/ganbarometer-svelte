@@ -62,7 +62,7 @@
     </thead>
     <tbody>
       <tr>
-        <th class="secondary right-align col2">Radicals12</th>
+        <th class="secondary right-align col2">Radical1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -71,7 +71,7 @@
           step={0.1}
           bind:value={values.newRWeight}
         ></td>
-        <th class="secondary right-align col4">Appr34</th>
+        <th class="secondary right-align col4">Appr3-4</th>
         <td><input 
           class="col5"
           type="number"
@@ -82,7 +82,7 @@
         ></td>
       </tr>
       <tr>
-        <th class="secondary right-align col2">Kanji12</th>
+        <th class="secondary right-align col2">Kanji1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -102,7 +102,7 @@
         ></td>
       </tr>
       <tr>
-        <th class="secondary right-align col2">Vocabulary12</th>
+        <th class="secondary right-align col2">Vocab1-2</th>
         <td><input 
           class="col3"
           type="number"
@@ -143,9 +143,9 @@
     <thead>
       <tr>
         <td></td>
-        <th class="secondary center col3">Radicals12</th>
-        <th class="secondary center">Kanji12</th>
-        <th class="secondary center">Vocabulary12</th>
+        <th class="secondary center col3">Radical1-2</th>
+        <th class="secondary center">Kanji1-2</th>
+        <th class="secondary center">Vocab1-2</th>
       </tr>
     </thead>
     <tbody>

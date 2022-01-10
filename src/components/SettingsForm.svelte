@@ -31,7 +31,7 @@
     result = validate.get();
   };
 
-  type navState = "Ganbarometer" | "Speed" | "Reviews" | "Appearance" | "Advanced";
+  type navState = "Ganbarometer" | "Reviews" | "Appearance" | "Advanced";
 
   let current: navState = "Ganbarometer";
   const switchTo = (comp: navState) => {
@@ -50,8 +50,7 @@
   <div class="menu">
     <nav class="nav">
         <li on:click={switchTo("Ganbarometer")} class:active={current === "Ganbarometer"}>Ganbarometer</li>
-        <li on:click={switchTo("Speed")} class:active={current === "Speed"}>Speed</li>
-        <li on:click={switchTo("Reviews")} class:active={current === "Reviews"}>Reviews</li>
+        <li on:click={switchTo("Reviews")} class:active={current === "Reviews"}>Speed/Reviews</li>
         <li on:click={switchTo("Appearance")} class:active={current === "Appearance"}>Appearance</li>
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
@@ -70,8 +69,6 @@
   <div class="formInputs">
     {#if current === "Ganbarometer"}
       <GanbarometerSettings {values} />
-    {:else if current === "Speed"}
-      <SpeedSettings {values} />
     {:else if current === "Reviews"}
       <ReviewSettings {values} />
     {:else if current === "Appearance"}
