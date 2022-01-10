@@ -198,6 +198,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding-block: 6px;
     color: var(--textColor);
     border-bottom: 2px solid #eeeeee;
     border-top-left-radius: 5px;
