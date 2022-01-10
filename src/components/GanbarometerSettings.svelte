@@ -14,8 +14,9 @@
     range
     pushy
     float
-    min={1}
+    min={5}
     max={300}
+    step={5}
     bind:values={range_values} />
   <div class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
 

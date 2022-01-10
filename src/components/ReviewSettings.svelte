@@ -48,8 +48,9 @@
     range
     pushy
     float
-    min={1}
+    min={2}
     max={300}
+    step={2}
     bind:values={rpdValues} />
   <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} reviews/day</div>
 
