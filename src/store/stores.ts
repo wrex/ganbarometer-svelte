@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
-const VERSION = "4.0.4"; // Increment whenever incompatible changes made to stuff in localstorage
+const VERSION = "4.0.5"; // Increment whenever incompatible changes made to stuff in localstorage
 
 export const display = writable("chart");
 
@@ -51,7 +51,6 @@ const defaults = {
     guruWeight: 0.1,
     masterWeight: 0,
     enlightenedWeight: 0,
-    targetQPM: 8.5,
     minQPM: 7.0,
     maxQPM: 10.0,
     madCutoff: 10.0,

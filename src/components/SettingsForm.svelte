@@ -5,30 +5,18 @@
   import AppearanceSettings from "./AppearanceSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import { defaultSettings, gbSettings } from '../store/stores';
-  import { onDestroy } from "svelte";
-
-  import { validate } from './validation';
 
   export let modal;
 
   let values = {...$gbSettings};
 
-  let result = validate.get(); // initialize empty validation state
-
   const submit = () => {
-    result = validate(values);
-    if (result.hasErrors()) {
-      // flatten all errors messages to one array 
-      return; 
-    }
     $gbSettings = {...$gbSettings, ...values};
     modal.hide();
   }
 
   const setDefaults = () => { 
     values = { ...defaultSettings };
-    validate.reset();
-    result = validate.get();
   };
 
   type navState = "Ganbarometer" | "Reviews" | "Appearance" | "Advanced";
@@ -38,11 +26,6 @@
     return () => current = comp;
   };
 
-  $: disabled = result.hasErrors();
-
-  onDestroy(() => {
-    validate.reset();
-  })
 </script>
 
 <form on:submit|preventDefault={submit} aria-label="Settings Form" class="settingsForm">
@@ -55,15 +38,9 @@
         <li on:click={switchTo("Advanced")} class:active={current === "Advanced"}>Advanced</li>
     </nav>
 
-    {#if result.hasErrors()}
-      <div class="validation-errors">
-        {result.errorCount} validation error{result.errorCount > 1 ? "s" : ""}
-      </div>
-    {/if}
-
     <div class="actions">
       <button on:click|preventDefault={setDefaults} class="defaultButton">Defaults</button>
-      <button type="submit" {disabled}>Save</button>
+      <button type="submit">Save</button>
     </div>
   </div>
   <div class="formInputs">
@@ -212,11 +189,4 @@ button:disabled {
 .defaultButton:hover {
   outline: 4px solid #4b3f1b;
 }
-
-.validation-errors {
-  color: red;
-  font-size: x-small;
-  text-align: center;
-}
-
 </style>
