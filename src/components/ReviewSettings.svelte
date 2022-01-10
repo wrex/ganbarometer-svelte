@@ -1,5 +1,5 @@
 <script type= "ts">
-  import RangeSlider from "./RangeSlider.svelte";
+  import RangeSlider from "svelte-range-slider-pips";
 
   export let values;
 
@@ -50,7 +50,6 @@
     float
     min={2}
     max={300}
-    step={2}
     bind:values={rpdValues} />
   <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} reviews/day</div>
 

@@ -6,7 +6,6 @@
 </script>
 
 <script type="ts">
-  import RangeSlider from "./RangeSlider.svelte";
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";

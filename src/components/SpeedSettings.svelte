@@ -1,5 +1,5 @@
 <script lang= "ts">
-  import RangeSlider from "./RangeSlider.svelte";
+  import RangeSlider from "svelte-range-slider-pips";
 
   export let values;
 
