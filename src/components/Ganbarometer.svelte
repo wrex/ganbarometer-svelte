@@ -2,7 +2,7 @@
   declare var ss_quiz: any;
   declare var wkof: any;
 
-  let modal;
+  let settingsModal, helpModal;
 </script>
 
 <script type="ts">
@@ -13,6 +13,7 @@
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
+  import Help from './Help.svelte';
 
   import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
@@ -84,6 +85,7 @@
   <nav class="chart-data-nav">
     <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
+    <li on:click|preventDefault="{() => helpModal.show()}">Help</li>
   </nav>
 
   {#if loading}
@@ -96,7 +98,7 @@
     {#if ssQuizPresent}
       <QuizButton on:click={ssQuizLauncher} />
     {/if}
-    <SettingsButton on:click="{() => modal.show()}" />
+    <SettingsButton on:click="{() => settingsModal.show()}" />
   </div>
 </div>
 
@@ -106,8 +108,12 @@
   <ReviewsWidget />
 </div>
   
-<Modal bind:this={modal} >
-  <SettingsForm {modal} />
+<Modal bind:this={settingsModal} >
+  <SettingsForm modal={settingsModal} />
+</Modal>
+
+<Modal bind:this={helpModal} >
+  <Help />
 </Modal>
 
 <style>

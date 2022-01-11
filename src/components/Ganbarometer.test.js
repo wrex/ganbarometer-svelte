@@ -49,6 +49,13 @@ describe("Ganbarometer layout", () => {
     expect(element).toBeInTheDocument();
   });
 
+  it("has a nave for showing help", () => {
+    render(Ganbarometer);
+    const navbar = screen.getByRole("navigation");
+    const element = within(navbar).getByText("Help");
+    expect(element).toBeInTheDocument();
+  });
+
   it("has a button to change the settings", () => {
     render(Ganbarometer);
     const button = screen.getByRole("button", { name: "settings" });
@@ -110,5 +117,16 @@ describe("Interaction", () => {
       name: /0 reviews @nan%/i,
     });
     expect(accuracyHeading).toBeInTheDocument();
+  });
+
+  it("Displays the help screen when Help is clicked", async () => {
+    mockReviewCollection([]);
+    render(Ganbarometer);
+    const navbar = screen.getByRole("navigation");
+    const helpNav = within(navbar).getByText("Help");
+    await userEvent.click(helpNav);
+
+    const helpWindow = screen.getByTestId("help-window");
+    expect(helpWindow).toBeInTheDocument();
   });
 });
