@@ -65,6 +65,8 @@ export const parseSessions = (reviews: Review[]): Session[] => {
     return [];
   }
 
+  const median_duration = median(reviews.map((r) => r.duration));
+
   // Find the indices of reviews with long durations (indicating the end of a
   // session)
   const session_ends = findSessionEnds(reviews);
@@ -82,6 +84,11 @@ export const parseSessions = (reviews: Review[]): Session[] => {
     return {
       reviews: reviews.slice(session_starts[i], end + 1),
     };
+  });
+
+  // Force the duration of the last review in each session to the overall median
+  sessionSlices.forEach((sess) => {
+    sess.reviews[sess.reviews.length - 1].duration = median_duration;
   });
 
   // Finally, flesh out the rest of the session object
