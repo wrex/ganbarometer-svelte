@@ -19,9 +19,9 @@
     pushy
     float
     min={1}
-    max={30}
+    max={60}
     bind:values={range_values} />
-  <div class="rangeLabel">{values.minQPM} &ndash; {values.maxQPM} questions/minute</div>
+  <div class="rangeLabel">{values.minQPM} &ndash; {values.maxQPM} qpm</div>
 
 </div>
 

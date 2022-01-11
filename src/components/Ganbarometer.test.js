@@ -102,7 +102,7 @@ describe("Interaction", () => {
     expect(gbTableHeading).toBeInTheDocument();
 
     const speedHeading = screen.getByRole("heading", {
-      name: /speed: 0\.0 s\/q • infinity q\/m/i,
+      name: /speed: 0\.0 spq • infinity qpm/i,
     });
     expect(speedHeading).toBeInTheDocument();
 

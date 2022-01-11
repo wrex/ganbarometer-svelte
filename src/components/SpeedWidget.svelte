@@ -44,9 +44,9 @@
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
     <Gauge value={gauge_value} label={gauge_label} needle lowZone hiZone />
-    <div class="units">questions/min</div>
+    <div class="units">qpm</div>
   {:else}
-    <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} s/q • {qPerMinute.toFixed(1)} q/m</h1>
+    <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} spq • {qPerMinute.toFixed(1)} qpm</h1>
     <div data-testid="speed-table" in:fade>
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
@@ -55,8 +55,8 @@
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
             ({(durationS(summary) / 60).toFixed()}m)</h5>
             <p>{summary.reviewCount} items • {summary.questionCount} questions •
-            {spq(durationS(summary), summary.questionCount)} s/q •
-            {qpm(durationS(summary), summary.questionCount)} q/m<br>
+            {spq(durationS(summary), summary.questionCount)} spq •
+            {qpm(durationS(summary), summary.questionCount)} qpm<br>
             {summary.correctAnswerCount}/{summary.questionCount} =
             {percentCorrect(summary)}% correct </p>
           </article>

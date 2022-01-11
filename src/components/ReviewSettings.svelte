@@ -38,7 +38,7 @@
     min={1}
     max={30}
     bind:values={speedValues} />
-  <div class="rangeLabel">{values.minQPM} &ndash; {values.maxQPM} questions/minute</div>
+  <div class="rangeLabel">{values.minQPM} &ndash; {values.maxQPM} qpm</div>
   
   <hr>
 
@@ -51,7 +51,7 @@
     min={2}
     max={300}
     bind:values={rpdValues} />
-  <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} reviews/day</div>
+  <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} rpd</div>
 
 </div>
         
