@@ -96,7 +96,6 @@ describe("Interaction", () => {
     const dataNav = within(navbar).getByText("Data");
     await userEvent.click(dataNav);
 
-    screen.logTestingPlaygroundURL();
     const gbTableHeading = screen.getByRole("heading", {
       name: /ganbarometer: -0.50/i,
     });
