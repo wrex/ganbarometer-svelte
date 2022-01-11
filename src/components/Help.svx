@@ -1,0 +1,70 @@
+<div class="helpWindow" data-testid="help-window">
+
+  ## This is the help screen
+
+  I'm thinking this should just be **markdown**. Will be ~~happy~~ overjoyed if
+  this works. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+  officiis praesentium accusantium laborum amet aut eligendi corporis autem
+  soluta. Modi nemo molestiae aliquid iusto quaerat esse neque. Ea, iure ipsum?
+
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
+  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
+  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
+  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
+  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
+  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
+  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
+  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
+  ipsum earum doloribus animi expedita.
+
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
+  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
+  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
+  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
+  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
+  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
+  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
+  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
+  ipsum earum doloribus animi expedita.
+
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
+  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
+  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
+  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
+  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
+  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
+  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
+  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
+  ipsum earum doloribus animi expedita.
+
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
+  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
+  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
+  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
+  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
+  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
+  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
+  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
+  ipsum earum doloribus animi expedita.
+
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
+  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
+  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
+  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
+  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
+  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
+  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
+  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
+  ipsum earum doloribus animi expedita.
+
+
+</div>
+
+<style>
+  .helpWindow {
+    width: 50vw;
+    max-height: 80vh;
+    padding: 2rem;
+    overflow-y: scroll;
+  }
+</style>

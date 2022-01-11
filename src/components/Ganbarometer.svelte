@@ -13,7 +13,7 @@
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
-  import Help from './Help.svelte';
+  import Help from './Help.svx';
 
   import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 

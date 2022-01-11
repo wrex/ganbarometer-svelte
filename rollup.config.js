@@ -7,6 +7,7 @@ import svelte from "rollup-plugin-svelte";
 import css from "rollup-plugin-css-only";
 import sveltePreprocess from "svelte-preprocess";
 import MagicString from "magic-string";
+import { mdsvex } from "mdsvex";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -20,9 +21,13 @@ export default {
   },
   plugins: [
     svelte({
-      preprocess: sveltePreprocess({
-        sourceMap: !production,
-      }),
+      extensions: [".svelte", ".svx"],
+      preprocess: [
+        mdsvex(),
+        sveltePreprocess({
+          sourceMap: !production,
+        }),
+      ],
       compilerOptions: {
         dev: !production,
       },
