@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { SETTINGSKEY } from "../store/stores";
 
-let speedNav, appearanceNav, advancedNav;
+let gbNav, speedNav, appearanceNav, advancedNav;
 
 const renderIt = () => {
   render(SettingsForm, {
@@ -18,8 +18,17 @@ const renderIt = () => {
       },
     },
   });
+  gbNav = screen.getByRole("listitem", {
+    name: "Ganbarometer",
+  });
   speedNav = screen.getByRole("listitem", {
     name: "Speed/Reviews",
+  });
+  appearanceNav = screen.getByRole("listitem", {
+    name: "Appearance",
+  });
+  advancedNav = screen.getByRole("listitem", {
+    name: "Advanced",
   });
 };
 
@@ -53,21 +62,6 @@ describe("Settings Form", () => {
       });
       expect(elem).toBeInTheDocument();
     });
-
-    // ${"bgnd"}
-    // ${"track"}
-    // ${"text"}
-    // ${"hltext"}
-    // ${"fill"}
-    // ${"warn"}
-    // ${"hltrack"}
-    // ${"number of apprentice"}
-
-    // ${"new kanji"}
-    // ${"new vocab"}
-    // ${"target speed"}
-    // ${"MAD cutoff"}
-    // ${"target reviews-per"}
 
     describe("renders Ganbarometer Settings by default", () => {
       test.each`
@@ -123,41 +117,99 @@ describe("Settings Form", () => {
       });
     });
 
-    describe("Renders the Speed/Reviews dialog when clicked", () => {
-      test.only.each`
-        inputText
-        ${"Reviews to examine"}
-        ${"Target answer speed"}
-        ${"Target daily load"}
-      `("has a slider for '$inputText'", async ({ inputText }) => {
-        renderIt();
-        userEvent.click(speedNav);
-        const elem = await screen.findByRole("heading", {
-          name: new RegExp(inputText, "i"),
-        });
-        expect(elem).toBeInTheDocument();
+    it("Does not render the other dialogs before clicking", () => {
+      renderIt();
+      const rte = screen.queryByRole("heading", {
+        name: /reviews to examine/i,
       });
+      const mad = screen.queryByRole("heading", {
+        name: /MAD cutoff/i,
+      });
+      const sample = screen.queryByTestId("colorSample");
+      expect(rte).not.toBeInTheDocument();
+      expect(mad).not.toBeInTheDocument();
+      expect(sample).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Renders the Speed/Reviews dialog when clicked", () => {
+    test.each`
+      inputText
+      ${"Reviews to examine"}
+      ${"Target answer speed"}
+      ${"Target daily load"}
+    `("has a slider for '$inputText'", async ({ inputText }) => {
+      renderIt();
+      userEvent.click(speedNav);
+      const elem = await screen.findByRole("heading", {
+        name: new RegExp(inputText, "i"),
+      });
+      expect(elem).toBeInTheDocument();
+    });
+  });
+
+  describe("Renders the Appearance dialog when clicked", () => {
+    it("Displays a color sample", async () => {
+      renderIt();
+      userEvent.click(appearanceNav);
+      const sample = await screen.findByTestId("colorSample");
+      expect(sample).toBeInTheDocument();
+    });
+
+    it("Has buttons for light/dark themes", async () => {
+      renderIt();
+      userEvent.click(appearanceNav);
+      const light = await screen.findByRole("button", {
+        name: /light theme/i,
+      });
+      const dark = await screen.findByRole("button", {
+        name: /light theme/i,
+      });
+      expect(light).toBeInTheDocument();
+      expect(dark).toBeInTheDocument();
+    });
+
+    test.each`
+      inputRE
+      ${"bgnd"}
+      ${"^track"}
+      ${"hltrack"}
+      ${"^text"}
+      ${"hltext"}
+      ${"fill"}
+      ${"^warn$"}
+    `("Has color pickers for '$inputRE' override", async ({ inputRE }) => {
+      renderIt();
+      userEvent.click(appearanceNav);
+      await screen.findByTestId("colorSample");
+      const elem = screen.getByText(new RegExp(inputRE, "i"));
+      expect(elem).toBeInTheDocument();
+    });
+  });
+
+  describe("Renders the Advanced dialog when clicked", () => {
+    test.each`
+      inputText
+      ${"MAD cutoff"}
+    `("has a slider for '$inputText'", async ({ inputText }) => {
+      renderIt();
+      userEvent.click(advancedNav);
+      const elem = await screen.findByRole("heading", {
+        name: new RegExp(inputText, "i"),
+      });
+      expect(elem).toBeInTheDocument();
     });
   });
 
   describe("interaction", () => {
-    let inputs;
+    let belowInput;
     let saveButton;
 
     // Setup a form with valid input values, and grab the inputs
     const setup = () => {
-      const { debug } = renderIt();
-
-      inputs = {
-        // retrieveDays: screen.getByLabelText(/days to retrieve/i),
-        reviewsPer: screen.getByLabelText(/target reviews-per/i),
-        apprenticeItems: screen.getByLabelText(/number of apprentice/i),
-        newRWeight: screen.getByLabelText(/new radical/i),
-        newKWeight: screen.getByLabelText(/new kanji/i),
-        newVWeight: screen.getByLabelText(/new vocab/i),
-      };
-
-      saveButton = screen.getByRole("button", { name: /save/i });
+      renderIt();
+      (belowInput = screen.getByTestId("belowInput")),
+        (saveButton = screen.getByRole("button", { name: /save/i }));
     };
 
     describe("settings in localstorage", () => {
@@ -166,77 +218,16 @@ describe("Settings Form", () => {
         localStorage.removeItem(SETTINGSKEY);
       });
 
-      xit("stores values to localstorage", async () => {
+      it("stores values to localstorage", async () => {
         setup();
-        userEvent.clear(inputs.newKWeight);
-        userEvent.type(inputs.newKWeight, "2.5");
+        userEvent.clear(belowInput);
+        userEvent.type(belowInput, "Hi Mom");
         userEvent.click(saveButton);
         await waitFor(() => {
-          const stored = JSON.parse(localStorage.getItem(SETTINGSKEY));
-          expect(stored).toEqual("2.5");
+          const stored = JSON.parse(localStorage.getItem("gbSettings"));
+          expect(stored.belowTerm).toEqual("Hi Mom");
         });
       });
-
-      test.skip.each`
-        input           | value
-        ${"newKWeight"} | ${"2.5"}
-      `("$input stores $value to localstorage", async ({ input, value }) => {
-        setup();
-        userEvent.clear(inputs[input]);
-        userEvent.type(inputs[input], value);
-        userEvent.click(saveButton);
-        await waitFor(() => {
-          const stored = JSON.parse(localStorage.getItem(SETTINGSKEY));
-          console.log(stored);
-          expect(stored[input]).toEqual(value);
-        });
-      });
-    });
-
-    // ${"retrieveDays"}     | ${"dog"}   | ${"must be a number"}
-    // ${"retrieveDays"}     | ${"-1"}    | ${"between 1 and 7"}
-    // ${"retrieveDays"}     | ${"0"}     | ${"between 1 and 7"}
-    // ${"retrieveDays"}     | ${"8"}     | ${"between 1 and 7"}
-
-    describe("Text and number input field validations", () => {
-      test.skip.each`
-        input                 | inputValue | errorMsg
-        ${"reviewsPer"}       | ${"dog"}   | ${"must be a number"}
-        ${"reviewsPer"}       | ${"-1"}    | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"0"}     | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"9"}     | ${"between 10 and 500"}
-        ${"reviewsPer"}       | ${"501"}   | ${"between 10 and 500"}
-        ${"apprenticeItems"}  | ${"dog"}   | ${"must be a number"}
-        ${"apprenticeItems"}  | ${"-1"}    | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"0"}     | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"9"}     | ${"between 10 and 300"}
-        ${"apprenticeItems"}  | ${"301"}   | ${"between 10 and 300"}
-        ${"acceptableMisses"} | ${"dog"}   | ${"must be a number"}
-        ${"acceptableMisses"} | ${"-1"}    | ${"between 0 and 30"}
-        ${"acceptableMisses"} | ${"31"}    | ${"between 0 and 30"}
-        ${"newKanjiWeight"}   | ${"dog"}   | ${"must be a number"}
-        ${"newKanjiWeight"}   | ${"-1"}    | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"0"}     | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"1"}     | ${"between 0.01 and 0.1"}
-        ${"newKanjiWeight"}   | ${"0.11"}  | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"dog"}   | ${"must be a number"}
-        ${"excessMissWeight"} | ${"-1"}    | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"0"}     | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"1"}     | ${"between 0.01 and 0.1"}
-        ${"excessMissWeight"} | ${"0.11"}  | ${"between 0.01 and 0.1"}
-      `(
-        "$input reports '$errorMsg' for '$inputValue'",
-        async ({ input, inputValue, errorMsg }) => {
-          setup();
-          await userEvent.clear(inputs[input]);
-          if (inputValue !== "") {
-            await userEvent.type(inputs[input], inputValue);
-          }
-          await userEvent.click(saveButton);
-          const errMessage = await screen.findByText(new RegExp(errorMsg, "i"));
-          expect(errMessage).toBeInTheDocument();
-        }
-      );
     });
   });
 });

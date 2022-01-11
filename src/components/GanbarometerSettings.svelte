@@ -28,14 +28,17 @@
         <th class="col2">Labels</th>
         <td><input 
           type="text" 
+          data-testid="belowInput"
           bind:value={values.belowTerm}
         ></td>
         <td><input 
           type="text" 
+          data-testid="inRangeInput"
           bind:value={values.inRangeTerm}
         ></td>
         <td><input 
           type="text" 
+          data-testid="aboveInput"
           bind:value={values.aboveTerm}
         ></td>
       </tr>

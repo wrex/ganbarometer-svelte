@@ -25,7 +25,7 @@
 </script>
 
 <div class="gbSettingsComp">
-  <div class="colorSample" style={` 
+  <div data-testid="colorSample" class="colorSample" style={` 
       background-color: ${values.bgColor};
       --bgColor: ${values.bgColor}; 
       --trackColor: ${values.hlTrackColor}; 
@@ -48,7 +48,7 @@
   </div>
 
   <button class="light" on:click|preventDefault={setLightTheme}>Light theme</button>
-  <button class="dark" on:click|preventDefault={setDarkTheme}>Dark Theme</button>
+  <button class="dark" on:click|preventDefault={setDarkTheme}>Dark theme</button>
     
   <h3>Individual overrides</h3>
   <div class="colorInputs">
