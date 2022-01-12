@@ -194,7 +194,7 @@
   .spinner {
     margin-inline: 0.5em;
     position: absolute;
-    left: 37em;
+    left: 39em;
   }
 
   .controls {
