@@ -46,6 +46,7 @@
           bind:value={values.aboveTerm}
         ></td>
       </tr>
+      <div class="infoIcon" data-testid="gbLabelInfo"><Info type="gbLabel" /></div>
     </tbody>
     <thead>
       <tr>
@@ -109,6 +110,7 @@
           bind:value={values.guruWeight}
         ></td>
       </tr>
+      <div class="infoIcon" data-testid="gbWeightInfo"><Info type="gbWeight" /></div>
       <tr>
         <th aria-label="Vocab1-2 Weight" class="secondary right-align col2">Vocab1-2</th>
         <td><input 
@@ -175,6 +177,7 @@
           bind:checked={values.vQuiz}
         ></td>
       </tr>
+      <div class="infoIcon" data-testid="gbQuizInfo"><Info type="gbQuiz" /></div>
     </tbody>
   </table>
 

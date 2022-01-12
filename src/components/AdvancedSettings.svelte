@@ -1,5 +1,6 @@
 <script type= "ts">
   import RangeSlider from "./RangeSlider.svelte";
+  import Info from "./Info.svelte";
 
   export let values;
 
@@ -17,6 +18,7 @@
     min={1}
     max={15}
     bind:values={range_value} />
+  <div class="infoIcon" data-testid="madInfo"><Info type="MAD" /></div>
   <div class="rangeLabel">{values.madCutoff}</div>
 
 
@@ -48,6 +50,11 @@
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
+  }
+  .infoIcon {
+    grid-column: 6;
+    justify-self: center;
+    align-self: center;
   }
 </style>
         

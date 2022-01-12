@@ -1,6 +1,7 @@
 <script type= "ts">
   import Gauge from "./Gauge.svelte";
   import BarChart from "./BarChart.svelte";
+  import Info from "./Info.svelte";
   export let values;
 
   const setLightTheme = () => {
@@ -69,6 +70,7 @@
       <input type="color" bind:value={values.hlTextColor}>
     </label>
   </div>
+  <div class="infoIcon" data-testid="colorInfo"><Info type="color" /></div>
   <div class="colorInputs">
     <label>
       Fill
@@ -97,6 +99,7 @@
       <option value="Bottom">Bottom</option>
     </select>
   </div>
+  <div class="infoIcon" data-testid="positionInfo"><Info type="position" /></div>
 
 </div>
 
@@ -215,6 +218,11 @@ button:active {
     transform: scale(0.99);
 }
 /* Button styles end */
-  
+
+.infoIcon {
+    grid-column: 6;
+    justify-self: center;
+    align-self: center;
+}
 
 </style>

@@ -1,5 +1,6 @@
 <script type= "ts">
   import RangeSlider from "./RangeSlider.svelte";
+  import Info from "./Info.svelte";
 
   export let values;
 
@@ -25,6 +26,7 @@
     float 
     min={1} 
     max={7} />
+  <div class="infoIcon" data-testid="retrieveDaysInfo"><Info type="retrieveDays" /></div>
   <div class="rangeLabel">past {values.daysToReview} day{values.daysToReview > 1 ? "s" : ""}</div>
 
   <hr>
@@ -38,6 +40,7 @@
     min={1}
     max={30}
     bind:values={speedValues} />
+  <div class="infoIcon" data-testid="answerSpeedInfo"><Info type="answerSpeed" /></div>
   <div class="rangeLabel">{values.minQPM} &ndash; {values.maxQPM} qpm</div>
   
   <hr>
@@ -51,6 +54,7 @@
     min={2}
     max={300}
     bind:values={rpdValues} />
+  <div class="infoIcon" data-testid="rpdInfo"><Info type="rpd" /></div>
   <div class="rangeLabel">{values.rpdMin} &ndash; {values.rpdMax} rpd</div>
 
 </div>
@@ -77,6 +81,12 @@
   hr {
     grid-column: 1 / span 6;
     margin: 10px;
+  }
+
+  .infoIcon {
+    grid-column: 6;
+    justify-self: center;
+    align-self: center;
   }
 
 </style>
