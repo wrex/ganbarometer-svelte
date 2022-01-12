@@ -88,7 +88,7 @@
   .title {
     background-color: #59c273;
     height: auto;
-    color: white;
+    color: white !important;
     margin: 0;
     text-align: center;
     padding: 0.5em 0;
@@ -100,7 +100,8 @@
     grid-area: menu;
     margin: 0.5em 0 0.5em 0.5em;
     border-radius: 0.5em;
-    background-color: hsl(44.86,46.26%,95%);
+    background-color: hsl(44.86,46.26%,95%) !important;
+    border: 1px solid hsl(44.86,46.26%,35%) !important;
     padding: 1em;
 
     display: flex;
@@ -116,7 +117,7 @@
   }
 
   .nav li {
-    color: hsl(44.86,46.26%,65%);;
+    color: hsl(44.86,46.26%,65%) !important;
     text-decoration: none;
     text-align: center;
     font-size: 20px;
@@ -128,7 +129,7 @@
   }
 
   .nav li.active {
-    color: hsl(44.86,46.26%,20%);
+    color: hsl(44.86,46.26%,20%) !important;
     text-decoration: underline;
     text-underline-offset: 0.2em;
     margin-top: -0.2em;

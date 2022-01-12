@@ -52,7 +52,7 @@
     top: 5%;
     width: auto;
     border-radius: 6px;
-    background: white;
+    background: var(--bgColor);
     border: 2px solid #000;
     filter: drop-shadow(5px 5px 5px #555);
   }
