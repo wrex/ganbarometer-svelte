@@ -1,5 +1,6 @@
 <script lang= "ts">
   import RangeSlider from "./RangeSlider.svelte";
+  import Info from "./Info.svelte";
 
   export let values;
 
@@ -18,6 +19,9 @@
     max={300}
     step={5}
     bind:values={range_values} />
+
+  <div class="infoIcon" data-testid="gbRangeInfo"><Info type="gbRange" /></div>
+
   <div data-testid="gbRangeLabel" class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
 
   <hr>
@@ -209,6 +213,12 @@
     width: 3em;
     text-align: center;
     margin: 0;
+  }
+
+  .infoIcon {
+    grid-column: 6;
+    justify-self: center;
+    align-self: center;
   }
 
 
