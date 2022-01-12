@@ -100,7 +100,7 @@
     grid-area: menu;
     margin: 0.5em 0 0.5em 0.5em;
     border-radius: 0.5em;
-    background-color: hsl(44.86,46.26%,95%) !important;
+    background-color: hsl(44.86,46.26%,85%) !important;
     border: 1px solid hsl(44.86,46.26%,35%) !important;
     padding: 1em;
 
