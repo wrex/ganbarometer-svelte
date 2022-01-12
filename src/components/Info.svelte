@@ -34,6 +34,11 @@
     margin: -2px;
     opacity: 0.6;
   }
+
+  .icon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
   .content{
     padding: 1em;
     width: 20rem;
