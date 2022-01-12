@@ -64,21 +64,35 @@ describe("Settings Form", () => {
     });
 
     describe("renders Ganbarometer Settings by default", () => {
-      test.each`
-        inputText
-        ${"target range"}
-      `("renders an input element for '$inputText'", ({ inputText }) => {
-        renderIt();
-        const elem = screen.getByRole("heading", {
-          name: new RegExp(inputText, "i"),
+      describe("Target range", () => {
+        it("Renders a target range slider", () => {
+          renderIt();
+          const slider = screen.getByRole("heading", {
+            name: /target range/i,
+          });
+          expect(slider).toBeInTheDocument();
         });
-        expect(elem).toBeInTheDocument();
-      });
 
-      it("Uses the default ganbarometer range", () => {
-        renderIt();
-        const elem = screen.getByTestId("gbRangeLabel");
-        expect(elem.innerHTML).toEqual("130 – 170");
+        it("Uses the default ganbarometer range", () => {
+          renderIt();
+          const elem = screen.getByTestId("gbRangeLabel");
+          expect(elem.innerHTML).toEqual("130 – 170");
+        });
+
+        it("Includes an renders an info button", () => {
+          renderIt();
+          const btn = screen.getByTestId("gbRangeInfo");
+          expect(btn).toBeInTheDocument();
+        });
+
+        // This doesn't work. Why not?!!
+        xit("Pulls up the info modal when clicked", async () => {
+          renderIt();
+          const btn = screen.getByTestId("gbRangeInfo");
+          userEvent.click(btn);
+          const elem = await screen.findByText(/this controls/);
+          expect(elem).toBeInTheDocument();
+        });
       });
 
       test.each`
