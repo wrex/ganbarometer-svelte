@@ -184,7 +184,7 @@
 			top:50%;
 			width:0;
 			margin:-1.5em 0 0;
-			background:white;
+			background: var(--bgColor);
 			box-shadow:0 0 0.25em rgba(0,0,0,0.6);
 			font-weight:bold;
 			opacity:0;
