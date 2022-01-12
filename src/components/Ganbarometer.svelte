@@ -240,4 +240,13 @@
     width: 100%;
   }
 
+  :global(#wkof_ds #ss_quiz[data-result="correct"] .answer input) {
+    color: #fff !important;
+    background-color: #8c8 !important;
+  }
+  :global(#wkof_ds #ss_quiz[data-result="incorrect"] .answer input) {
+    color: #fff !important;
+    background-color: #f03 !important;
+  }
+
 </style>
