@@ -1,6 +1,7 @@
 <script lang= "ts">
   import RangeSlider from "./RangeSlider.svelte";
   import Info from "./Info.svelte";
+  import NumberSpinner from "svelte-number-spinner";
 
   export let values;
 
@@ -72,77 +73,70 @@
     <tbody>
       <tr>
         <th aria-label="Radical1-2 Weight" class="secondary right-align col2">Radical1-2</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newRWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.newRWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
         <th class="secondary right-align col4">Appr3-4</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.apprWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.apprWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
       <tr>
         <th aria-label="Kanji1-2 Weight" class="secondary right-align col2">Kanji1-2</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newKWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.newKWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
         <th class="secondary right-align col4">Guru</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.guruWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.guruWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
       <div class="infoIcon" data-testid="gbWeightInfo"><Info type="gbWeight" /></div>
       <tr>
         <th aria-label="Vocab1-2 Weight" class="secondary right-align col2">Vocab1-2</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newVWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.newVWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
         <th class="secondary right-align col4">Master</th>
-        <td><input 
-          class="col4"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.masterWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.masterWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <th class="secondary right-align col4">Enlightened</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.enlightenedWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.enlightenedWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
     </tbody>
   </table>
@@ -205,11 +199,6 @@
     grid-column: 1 / span 6;
     margin: 5px 0;
     padding: 0;
-  }
-  input[type="number"] {
-    width: 3em;
-    text-align: center;
-    margin: 0;
   }
 
   input[type="text"] {
