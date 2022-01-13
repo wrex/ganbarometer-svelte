@@ -4,7 +4,7 @@ import type { SessionSummary, ReviewCount } from "../API/API";
 
 // Keys/indexes into localstorage
 export const SETTINGSKEY = "gbSettings";
-const VERSION = "9.0.5"; // Increment whenever incompatible changes made to stuff in localstorage
+const VERSION = "4.0.8"; // Increment whenever incompatible changes made to stuff in localstorage
 
 export const display = writable("chart");
 
