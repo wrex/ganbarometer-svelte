@@ -88,8 +88,8 @@
 
 
 .gbWidget {
-  --scrollbarBG: var(--trackColor);
-  --thumbBG: var(--fillColor);
+  --scrollbarBG: var(--hlTrackColor);
+  --thumbBG: var(--textColor);
 }
 
 .scrollbox::-webkit-scrollbar {
