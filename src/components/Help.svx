@@ -164,9 +164,9 @@ One additional wrinkle is that "apprentice" items are further segregated into
 the early apprentice stages can also be broken down by type: radical, kanji, or
 vocabulary.
 
-By default, early apprentice radicals only count as 0.75 of a "normal" item
-because they are slightly easier to memorize (they only have a meaning, without
-an additional reading to memorize).
+By default, early apprentice radicals only count as 0.6 of a "normal" item
+because they are easier to memorize (they only have a meaning, without
+any additional reading to memorize).
 
 Similarly, by default, early stage vocabulary items count normally (weight: 1.0)
 while early stage _kanji_ count **three times** as heavily (weight: 3.0). This
