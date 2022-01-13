@@ -1,70 +1,354 @@
-<div class="helpWindow" data-testid="help-window">
+<script>
+import Ganbarometer from "./GbWidget.svelte";
+import Speed from "./SpeedWidget.svelte";
+import Reviews from "./ReviewsWidget.svelte";
+import {gbSettings} from "../store/stores";
+</script>
 
-  ## This is the help screen
+<div class="helpWindow" data-testid="help-window" style={` 
+  --bgColor: ${$gbSettings.bgColor}; 
+  --trackColor: ${$gbSettings.hlTrackColor}; 
+  --textColor: ${$gbSettings.textColor}; 
+  --hlTextColor: ${$gbSettings.hlTextColor}; 
+  --fillColor: ${$gbSettings.fillColor}; 
+  --warnColor: ${$gbSettings.warnColor}; 
+  --hlTrackColor: ${$gbSettings.trackColor}; 
+`}>
 
-  I'm thinking this should just be **markdown**. Will be ~~happy~~ overjoyed if
-  this works. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-  officiis praesentium accusantium laborum amet aut eligendi corporis autem
-  soluta. Modi nemo molestiae aliquid iusto quaerat esse neque. Ea, iure ipsum?
+## Overview
 
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
-  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
-  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
-  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
-  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
-  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
-  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
-  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
-  ipsum earum doloribus animi expedita.
+This script displays two dial gauges and a bar chart on your Wanikani dashboard.
+These "widgets" display distilled information from the [Wanikani
+API](https://docs.api.wanikani.com) to help you manage your workload as you
+progress through the levels.
 
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
-  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
-  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
-  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
-  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
-  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
-  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
-  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
-  ipsum earum doloribus animi expedita.
+<div style="display: flex; margin-block: 2ch;">
+  <Ganbarometer /><Speed /><Reviews />
+</div>
 
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
-  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
-  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
-  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
-  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
-  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
-  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
-  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
-  ipsum earum doloribus animi expedita.
+The widgets distill information from two data sources:
 
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
-  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
-  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
-  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
-  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
-  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
-  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
-  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
-  ipsum earum doloribus animi expedita.
+1. Your queue of _assignments_ (upcoming _reviews_ already available or
+scheduled to become available up to 120 days in the future). Each assignment is
+for an item in one of 8 possible SRS stages (stages 1-4 are named the "Apprentice"
+stages, stages 5-6 the "guru" stages, stage 7 the "master" stage, and stage 8 the
+"enlightened" stage).
 
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, in laudantium!
-  Sint aspernatur soluta pariatur accusamus et expedita nemo in officia quae
-  consequuntur. Labore modi vero blanditiis aperiam necessitatibus sed, in animi
-  quidem veritatis quas, odit dolorem ab non quasi accusamus nisi harum vitae
-  nam quibusdam temporibus enim, repellat tenetur quaerat. Laboriosam voluptatum
-  dicta quas atque rem nostrum, eius obcaecati totam, harum magnam nulla iusto
-  odit quam repudiandae! Nisi harum eaque doloribus, deleniti repellendus
-  debitis deserunt ullam sed? Delectus ipsa neque pariatur dolore! Atque itaque
-  ipsum earum doloribus animi expedita.
+2. _Reviews_ you've actually performed over the past few days. Review records
+are created whenever you've answered all questions (meaning and reading)
+correctly for an item. They contain the start time of the review (when the first
+question was displayed) as well as the number of incorrect answers.
+
+These displays help you better understand how well you're meeting your
+goals with respect to effort, speed, and accuracy. For those of us that _haven't_
+yet reached level 60, they especially help you make better decisions regarding
+how many _lessons_ to perform each day.
+
+---
+
+## Navigation
+
+Along the top-left you will see the **Graphs**, **Data**, and **Help** menu items. Since
+you're reading this, you've already discovered what the **Help** menu item does. The
+**Data** menu item replaces the graphical display with a text display of the
+underlying data that the calculated values derive from. **Graphs** returns you to
+the graphical display.
+
+At the top-right you'll see one or possibly two icons. The rightmost icon
+launches the **Settings** dialog. If you've installed the [Self-study
+Quiz](https://community.wanikani.com/t/userscript-self-study-quiz/13191),
+you will also see an icon to launch it pre-configured to quiz you on
+items in SRS stages 1 or 2 (the first half of the "Apprentice" category). 
+
+You can specify in **Settings** whether you want to be quizzed on just one or
+any combination of radicals, kanji, or vocabulary items in the early apprentice
+stages.
+
+---
+
+## The GanbarOmeter
+
+<div style="display: flex; justify-content: center; margin-block:
+2ch;">
+<Ganbarometer />
+</div>
+
+The GanbarOmeter displays a visual indication of the makeup of your assignment
+queue. This display is most useful to users between, say, levels 5 and 55. It
+tries to tell you whether to do _more_ or _fewer_ lessons each day.
+
+<div style="margin: 2rem; font-size: small; opacity: 0.6">Aside: Users on levels
+1-5 should find it relatively easy to do all their lessons every day without
+creating a huge number of reviews for themselves.  Users on advanced levels will
+already know how to manage their workload. In particular, users who've reached
+level 60 will no longer see _any_ new lessons (ignoring the new characters that
+Wanikani adds periodically) — they'll only be performing reviews, not lessons.
+Level-60 users usually still have plenty of assignments for months in the
+future. The display may still prove useful to them, but it won't mean
+speed-up/slow-down on lessons!</div>
+
+### Reading the dial
+
+If you have a lot of items to study, the needle will move toward the
+right (多). If you have fewer assignments, the needle moves to the left (少).
+
+When the needle is within the highlighted area (between the target minimum and
+target maximum values from the **Settings** dialog) the center area displays the
+"Good" marker (良 by default). When it's to the left of the green zone, it
+displays a "more lesson effort required" indication (努力). When it's to the right, it
+says to "take a break" from lessons (休).
+
+### The data view
+
+When you click the **Data** menu item, the GanbarOmeter displays the number of
+assignments in each category of SRS stages, as well as the weighted total after
+performing the complete calculation.
+
+It also displays the GanbarOmeter value numerically (it can vary between -0.5
+and +0.5).
+
+### The calculation
+
+The specific value displayed (from 0 to 100%) depends on the **Settings** a user
+has stored. By default, it uses a variation of this common strategy:
+
+> Try to keep the sum of your apprentice items + 1/10 of guru items below 150.
+
+### Configuring the target range 
+
+In the **Settings** dialog you can specify the desired target value (150 above).
+You specify a target _range_ of values (default: 130 to 170). This is a
+reasonable range for most people, but if you're finding your daily reviews too
+difficult, you might choose to lower the range (perhaps 80 to 120). Ambitious
+users wanting to progress faster might choose to increase the range (at the risk
+of more difficult review sessions and potentially worse accuracy and retention).
+
+### Configuring the weighting
+
+Advanced users may choose to modify how the value is calculated in addition to
+changing the target range.
+
+You accomplish this by assigning "weights" to items in various stages. The
+default settings assign a weight of 0.1 (1/10) to "guru" items per the common
+strategy above, and ignore "master" and "enlightened" items by assigning them a
+weight of 0. A weight of 1 indicates an item should be treated normally, neither
+heavier nor lighter than any other.
+
+One additional wrinkle is that "apprentice" items are further segregated into
+"early apprentice" (stages 1-2) and "late apprentice" (stages 3-4). Further, items in
+the early apprentice stages can also be broken down by type: radical, kanji, or
+vocabulary.
+
+By default, early apprentice radicals only count as 0.75 of a "normal" item
+because they are slightly easier to memorize (they only have a meaning, without
+an additional reading to memorize).
+
+Similarly, by default, early stage vocabulary items count normally (weight: 1.0)
+while early stage _kanji_ count **three times** as heavily (weight: 3.0). This
+is because you won't review vocabulary items until you've already "learned" the
+underlying kanji (i.e. progressed them to guru stages or higher) while
+early-stage kanji are mostly brand new and are much harder to memorize
+(requiring frequent, repeated reviews). 
+
+It can quickly become overwhelming if you have too many early-stage kanji in
+your assignment queue!
+
+
+---
+
+## The Speed gauge
+
+<div style="display: flex; justify-content: center; margin-block: 2ch;">
+<Speed />
+</div>
+
+The **Graphs** view of the speed gauge is _much_ easier to explain. It displays how quickly you
+answered every question on average in units of questions-per-minute (qpm). The
+**Data** view also shows units of seconds-per-question (spq).
+
+
+### Data View
+
+The data view for the **Speed** widget displays _session_ information: the
+number of items (or "subjects") studied in each session, the total number of
+questions asked (both meaning and reading, as well as repeated questions for
+incorrect answers), and the overall accuracy (the percentage of questions
+answered correctly).
+
+A _session_ is defined as a string of consecutive reviews. It's common to do a
+string of reviews in the morning and more in the afternoon or evening. Others
+(like the author) only do their reviews in one marathon session per day.
+
+Unfortunately, the Wanikani API only logs the _start_ time of each review (as
+well as what radical/kanji/vocabulary was reviewed and the number of incorrect
+answers). This means that it's surprisingly difficult to know which reviews
+belong together in a single session: was that 2.3 minute gap between reviews
+because you were thinking hard trying to recall an item, or was it because you
+took a phone call or made a cup of tea?
+
+Worse, review records are only created when all questions (meaning and reading)
+are answered correctly. This means there might be a significant gap between
+starting a review for an item and completing that review: _several questions
+from unrelated items might be asked between the meaning and reading questions
+for the original item!_
+
+This script uses a statistical technique called the [Median Absolute
+Deviation](https://en.wikipedia.org/wiki/Median_absolute_deviation) to determine
+which reviews are part of the same session. Basically, the script determines the
+interval between the start times of each review, and uses the MAD algorithm to
+find "outliers" indicating the start of a new session.
+
+The more reviews there are, the better this algorithm performs at correctly
+finding sessions.
+
+### Note about questions vs. items (speed and accuracy)
+
+This data section displays the speed and accuracy with answering _questions_.
+
+Each radical review record indicates at least one question plus repeated
+questions for each incorrect answer. Kanji and vocabulary reviews involve at
+least _two_ questions (reading and meaning) plus additional questions for each
+incorrect answer.
+
+The total session duration is the time in seconds between the first and last
+reviews in a session. The speed (in seconds-per-question) is that number divided
+by the total number of questions in the session.
+
+The questions-per-minute value is 60 divided by the seconds-per-question value.
+
+Similarly, accuracy is the total number of correct answers in the session
+divided by the total number of questions.
+
+Note that _item_ accuracy (as reported in the Reviews section) is quite
+different. Item accuracy is the ratio of items where all questions (reading and
+meaning) were answered correctly _the first time_ divided by the total number of
+items.
+
+Question accuracy is always a larger percentage than item accuracy.
+
+### Note about the last review in a session
+
+Because the Wanikani API only logs _start_ times of each review, there is no way
+to estimate the duration of the last review in each session. In particular, a
+session with only one review has an indeterminate duration.
+
+Say, for example, you started a review session one morning and 
+
+1. Correctly answered the reading for 大 
+2. Missed the meaning of 小 
+3. Correctly gave the reading for 小 
+4. Correctly supplied the meaning for 大 
+
+Then you were pulled away for some reason and unable to get back to your reviews
+for several hours.
+
+This would create exactly one review record for 大 (no record for 小 would be
+created because both questions haven't been answered correctly yet).
+
+It might be hours or even days before you finish another review, but it wouldn't
+be sensible to say the duration of that review was hours or days.
+
+Instead the script sets the duration of the last review in each session to the
+**median** duration between all review records. The median is a much better
+guess than the average since outlier values (minutes, hours, and days between
+sessions) will be ignored.
+
+This works well in practice as long as dozens or hundreds of reviews are retrieved.
+
+### Settings
+
+The first setting is the how far back (in days) you want to retrieve reviews for
+analysis. This setting is shared with the **Reviews** widget. The minimum value
+is 1 day: all reviews performed since midnight yesterday. The maximum value is
+7: six full days plus any reviews performed today. The default value is 4.
+
+You can also specify your target speed range (from 1 question-per-minute at
+the slow end, to 60 questions per minute or 1 question-per-second for
+stenographers). The default is 7 to 10 questions-per-minute (8.6 seconds per
+question to 6 seconds-per-question).
+
+Finally, there is an advanced setting for the MAD cutoff value (default: 10).
+You should not need to change this, but lower values will likely find more sessions.
+
+---
+
+## Reviews
+
+The **Reviews** widget displays a bar graph of reviews over the retrieval
+interval.
+
+For each day, it displays the total number of reviews performed, as well as the
+percentage of those reviews answered correctly the first time. (See the note
+above about question vs. item accuracy.)
+
+Hovering your mouse pointer over any of the bars will display the number of
+reviews and item accuracy for that day.
+
+The light green area in the background indicates the target range of
+reviews-per-day (rpd) as specified in the **Settings** (default: 120-180 rpd).
+
+The dashed golden line indicate the "expected daily reviews" based on the
+assignment breakdown by SRS stage. It uses exactly the same heuristic as the
+[Expected Daily
+Reviews](https://community.wanikani.com/t/userscript-expected-daily-reviews/29206)
+script.
+
+The "expected daily" heuristic assumes correct answers and an equal probability of
+seeing an item on a given day based on the intervals between SRS stages. An item
+in the "enlightened" stage, has an equal chance of being seen on any of the next
+120 days (since a correctly answered master item gets schedule 120 days in the future).
+
+
+### Data view
+
+The data view is pretty simple. 
+
+It shows the expected daily number of reviews (assuming correct answers and the
+same SRS distribution as discussed above).
+
+It also shows the numeric values and accuracy percentages for each day retrieved.
+
+### Settings
+
+The review gauge uses the same setting for the number of days worth of reviews
+to retrieve.
+
+It also has a setting for the target range of daily review counts (the light
+green section on the graphical display).
+
+---
+
+## Appearance settings
+
+The appearance section of the **Settings** dialog lets you override the colors
+for most of the design elements. Use the sample widgets at the top to evaluate
+your choices.
+
+There is also a setting for where you would like the widgets to appear on your dashboard.
+
 
 
 </div>
 
 <style>
-  .helpWindow {
-    width: 50vw;
-    max-height: 80vh;
-    padding: 2rem;
-    overflow-y: scroll;
-  }
+.helpWindow {
+  width: 50vw;
+  max-height: 80vh;
+  padding: 2rem;
+  overflow-y: scroll;
+}
+
+h2 {
+  margin: 1em 0;
+}
+
+h3 {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  margin: 2em 0 1em;
+}
+
+blockquote {
+  margin-block: 1em;
+}
 </style>
