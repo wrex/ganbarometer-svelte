@@ -151,7 +151,7 @@ describe("parseSessions()", () => {
   });
 
   it("sets the duration of single review sessions to the median", async () => {
-    // median(infinity, 1000, 2000, 3000, 4000, 5000, 30000) === 3500
+    // median(infinity, 2000, 1000, 5000, 4000, 3000, infinity) === 3500
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-01T00:00:00.000Z" } }), // session with single review
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
@@ -159,13 +159,31 @@ describe("parseSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:03.000Z" } }), // 5s duration
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:08.000Z" } }), // 4s duration
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:12.000Z" } }), // 3s duration
-      mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown / infinity
     ]);
     const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(2);
     expect(sessions[0].reviews.length).toBe(1);
     expect(sessions[0].reviews[0].duration).toBe(3500);
+  });
+
+  it("also sets the duration of single review sessions in the middle", async () => {
+    // median(2000, 1000, 5000, infinity, 4000, 3000, infinity) === 3500
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:00.000Z" } }), // 2s duration
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:02.000Z" } }), // 1s duration
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:03.000Z" } }), // 5s duration
+      mockReview({ reviewData: { created_at: "2019-10-02T00:00:08.000Z" } }), // 4s duration
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:00.000Z" } }), // session with single review
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:04.000Z" } }), // 3s duration
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:07.000Z" } }), // unknown / infinity
+    ]);
+    const reviews = await getReviews(7);
+    const sessions = parseSessions(reviews);
+    expect(sessions.length).toBe(3);
+    expect(sessions[1].reviews.length).toBe(1);
+    expect(sessions[1].reviews[0].duration).toBe(3500);
   });
 
   it("only counts one question for radicals", async () => {

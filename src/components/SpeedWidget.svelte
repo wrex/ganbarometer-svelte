@@ -10,8 +10,8 @@
     return (sess.end - sess.start) / 1000;
   };
 
-  let totalDuration: number;
-  $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
+  let totalDuration: number; // seconds
+  $: totalDuration = ($sessionSummaries.reduce((acc, s) => acc += s.duration, 0)) / 1000;
 
   $: secondsPerQ = (totalQuestions > 0)
     ? (totalDuration / totalQuestions)
@@ -53,10 +53,10 @@
         {#each $sessionSummaries.reverse() as summary, i}
           <article>
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
-            ({(durationS(summary) / 60).toFixed()}m)</h5>
+            ({(summary.duration / 60000).toFixed(2)}m)</h5>
             <p>{summary.reviewCount} items • {summary.questionCount} questions •
-            {spq(durationS(summary), summary.questionCount)} spq •
-            {qpm(durationS(summary), summary.questionCount)} qpm<br>
+            {spq(summary.duration / 1000, summary.questionCount)} spq •
+            {qpm(summary.duration / 1000, summary.questionCount)} qpm<br>
             {summary.correctAnswerCount}/{summary.questionCount} =
             {percentCorrect(summary)}% correct </p>
           </article>

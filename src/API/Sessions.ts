@@ -133,6 +133,7 @@ export const findSessSummaries = (reviews: Review[]): Session[] => {
       reviewCount: s.reviews.length,
       questionCount: totalQuestions,
       correctAnswerCount: correctAnswers,
+      duration: s.reviews.reduce((acc, r) => (acc += r.duration), 0),
     };
     summaries.push(summary);
   });

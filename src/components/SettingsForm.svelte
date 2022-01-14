@@ -78,6 +78,7 @@
   .settingsForm {
     margin: 0;
     min-height: 450px;
+    border-radius: 5px;
     display: grid;
     grid-template-columns: 180px 520px;
     grid-template-rows: min-content;
@@ -86,22 +87,22 @@
       "menu formInputs";
   }
   .title {
-    background-color: #59c273;
+    background-color: #ab903f;
     height: auto;
     color: white !important;
     margin: 0;
     text-align: center;
     padding: 0.5em 0;
     grid-area: title;
-    border-radius: 5px 5px 0 0;
+    border-radius: 5px;
   }
 
   .menu {
     grid-area: menu;
-    margin: 0.5em 0 0.5em 0.5em;
-    border-radius: 0.5em;
-    background-color: hsl(44.86,46.26%,85%) !important;
-    border: 1px solid hsl(44.86,46.26%,35%) !important;
+    margin: 0.5em 0 0;
+    border-radius: 5px;
+    background-color: #ab903f !important;
+    border: 1px solid #ab903f !important;
     padding: 1em;
 
     display: flex;
@@ -117,7 +118,7 @@
   }
 
   .nav li {
-    color: hsl(44.86,46.26%,65%) !important;
+    color: #ddcea2 !important;
     text-decoration: none;
     text-align: center;
     font-size: 20px;
@@ -154,21 +155,18 @@
     border-radius: 5px;
     margin: 0;
     text-decoration: none;
-    background: #4b3f1b;
-    color: #ffffff;
+    background-color: #4b3f1b !important;
+    color: #ffffff !important;
     font-family: sans-serif;
     font-size: 1rem;
     line-height: 1;
     cursor: pointer;
     text-align: center;
-    transition: background 250ms ease-in-out, transform 150ms ease;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
 
 button:hover,
 button:focus {
-  outline: 1px solid #fff;
+  outline: 1px solid #fff !important;
   outline-offset: -4px;
 }
 button:disabled {
@@ -179,14 +177,14 @@ button:disabled {
 .defaultButton, 
 .defaultButton:hover,
 .defaultButton:focus  {
-  background-color: transparent;
-  color: #4b3f1b;
-  outline: 2px solid #4b3f1b;
+  background-color: transparent !important;
+  color: #4b3f1b !important;
+  outline: 2px solid #4b3f1b !important;
   outline-offset: -2px;
 }
 
 .defaultButton:focus,
 .defaultButton:hover {
-  outline: 4px solid #4b3f1b;
+  outline: 4px solid #4b3f1b !important;
 }
 </style>
