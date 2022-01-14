@@ -1,6 +1,6 @@
 {
   "name": "ganbarometer-beta",
-  "version": "4.0.8",
+  "version": "4.0.9",
   "description": "The GanbarOmeter (Wanikani dashboard widgets)",
   "author": "Rex Walters -- rw [at] pobox.com",
   "homepage": "https://github.com/wrex/ganbarometer-svelte#readme",
