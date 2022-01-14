@@ -3,7 +3,7 @@
  */
 
 import BarChart from "./BarChart.svelte";
-import { render, screen, fireEvent } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 
 describe("BarChart", () => {
   it("creates a bar-chart table to render", () => {

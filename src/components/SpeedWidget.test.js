@@ -20,10 +20,10 @@ describe("Speed Widget", () => {
     expect(value).toBeInTheDocument;
   });
 
-  it("displays a gauge with a speed of 9.6 Q/m with real data", () => {
+  it("displays a gauge with a speed of 9.1 qpm with real data", () => {
     sessionSummaries.set(realData);
     render(SpeedWidget);
-    const value = screen.getByText("9.6");
+    const value = screen.getByText(/9\.1/i);
     expect(value).toBeInTheDocument;
   });
 
@@ -32,24 +32,32 @@ describe("Speed Widget", () => {
     display.set("data");
     render(SpeedWidget);
     const header = screen.getByRole("heading", {
-      name: /7 sessions • 528 items • 1204 questions/i,
+      name: /8 sessions • 387 items • 866 questions/i,
     });
     const firstSessionHeader = screen.getByRole("heading", {
-      name: /1: 12\/13\/21, 2:30 pm – 2:45 pm \(15m\)/i,
+      name: /1: 1\/13\/22, 10:36 am – 10:38 am \(2\.60m\)/i,
     });
     const firstSessionText = screen.getByText(
-      /65 items • 142 questions • 6\.2 s\/q • 9\.7 q\/m 106\/142 = 74\.6% correct/i
+      /20 items • 40 questions • 3\.9 spq • 15\.4 qpm 40\/40 = 100\.0% correct/i
+    );
+    const singleReviewHeader = screen.getByRole("heading", {
+      name: /7: 1\/12\/22, 11:48 am – 11:48 am \(0\.09m\)/i,
+    });
+    const singleReviewText = screen.getByText(
+      /1 items • 2 questions • 2\.8 spq • 21\.1 qpm 2\/2 = 100\.0% correct/i
     );
     const lastSessionHeader = screen.getByRole("heading", {
-      name: /7: 12\/17\/21, 10:21 am – 10:52 am \(31m\)/i,
+      name: /8: 1\/11\/22, 10:26 am – 11:00 am \(34\.48m\)/i,
     });
     const lastSessionText = screen.getByText(
-      /123 items • 288 questions • 6\.4 s\/q • 9\.4 q\/m 173\/288 = 60\.1% correct/i
+      /145 items • 329 questions • 6\.3 spq • 9\.5 qpm 286\/329 = 86\.9% correct/i
     );
 
     expect(header).toBeInTheDocument();
     expect(firstSessionHeader).toBeInTheDocument();
     expect(firstSessionText).toBeInTheDocument();
+    expect(singleReviewHeader).toBeInTheDocument();
+    expect(singleReviewText).toBeInTheDocument();
     expect(lastSessionHeader).toBeInTheDocument();
     expect(lastSessionText).toBeInTheDocument();
   });

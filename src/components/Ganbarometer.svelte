@@ -2,11 +2,10 @@
   declare var ss_quiz: any;
   declare var wkof: any;
 
-  let modal;
+  let settingsModal, helpModal;
 </script>
 
 <script type="ts">
-  import RangeSlider from "./RangeSlider.svelte";
   import GbWidget from "./GbWidget.svelte";
   import SpeedWidget from "./SpeedWidget.svelte";
   import ReviewsWidget from "./ReviewsWidget.svelte";
@@ -14,11 +13,12 @@
   import SettingsForm from './SettingsForm.svelte';
   import QuizButton from './QuizButton.svelte';
   import SettingsButton from './SettingsButton.svelte';
+  import Help from './Help.svx';
 
   import { findSessSummaries } from '../API/Sessions';
   import { getReviews, calculateCounts } from "../API/Reviews"; 
 
-  import { gbSettings, display, daysToReview, sessionSummaries, reviewCounts } from '../store/stores';
+  import { gbSettings, display, sessionSummaries, reviewCounts } from '../store/stores';
 
   import { fade } from  'svelte/transition';
   import { SyncLoader } from 'svelte-loading-spinners';
@@ -43,9 +43,7 @@
     loading = false;
   };
 
-  $: updateSummaries($daysToReview[0]);
-
-  $: suffix = $daysToReview[0] > 1 ? " days" : " day";
+  $: updateSummaries($gbSettings.daysToReview);
 
   let ssQuizPresent = false;
   wkof.wait_state('ss_quiz', 'ready').then(() => {
@@ -87,6 +85,7 @@
   <nav class="chart-data-nav">
     <li class:active="{$display === 'chart'}" on:click|preventDefault="{() => $display = 'chart'}">Graphs</li>
     <li class:active="{$display === 'data'}" on:click|preventDefault="{() => $display = 'data'}">Data</li>
+    <li on:click|preventDefault="{() => helpModal.show()}">Help</li>
   </nav>
 
   {#if loading}
@@ -95,15 +94,11 @@
     </div>
   {/if}
 
-  <div class="dayRange" data-testid="daySlider">
-    <RangeSlider bind:values={$daysToReview} float pips {suffix} min={1} max={7} />
-  </div>
-
   <div class="action-buttons">
     {#if ssQuizPresent}
       <QuizButton on:click={ssQuizLauncher} />
     {/if}
-    <SettingsButton on:click="{() => modal.show()}" />
+    <SettingsButton on:click="{() => settingsModal.show()}" />
   </div>
 </div>
 
@@ -113,20 +108,15 @@
   <ReviewsWidget />
 </div>
   
-<Modal bind:this={modal} >
-  <SettingsForm {modal} />
+<Modal bind:this={settingsModal} >
+  <SettingsForm modal={settingsModal} />
+</Modal>
+
+<Modal bind:this={helpModal} >
+  <Help />
 </Modal>
 
 <style>
-.dayRange {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  z-index: 0; /* prevent range-slider thumb from sliding over the main nav */
-}
-:global(.rangeSlider) {
-  width: 7em;
-}
 .gbwidgets {
     display: flex;
     flex-wrap: wrap;
@@ -204,7 +194,7 @@
   .spinner {
     margin-inline: 0.5em;
     position: absolute;
-    left: 37em;
+    left: 39em;
   }
 
   .controls {
@@ -213,6 +203,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding-block: 6px;
     color: var(--textColor);
     border-bottom: 2px solid #eeeeee;
     border-top-left-radius: 5px;
@@ -230,7 +221,7 @@
     text-decoration: none;
     display: inline;
     margin-inline: 1rem;
-    height: fit-content;
+    height: auto;
   }
 
   .chart-data-nav li:hover {
@@ -247,6 +238,15 @@
     justify-content: flex-end;
     align-items: center;
     width: 100%;
+  }
+
+  :global(#wkof_ds #ss_quiz[data-result="correct"] .answer input) {
+    color: #fff !important;
+    background-color: #8c8 !important;
+  }
+  :global(#wkof_ds #ss_quiz[data-result="incorrect"] .answer input) {
+    color: #fff !important;
+    background-color: #f03 !important;
   }
 
 </style>

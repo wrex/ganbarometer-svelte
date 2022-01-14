@@ -1,7 +1,7 @@
 <script type="ts">
   import BarChart from "./BarChart.svelte";
   import { fade } from "svelte/transition";
-  import { display, gbSettings, daysToReview, srsCounts, reviewCounts } from "../store/stores";
+  import { display, gbSettings, srsCounts, reviewCounts } from "../store/stores";
 
   const dowString = (date) => { 
     return new Intl.DateTimeFormat('en-US', {weekday: "short"} ).format(date); }
@@ -11,7 +11,7 @@
 
   $: totalReviews = $reviewCounts.reduce((acc,r) => acc += r.review_count, 0);
 
-  $: avgReviewsPerDay = (totalReviews / $daysToReview[0]).toFixed();
+  $: avgReviewsPerDay = (totalReviews / $gbSettings.daysToReview).toFixed();
 
   $: displayValues = $reviewCounts.map(r => r.review_count);
   $: accuracyValues = $reviewCounts.map(r => r.accuracy);

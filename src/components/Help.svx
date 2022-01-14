@@ -1,0 +1,570 @@
+<script>
+import Ganbarometer from "./GbWidget.svelte";
+import Speed from "./SpeedWidget.svelte";
+import Reviews from "./ReviewsWidget.svelte";
+import {gbSettings} from "../store/stores";
+</script>
+
+<div class="helpWindow" data-testid="help-window" style={` 
+  --bgColor: ${$gbSettings.bgColor}; 
+  --trackColor: ${$gbSettings.hlTrackColor}; 
+  --textColor: ${$gbSettings.textColor}; 
+  --hlTextColor: ${$gbSettings.hlTextColor}; 
+  --fillColor: ${$gbSettings.fillColor}; 
+  --warnColor: ${$gbSettings.warnColor}; 
+  --hlTrackColor: ${$gbSettings.trackColor}; 
+`}>
+
+# GanbarOmeter Help
+
+---
+
+## Table of contents
+
+- [Overview](#Overview)
+- [Navigation](#Navigation)
+- [The GanbarOmeter](#GanbarOmeter)
+- [The Speed gauge](#Speed)
+- [The Reviews chart](#Reviews)
+- [Wanikani's Spaced Repetition System](#SRS)
+- [How the author uses this](#Howto)
+
+---
+
+## <a name="Overview">Overview</a>
+
+This script displays two dial gauges and a bar chart on your Wanikani dashboard.
+These "widgets" display distilled information from the [Wanikani
+API](https://docs.api.wanikani.com) to help you manage your workload as you
+progress through the levels.
+
+<div class="gbSample">
+  <Ganbarometer /><Speed /><Reviews />
+</div>
+
+The widgets distill information from two data sources:
+
+1. Your queue of _assignments_ (upcoming _reviews_ already available or
+scheduled to become available up to 120 days in the future). Each assignment is
+for an item in one of 8 possible SRS stages (stages 1-4 are named the "Apprentice"
+stages, stages 5-6 the "guru" stages, stage 7 the "master" stage, and stage 8 the
+"enlightened" stage).
+
+2. _Reviews_ you've actually performed over the past few days. Review records
+are created whenever you've answered all questions (meaning and reading)
+correctly for an item. They contain the start time of the review (when the first
+question was displayed) as well as the number of incorrect answers.
+
+These displays help you better understand how well you're meeting your
+goals with respect to effort, speed, and accuracy. For those of us that _haven't_
+yet reached level 60, they especially help you make better decisions regarding
+how many _lessons_ to perform each day.
+
+---
+
+## <a name="Navigation">Navigation</a>
+
+Along the top-left you will see the **Graphs**, **Data**, and **Help** menu items. Since
+you're reading this, you've already discovered what the **Help** menu item does. The
+**Data** menu item replaces the graphical display with a text display of the
+underlying data that the calculated values derive from. **Graphs** returns you to
+the graphical display.
+
+At the top-right you'll see one or possibly two icons. The rightmost icon
+launches the **Settings** dialog. If you've installed the [Self-study
+Quiz](https://community.wanikani.com/t/userscript-self-study-quiz/13191),
+you will also see an icon to launch it pre-configured to quiz you on
+items in SRS stages 1 or 2 (the first half of the "Apprentice" category). 
+
+You can specify in **Settings** whether you want to be quizzed on just one or
+any combination of radicals, kanji, or vocabulary items in the early apprentice
+stages.
+
+The **Settings** dialog also lets you control the appearance: you can override
+the colors for most of the design elements. Use the sample widgets at the top to
+evaluate your choices.  There is also a setting to indicate where you would like the
+widgets to appear on your dashboard.
+
+---
+
+## <a name="GanbarOmeter">The GanbarOmeter</a>
+
+<div class="gbSample">
+<Ganbarometer />
+</div>
+
+The GanbarOmeter displays a visual indication of the makeup of your assignment
+queue. This gauge is most useful to users between, say, levels 5 and 55. It
+tries to tell you whether to do _more_ or _fewer_ lessons each day.
+
+<div class="aside">
+
+
+Users on levels 1-5 should find it relatively easy to do all their lessons every day without
+creating a huge number of reviews for themselves.  Users on advanced levels will
+already know how to manage their workload. 
+
+In particular, users who've reached level 60 will no longer see _any_ new
+lessons (ignoring the new characters that Wanikani adds periodically) — they'll
+only be performing reviews, not lessons.  Level-60 users usually still have
+plenty of assignments for months in the future. The display may still prove
+useful to them, but it won't mean speed-up/slow-down on lessons!
+
+</div>
+
+### Reading the dial
+
+If you have a lot of items to study, the needle will move toward the
+right (多). If you have fewer assignments, the needle moves to the left (少).
+
+When the needle is within the highlighted area (between the target minimum and
+target maximum values from the **Settings** dialog) the center area displays the
+"Good" marker (良 by default). When it's to the left of the green zone, it
+displays a "more lesson effort required" indication (努力). When it's to the right, it
+says to "take a break" from lessons (休).
+
+### The data view
+
+When you click the **Data** menu item, the GanbarOmeter displays the number of
+assignments in each category of SRS stages, as well as the weighted total after
+performing the complete calculation.
+
+It also displays the GanbarOmeter value numerically (it can vary between -0.5
+and +0.5).
+
+### The calculation
+
+The specific value displayed (from 0 to 100%) depends on the **Settings** a user
+has stored. By default, it uses a variation of this common strategy:
+
+> Try to keep the sum of your apprentice items + 1/10 of guru items below 150.
+
+### Configuring the target range 
+
+In the **Settings** dialog you can specify the desired target value (150 above).
+You specify a target _range_ of values (default: 130 to 170). This is a
+reasonable range for most people, but if you're finding your daily reviews too
+difficult, you might choose to lower the range (perhaps 80 to 120). Ambitious
+users wanting to progress faster might choose to increase the range (at the risk
+of more difficult review sessions and potentially worse accuracy and retention).
+
+### Configuring the weighting
+
+Advanced users may choose to modify how the value is calculated in addition to
+changing the target range.
+
+You accomplish this by assigning "weights" to items in various stages. The
+default settings assign a weight of 0.1 (1/10) to "guru" items per the common
+strategy above, and ignore "master" and "enlightened" items by assigning them a
+weight of 0. A weight of 1 indicates an item should be treated normally, neither
+heavier nor lighter than any other.
+
+One additional wrinkle is that "apprentice" items are further segregated into
+"early apprentice" (stages 1-2) and "late apprentice" (stages 3-4). Further, items in
+the early apprentice stages can also be broken down by type: radical, kanji, or
+vocabulary.
+
+By default, early apprentice radicals only count as 0.6 of a "normal" item
+because they are easier to memorize (they only have a meaning, without
+any additional reading to memorize).
+
+Similarly, by default, early stage vocabulary items count normally (weight: 1.0)
+while early stage _kanji_ count **three times** as heavily (weight: 3.0). This
+is because you won't review vocabulary items until you've already "learned" the
+underlying kanji (i.e. progressed them to guru stages or higher) while
+early-stage kanji are mostly brand new and are much harder to memorize
+(requiring frequent, repeated reviews). 
+
+It can quickly become overwhelming if you have too many early-stage kanji in
+your assignment queue!
+
+
+---
+
+## <a name="Speed">The Speed gauge</a>
+
+<div class="gbSample">
+<Speed />
+</div>
+
+The **Graphs** view of the speed gauge is _much_ easier to explain. It displays how quickly you
+answered every question on average in units of questions-per-minute (qpm). The
+**Data** view also shows units of seconds-per-question (spq).
+
+The graphic dial gauge is probably less useful than the Ganbarometer, but if,
+say, you've noticed your accuracy dropping and the Speed gauge creeping higher
+and higher, you may want to consciously slow down during your reviews.
+Alternately, if your reviews seem to take forever you may want to push this dial
+higher.
+
+The data behind this single figure-of-merit is what's most interesting. Click
+the **Data** view and you'll be presented with all sorts of useful information
+about recent review sessions.
+
+
+### Data View
+
+The data view for the **Speed** widget displays _session_ information: the
+number of items (or "subjects") studied in each session, the total number of
+questions asked (both meaning and reading, as well as repeated questions for
+incorrect answers), and the overall accuracy (the percentage of questions
+answered correctly).
+
+A _session_ is defined as a string of consecutive reviews. It's common to do a
+string of reviews in the morning and more in the afternoon or evening. Others
+(like the author) only do their reviews in one marathon session per day.
+
+Unfortunately, the Wanikani API only logs the _start_ time of each review (as
+well as what radical/kanji/vocabulary was reviewed and the number of incorrect
+answers). This means that it's surprisingly difficult to know which reviews
+belong together in a single session: was that 2.3 minute gap between reviews
+because you were thinking hard trying to recall an item, or was it because you
+took a phone call or made a cup of tea?
+
+Worse, review records are only created when all questions (meaning and reading)
+are answered correctly. This means there might be a significant gap between
+starting a review for an item and completing that review: _several questions
+from unrelated items might be asked between the meaning and reading questions
+for the original item!_
+
+This script uses a statistical technique called the [Median Absolute
+Deviation](https://en.wikipedia.org/wiki/Median_absolute_deviation) to determine
+which reviews are part of the same session. Basically, the script determines the
+interval between the start times of each review, and uses the MAD algorithm to
+find "outliers" indicating the start of a new session.
+
+The more reviews there are, the better this algorithm performs at correctly
+finding sessions.
+
+### Note about questions vs. items (speed and accuracy)
+
+This data section displays the speed and accuracy with answering _questions_.
+
+Each radical review record indicates at least one question plus repeated
+questions for each incorrect answer. Kanji and vocabulary reviews involve at
+least _two_ questions (reading and meaning) plus additional questions for each
+incorrect answer.
+
+The total session duration is the time in seconds between the first and last
+reviews in a session. The speed (in seconds-per-question) is that number divided
+by the total number of questions in the session.
+
+The questions-per-minute value is 60 divided by the seconds-per-question value.
+
+Similarly, accuracy is the total number of correct answers in the session
+divided by the total number of questions.
+
+Note that _item_ accuracy (as reported in the Reviews section) is quite
+different. Item accuracy is the ratio of items where all questions (reading and
+meaning) were answered correctly _the first time_ divided by the total number of
+items.
+
+Question accuracy is always a larger percentage than item accuracy.
+
+### Note about the last review in a session
+
+Because the Wanikani API only logs _start_ times of each review, there is no way
+to estimate the duration of the last review in each session. In particular, a
+session with only one review has an indeterminate duration.
+
+Say, for example, you started a review session one morning and:
+
+1. Correctly answered the reading for 大 
+
+2. Missed the meaning of 小 
+
+3. Correctly gave the reading for 小 
+
+4. Correctly supplied the meaning for 大 
+
+Then you were pulled away for some reason and unable to get back to your reviews
+for several hours.
+
+This would create exactly one review record for 大 (no record for 小 would be
+created because both questions haven't been answered correctly yet).
+
+It might be hours or even days before you finish another review, but it wouldn't
+be sensible to say the duration of that review was hours or days.
+
+Instead the script sets the duration of the last review in each session to the
+**median** duration between all review records. The median is a much better
+guess than the average since outlier values (minutes, hours, and days between
+sessions) will be ignored.
+
+This works well in practice as long as dozens or hundreds of reviews are retrieved.
+
+### Settings
+
+The first setting is the how far back (in days) you want to retrieve reviews for
+analysis. This setting is shared with the **Reviews** widget. The minimum value
+is 1 day: all reviews performed since midnight yesterday. The maximum value is
+7: six full days plus any reviews performed today. The default value is 4.
+
+You can also specify your target speed range (from 1 question-per-minute at
+the slow end, to 60 questions per minute or 1 question-per-second for
+stenographers). The default is 7 to 10 questions-per-minute (8.6 seconds per
+question to 6 seconds-per-question).
+
+Finally, there is an advanced setting for the MAD cutoff value (default: 10).
+You should not need to change this, but lower values will likely find more sessions.
+
+---
+
+## <a name="Reviews">Reviews</a>
+
+<div class="gbSample">
+<Reviews />
+</div>
+
+The **Reviews** widget displays a bar graph of reviews over the retrieval
+interval.
+
+For each day, it displays the total number of reviews performed, as well as the
+percentage of those reviews answered correctly the first time. (See the note
+above about question vs. item accuracy.)
+
+Hovering your mouse pointer over any of the bars will display the number of
+reviews and item accuracy for that day.
+
+The light green area in the background indicates the target range of
+reviews-per-day (rpd) as specified in the **Settings** (default: 120-180 rpd).
+
+The dashed golden line indicate the "expected daily reviews" based on the
+assignment breakdown by SRS stage. It uses exactly the same heuristic as the
+[Expected Daily
+Reviews](https://community.wanikani.com/t/userscript-expected-daily-reviews/29206)
+script.
+
+The "expected daily" heuristic assumes correct answers and an equal probability of
+seeing an item on a given day based on the intervals between SRS stages. An item
+in the "enlightened" stage, has an equal chance of being seen on any of the next
+120 days (since a correctly answered master item gets schedule 120 days in the future).
+
+
+### Data view
+
+The data view is pretty simple. 
+
+It shows the expected daily number of reviews (assuming correct answers and the
+same SRS distribution as discussed above).
+
+It also shows the numeric values and accuracy percentages for each day retrieved.
+
+### Settings
+
+The review gauge uses the same setting for the number of days worth of reviews
+to retrieve.
+
+It also has a setting for the target range of daily review counts (the light
+green section on the graphical display).
+
+---
+
+## <a name="SRS">Thoughts about Wanikani's SRS</a>
+
+Wanikani is a [Spaced Repetition
+System](https://knowledge.wanikani.com/wanikani/srs/). Most people tend to think
+the **main** point of an SRS is to quiz you just before you're about to forget something
+(the so-called "spacing effect").
+
+That's definitely part of it, but I'd argue the main point is even simpler: **An
+SRS quizzes you on things you find _difficult_ more often than items you find _easy._**
+
+Not wasting time quizzing yourself on stuff you already know makes the process
+_much_ more efficient. You want more reviews of the hard stuff, and fewer (and
+wider spaced) reviews of stuff you find easy.
+
+There is one _extremely_ important point about Wanikani's SRS in particular that
+people tend to forget, though:
+
+**Wanikani only knows what you find difficult if you answer incorrectly!**
+
+It's human nature to feel bad about wrong answers, but it's important to remind
+yourself that wrong answers are far more important than correct ones! Seriously:
+Users above level 3 are literally paying for a service (more quizzes of
+difficult items) that's only activated by wrong answers.
+
+As you answer an item correctly [it moves to later and later
+stages](https://knowledge.wanikani.com/wanikani/srs-stages/) and you'll start to
+see that item less frequently until it's "burned" and you won't see it (on
+Wanikani!) again (so sad). Early stage items, though, show up every or almost
+every day.
+
+The best way to use Wanikani is to perform two or three review sessions every
+single day. At a minimum, you _really_ must try to get your available reviews
+(assignments) down to zero at least once every day.
+
+Since you must do your _reviews_ every day, there are really only two things
+that control how long it will take to get to level 60:
+
+1. How many _lessons_ you do each day. This controls how many items will be made
+available for _reviews_. Each lesson you complete adds an item you will be
+reviewing for months if not years in the future.
+
+2. How well you memorize and retain each item. The better you remember an item,
+the less frequently you'll have to review it. The minimum is 8
+correct-the-first-time answers for both meaning and reading in a row. Do that,
+and you'll "burn" the item in a little over five months, but that is **NOT** the
+goal unless you already know the item!
+
+Some people find memorization easy. Most of us find it difficult. Regardless, #2
+is mostly out of our control. It can only be improved with sufficient sleep, no
+alcohol, proper attitude, focus, quiet and interruption-free workplaces, and
+other obviously impossible things like that.
+
+That means that **the single most important "knob" under your control is how
+many lessons you perform each day**. The GanbarOmeter attempts to help you
+figure out a pace that's most appropriate for you personally.
+
+Some users want to get to level 60 as quickly and efficiently as possible. While
+there is nothing wrong with this, the author is much more interested in learning
+to read all the items _well_, and without too much pain, no matter how long it
+takes. I still seem to be on a roughly 3-or-so-years-to-60 pace which seems
+amazingly quick and efficient to me.
+
+Since I wrote this script mostly for my own use, it will probably prove less
+useful to speed demons, but the stats should be interesting regardless.
+
+---
+
+## <a name="Howto">How the author uses this</a>
+
+I've made it a habit to do my reviews just once-per-day with my morning coffee.
+
+The coffee is a trigger, a productivity hack. I've associated something I
+enjoy and do every day with my reviews. After just the first few weeks of
+religiously doing my reviews as soon as I have my first a sip of coffee, I
+quickly reached the point where I couldn't drink coffee without at least
+_thinking_ about my daily reviews. This has made it much easier to keep up with
+my reviews.
+
+Because I only do one review session each day, though, I miss the reviews
+scheduled on 4-hour and 8-hour intervals (items in stages 1 and 2). In other
+words, like many, **I don't get nearly enough reviews for early-stage items.**
+
+My solution was to install the [Self-Study
+Quiz](https://community.wanikani.com/t/userscript-self-study-quiz/13191) and
+perform "extra" reviews each morning before doing my "real" reviews.
+
+### My routine
+
+The default settings are, unsurprisingly, geared to my personal usage as
+described below:
+
+1. Each morning I open up my dashboard (it's usually still open in my browser, so I
+just refresh the page). I mostly ignore the widgets at this point, but I do at
+least glance at it to see if anything jumps out.
+
+2. If I'm still early on a level and learning new kanji, I'll click the self-study
+quiz icon before doing anything else. Once I'm toward the end of a level, I'm
+only doing lessons for vocabulary items, so the early apprentice levels are
+almost entirely vocabulary. I personally find vocabulary easier, so I don't
+bother with self-study: once-per-day reviews for vocabulary seems to suffice for
+me.
+
+3. I really blast through the self-study quiz. If I don't know an answer I give
+up quickly and easily, but I always press F1 to show the correct answer (trying
+to remember it for next time).
+
+4. At the end of the first pass through all the early stage items I'll
+invariably have missed several (it shows them on a summary page at the end of
+the quiz). Next, I just hit the enter key and start another pass through all the
+items (in a different random order).
+
+5. I'll keep iterating, quizzing myself on all early stage items until I score
+100%. This usually takes between two and four passes, depending on how many
+items there are. The default settings only quiz me on early-stage kanji because
+that's what I need the most extra reviews for.
+
+6. After several iterations of out-of-band self-study, I'll finally start my
+proper reviews. I try hard to get through all my available reviews every single
+morning.
+
+7. It usually takes me about 30 minutes to an hour to get through all 100 to 200
+or so available review items each day. Once I've completed my review session, I
+navigate back to the dashboard and wait for the most recent reviews to load.
+
+8. Only now do I look at the graphical widgets, especially the GanbarOmeter and
+the Reviews bar chart (my Speed stays pretty consistent these days). As long as
+the GanbarOmeter is well under the right edge of the green zone I'll then do at least
+5 **lessons**. If its below the minimum or well to the left of the target zone I
+might do 10, 15, or even 20 lessons (almost never more).
+
+9. I also keep an eye on the "expected daily reviews" dashed line on my Reviews
+bar chart. If that starts creeping up too high, I'll pull up the [Ultimate
+Timeline](https://community.wanikani.com/t/userscript-wanikani-ultimate-timeline/10516)
+and look at assignments by SRS stage for the next 120 days to figure out what's
+going on. The goal is to keep the average number of reviews scheduled each day
+within a reasonable range, without any huge peaks and valleys.
+
+10. Finally, after finishing both my reviews and my lessons, I'll sometimes take
+a peak at the Data view to see if there is anything interesting going on with my
+question accuracy during sessions.
+
+All of this is **much** easier to do in practice than to write about!
+
+
+
+
+
+</div>
+
+<style>
+.helpWindow {
+  width: 820px;
+  max-height: 80vh;
+  padding: 2rem;
+  overflow-y: scroll;
+}
+
+.gbSample {
+    display: flex;
+    margin-block: 2ch;
+    justify-content: center;
+}
+
+p {
+  font-size: 18px !important;
+  margin: 2em;
+  line-height: 1.4;
+}
+
+h2 {
+  margin: 1em 0;
+  font-size: xx-large;
+}
+
+h3 {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  margin: 2em 0 1em;
+  font-size: x-large;
+}
+
+ul, ol {
+    padding: 0;
+    margin: 2em 4em;
+}
+
+blockquote {
+  margin-block: 1em;
+}
+
+.aside {
+  margin: 2rem 8rem;
+  padding: 1em;
+  border: 3px solid;
+}
+
+.aside p {
+  margin: 0 0 1em;
+  font-size: small !important;
+  font-style: italic;
+}
+
+hr {
+  color: var(--textColor);
+  border: 0;
+  border-top: 2px solid;
+}
+</style>

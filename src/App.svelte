@@ -12,9 +12,8 @@
     --hlTextColor: ${$gbSettings.hlTextColor}; 
     --fillColor: ${$gbSettings.fillColor}; 
     --warnColor: ${$gbSettings.warnColor}; 
-    --lTrackColor: ${$gbSettings.lTrackColor}; 
-    --hTrackColor: ${$gbSettings.hTrackColor};`
-  } > 
+    --hlTrackColor: ${$gbSettings.hlTrackColor}; 
+  `} > 
   {#if wkofLoaded }
   <Ganbarometer />
   {:else}

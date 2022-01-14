@@ -60,6 +60,7 @@ export interface SessionSummary {
   reviewCount: number;
   questionCount: number;
   correctAnswerCount: number;
+  duration: number; // milliseconds
 }
 
 export interface ReviewCount {

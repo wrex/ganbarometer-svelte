@@ -9,7 +9,6 @@ import "fake-indexeddb/auto";
 import FDBFactory from "fake-indexeddb/lib/FDBFactory";
 import {
   mockWkof,
-  mockReview,
   mockReviewCollection,
   clearMockedAPIData,
   mock_ss_quiz,
@@ -20,7 +19,7 @@ mockWkof();
 mock_ss_quiz();
 const wkofApiv2Mock = window.wkof.Apiv2.fetch_endpoint;
 
-describe.skip("Ganbarometer layout", () => {
+describe("Ganbarometer layout", () => {
   beforeEach(() => {
     window.indexedDB = new FDBFactory(); // reset database
     mockReviewCollection([]);
@@ -50,9 +49,10 @@ describe.skip("Ganbarometer layout", () => {
     expect(element).toBeInTheDocument();
   });
 
-  it("has an input for entering the number of days to retrieve", () => {
+  it("has a nave for showing help", () => {
     render(Ganbarometer);
-    const element = screen.getByTestId("daySlider");
+    const navbar = screen.getByRole("navigation");
+    const element = within(navbar).getByText("Help");
     expect(element).toBeInTheDocument();
   });
 
@@ -78,16 +78,16 @@ describe.skip("Ganbarometer layout", () => {
     expect(reviewsGauge).toBeInTheDocument();
   });
 
-  it("Has a review accuracy bar chart", () => {
+  it("Has a reviews bar chart", () => {
     render(Ganbarometer);
     const accuracyChart = screen.getByRole("heading", {
-      name: "Accuracy",
+      name: "Reviews",
     });
     expect(accuracyChart).toBeInTheDocument();
   });
 });
 
-describe.skip("Interaction", () => {
+describe("Interaction", () => {
   beforeEach(() => {
     window.indexedDB = new FDBFactory(); // reset database
   });
@@ -104,18 +104,29 @@ describe.skip("Interaction", () => {
     await userEvent.click(dataNav);
 
     const gbTableHeading = screen.getByRole("heading", {
-      name: /ganbarometer: 0%/i,
+      name: /ganbarometer: -0.50/i,
     });
     expect(gbTableHeading).toBeInTheDocument();
 
     const speedHeading = screen.getByRole("heading", {
-      name: /speed: 0\.0 s\/q/i,
+      name: /speed: 0\.0 spq • infinity qpm/i,
     });
     expect(speedHeading).toBeInTheDocument();
 
     const accuracyHeading = screen.getByRole("heading", {
-      name: /0 reviews/i,
+      name: /0 reviews @nan%/i,
     });
     expect(accuracyHeading).toBeInTheDocument();
+  });
+
+  it("Displays the help screen when Help is clicked", async () => {
+    mockReviewCollection([]);
+    render(Ganbarometer);
+    const navbar = screen.getByRole("navigation");
+    const helpNav = within(navbar).getByText("Help");
+    await userEvent.click(helpNav);
+
+    const helpWindow = screen.getByTestId("help-window");
+    expect(helpWindow).toBeInTheDocument();
   });
 });

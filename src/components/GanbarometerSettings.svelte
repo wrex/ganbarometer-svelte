@@ -1,44 +1,29 @@
-<script type= "ts">
-  import { validate } from './validation';
-  import Errors from './Errors.svelte';
-  import { onMount } from 'svelte';
+<script lang= "ts">
+  import RangeSlider from "./RangeSlider.svelte";
+  import Info from "./Info.svelte";
+  import NumberSpinner from "svelte-number-spinner";
 
   export let values;
-  export let result;
 
-  const validateField = path => () => {
-    result = validate(values, path);
-  }
-
-  onMount(() => {
-    result = validate(values);
-  });
+  let range_values = [values.gbMinTarget, values.gbMaxTarget];
+  $: [values.gbMinTarget, values.gbMaxTarget] = range_values;
 </script>
 
-<div class="settingsComp">
-  <h4>Target minimum</h4>
-  <input 
-    id="targetMin" 
-    type="range"
-    min={10}
+<div class="gbSettingsComp">
+  <h4>Target range</h4>
+  <RangeSlider 
+    id="gbRange" 
+    range
+    pushy
+    float
+    min={5}
     max={300}
-    step={10}
-    bind:value={values.gbMinTarget}
-    on:change={validateField("gbMinTarget")}>
-  <label for="targetMin">{values.gbMinTarget}</label>
-  <Errors bind:result path="gbMinTarget" />
+    step={5}
+    bind:values={range_values} />
 
-  <h4>Target maximum</h4>
-  <input 
-    id="targetMax" 
-    type="range"
-    min={10}
-    max={300}
-    step={10}
-    bind:value={values.gbMaxTarget}
-    on:change={validateField("gbMaxTarget")}>
-  <label for="targetMax">{values.gbMaxTarget}</label>
-  <Errors bind:result path="gbMaxTarget" />
+  <div class="infoIcon" data-testid="gbRangeInfo"><Info type="gbRange" /></div>
+
+  <div data-testid="gbRangeLabel" class="rangeLabel">{values.gbMinTarget} &ndash; {values.gbMaxTarget}</div>
 
   <hr>
 
@@ -48,17 +33,21 @@
         <th class="col2">Labels</th>
         <td><input 
           type="text" 
+          data-testid="belowInput"
           bind:value={values.belowTerm}
         ></td>
         <td><input 
           type="text" 
+          data-testid="inRangeInput"
           bind:value={values.inRangeTerm}
         ></td>
         <td><input 
           type="text" 
+          data-testid="aboveInput"
           bind:value={values.aboveTerm}
         ></td>
       </tr>
+      <div class="infoIcon" data-testid="gbLabelInfo"><Info type="gbLabel" /></div>
     </tbody>
     <thead>
       <tr>
@@ -83,77 +72,71 @@
     </thead>
     <tbody>
       <tr>
-        <th class="secondary right-align col2">Radicals12</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newRWeight}
-        ></td>
-        <th class="secondary right-align col4">Appr34</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.apprWeight}
-        ></td>
+        <th aria-label="Radical1-2 Weight" class="secondary right-align col2">Radical1-2</th>
+        <td><NumberSpinner 
+          bind:value={values.newRWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
+        <th class="secondary right-align col4">Appr3-4</th>
+        <td><NumberSpinner 
+          bind:value={values.apprWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
       <tr>
-        <th class="secondary right-align col2">Kanji12</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newKWeight}
-        ></td>
+        <th aria-label="Kanji1-2 Weight" class="secondary right-align col2">Kanji1-2</th>
+        <td><NumberSpinner 
+          bind:value={values.newKWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
         <th class="secondary right-align col4">Guru</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.guruWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.guruWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
+      <div class="infoIcon" data-testid="gbWeightInfo"><Info type="gbWeight" /></div>
       <tr>
-        <th class="secondary right-align col2">Vocabulary12</th>
-        <td><input 
-          class="col3"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.newVWeight}
-        ></td>
+        <th aria-label="Vocab1-2 Weight" class="secondary right-align col2">Vocab1-2</th>
+        <td><NumberSpinner 
+          bind:value={values.newVWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
         <th class="secondary right-align col4">Master</th>
-        <td><input 
-          class="col4"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.masterWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.masterWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <th class="secondary right-align col4">Enlightened</th>
-        <td><input 
-          class="col5"
-          type="number"
-          min={0}
-          max={5}
-          step={0.1}
-          bind:value={values.enlightenedWeight}
-        ></td>
+        <td><NumberSpinner 
+          bind:value={values.enlightenedWeight} 
+          min={0} 
+          max={5} 
+          step={0.001} 
+          decimals={3}
+        /></td>
       </tr>
     </tbody>
   </table>
@@ -164,9 +147,9 @@
     <thead>
       <tr>
         <td></td>
-        <th class="secondary center col3">Radicals12</th>
-        <th class="secondary center">Kanji12</th>
-        <th class="secondary center">Vocabulary12</th>
+        <th aria-label="Radical1-2 Quiz" class="secondary center col3">Radical1-2</th>
+        <th aria-label="Kanji1-2 Quiz" class="secondary center">Kanji1-2</th>
+        <th aria-label="Vocab1-2 Quiz" class="secondary center">Vocab1-2</th>
       </tr>
     </thead>
     <tbody>
@@ -188,24 +171,28 @@
           bind:checked={values.vQuiz}
         ></td>
       </tr>
+      <div class="infoIcon" data-testid="gbQuizInfo"><Info type="gbQuiz" /></div>
     </tbody>
   </table>
 
 </div>
         
 <style>
-  
+
+  :global(#gbRange),
+  .rangeLabel {
+    grid-column: 3 / span 3;
+    width: 100%;
+    margin: 0;
+    align-self: center;
+    text-align: center;
+  }
   h4 {
     font-size: small;
     margin: 0;
     grid-column: 1 / span 2;
     text-align: right;
-  }
-
-  label {
-    grid-column: 5 / span 1;
-    margin: 0;
-    text-align: left;
+    align-self: center;
   }
 
   hr {
@@ -213,25 +200,17 @@
     margin: 5px 0;
     padding: 0;
   }
-  input[type="range"] {
-    grid-column: 3 / span 2;
-    width: 80%;
-    justify-self: center;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0;
-  }
-
-  input[type="number"] {
-    width: 3em;
-    text-align: center;
-    margin: 0;
-  }
 
   input[type="text"] {
     width: 3em;
     text-align: center;
     margin: 0;
+  }
+
+  .infoIcon {
+    grid-column: 6;
+    justify-self: center;
+    align-self: center;
   }
 
 

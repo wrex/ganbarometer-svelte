@@ -6,14 +6,17 @@
   export function hide() {
     shown = false;
   }
+	export function toggle() {
+		shown = !shown;
+	}
 </script>
 
-<svelte:window
-  on:keydown={e => {
+<!-- <svelte:window
+  on:keydown|once|stopPropagation={e => {
     if (e.key === "Escape") {
       hide();
     }
-  }} />
+  }} /> -->
 
 {#if shown}
   <div class="modal-wrapper">
@@ -44,12 +47,14 @@
 
   .modal {
 		position: relative;
-		left: 0;
-		width: fit-content;
-		border-radius: 6px;
-		background: white;
+    margin: 0;
+    left: 0;
+    top: 5%;
+    width: auto;
+    border-radius: 6px;
+    background: var(--bgColor);
     border: 2px solid #000;
-		filter: drop-shadow(5px 5px 5px #555);
+    filter: drop-shadow(5px 5px 5px #555);
   }
 
 	.closeIcon {

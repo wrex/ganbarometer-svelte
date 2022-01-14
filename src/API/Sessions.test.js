@@ -64,33 +64,38 @@ describe("parseSessions()", () => {
     expect(sessions.length).toBe(0);
   });
 
-  xit("returns one session if only one review fetched", async () => {
-    mockReviewCollection([mockReview()]);
-    const reviews = await getReviews();
+  it("returns one session if only one review fetched", async () => {
+    const review = mockReview();
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
+    ]);
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(1);
   });
 
-  xit("returns the number of reviews in the sessions object", async () => {
-    mockReviewCollection([mockReview()]);
-    const reviews = await getReviews();
+  it("returns the number of reviews in the sessions object", async () => {
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
+    ]);
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].reviews.length).toBe(1);
   });
 
-  xit("returns a duration of 0 seconds if only one review fetched", async () => {
-    mockReviewCollection([mockReview()]);
-    const reviews = await getReviews();
-    console.log(JSON.stringify(reviews, null, 2));
+  it("returns a duration of 0 seconds if only one review fetched", async () => {
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
+    ]);
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
-    console.log(JSON.stringify(sessions, null, 2));
     expect(sessions[0].reviews.length).toBe(1);
     expect(
       sessions[0].endTime.getTime() - sessions[0].startTime.getTime()
     ).toBe(0);
   });
 
-  xit("returns one session if small number of reviews together (within 10 minutes)", async () => {
+  it("returns one session if small number of reviews together (within 10 minutes)", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:25:18.048Z" } }),
@@ -98,21 +103,22 @@ describe("parseSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T04:27:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:28:18.048Z" } }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(1);
   });
 
-  xit("returns two sessions if two widely spaced reviews fetched", async () => {
+  it("returns two sessions if two widely spaced reviews fetched", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:24:18.048Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-05T04:25:18.048Z" } }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(2);
   });
-  xit("returns two sessions if string of 2 and 3 reviews", async () => {
+
+  it("returns two sessions if string of 2 and 3 reviews", async () => {
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T04:01:00.000Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T04:02:00.000Z" } }),
@@ -120,14 +126,14 @@ describe("parseSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T05:02:00.000Z" } }),
       mockReview({ reviewData: { created_at: "2019-10-04T05:03:00.000Z" } }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(2);
     expect(sessions[0].reviews.length).toBe(2);
     expect(sessions[1].reviews.length).toBe(3);
   });
 
-  xit("sets final review to median duration of prior reviews", async () => {
+  it("sets final review to median duration of prior reviews", async () => {
     // median(1000, 2000, 3000, 4000, 5000, 30000) === 3000
     mockReviewCollection([
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
@@ -137,84 +143,125 @@ describe("parseSessions()", () => {
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:12.000Z" } }), // 3s duration
       mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown (30s)
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions.length).toBe(1);
     expect(sessions[0].reviews.length).toBe(6);
     expect(sessions[0].reviews[5].duration).toBe(3000);
   });
 
-  xit("only counts one question for radicals", async () => {
+  it("sets the duration of single review sessions to the median", async () => {
+    // median(infinity, 2000, 1000, 5000, 4000, 3000, infinity) === 3500
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:00.000Z" } }), // session with single review
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:00.000Z" } }), // 2s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:02.000Z" } }), // 1s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:03.000Z" } }), // 5s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:08.000Z" } }), // 4s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:12.000Z" } }), // 3s duration
+      mockReview({ reviewData: { created_at: "2019-10-04T00:00:15.000Z" } }), // unknown / infinity
+    ]);
+    const reviews = await getReviews(7);
+    const sessions = parseSessions(reviews);
+    expect(sessions.length).toBe(2);
+    expect(sessions[0].reviews.length).toBe(1);
+    expect(sessions[0].reviews[0].duration).toBe(3500);
+  });
+
+  it("also sets the duration of single review sessions in the middle", async () => {
+    // median(2000, 1000, 5000, infinity, 4000, 3000, infinity) === 3500
+    mockReviewCollection([
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:00.000Z" } }), // 2s duration
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:02.000Z" } }), // 1s duration
+      mockReview({ reviewData: { created_at: "2019-10-01T00:00:03.000Z" } }), // 5s duration
+      mockReview({ reviewData: { created_at: "2019-10-02T00:00:08.000Z" } }), // 4s duration
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:00.000Z" } }), // session with single review
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:04.000Z" } }), // 3s duration
+      mockReview({ reviewData: { created_at: "2019-10-03T00:00:07.000Z" } }), // unknown / infinity
+    ]);
+    const reviews = await getReviews(7);
+    const sessions = parseSessions(reviews);
+    expect(sessions.length).toBe(3);
+    expect(sessions[1].reviews.length).toBe(1);
+    expect(sessions[1].reviews[0].duration).toBe(3500);
+  });
+
+  it("only counts one question for radicals", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "123", object: "radical" },
         reviewData: {
+          created_at: "2019-10-04T00:00:00.000Z",
           incorrect_meaning_answers: 0,
           incorrect_reading_answers: 0,
         },
       }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].questions).toBe(1);
   });
 
-  xit("counts two questions for kanji", async () => {
+  it("counts two questions for kanji", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
         reviewData: {
+          created_at: "2019-10-04T00:00:00.000Z",
           incorrect_meaning_answers: 0,
           incorrect_reading_answers: 0,
         },
       }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].questions).toBe(2);
   });
 
-  xit("counts two questions for vocabulary", async () => {
+  it("counts two questions for vocabulary", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
         reviewData: {
+          created_at: "2019-10-04T00:00:00.000Z",
           incorrect_meaning_answers: 0,
           incorrect_reading_answers: 0,
         },
       }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].questions).toBe(2);
   });
 
-  xit("adds incorrect meanings to question count", async () => {
+  it("adds incorrect meanings to question count", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
         reviewData: {
+          created_at: "2019-10-04T00:00:00.000Z",
           incorrect_meaning_answers: 3,
           incorrect_reading_answers: 0,
         },
       }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].questions).toBe(5);
   });
 
-  xit("adds incorrect readings to question count", async () => {
+  it("adds incorrect readings to question count", async () => {
     mockReviewCollection([
       mockReview({
         subject: { id: "101", object: "kanji" },
         reviewData: {
+          created_at: "2019-10-04T00:00:00.000Z",
           incorrect_meaning_answers: 3,
           incorrect_reading_answers: 3,
         },
       }),
     ]);
-    const reviews = await getReviews();
+    const reviews = await getReviews(7);
     const sessions = parseSessions(reviews);
     expect(sessions[0].questions).toBe(8);
   });

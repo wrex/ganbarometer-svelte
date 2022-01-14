@@ -42,8 +42,8 @@
   <div class="gbWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
     {#if $display === "chart" }
       <h1 class="gbHeader">GanbarOmeter</h1>
-      <Gauge value={rotValue} {label} indicator="needle" lowZone hiZone />
-      <div class="units"><span class="left-aligned">遅</span><span class=right-aligned>早</span></div>
+      <Gauge value={rotValue} {label} needle lowZone hiZone />
+      <div class="units"><span class="left-aligned">少</span><span class=right-aligned>多</span></div>
     {:else}
       <h1 class="gbHeader" in:fade >GanbarOmeter: {numericLabel}</h1>
       <div data-testid="ganbarometer-table" in:fade >
@@ -62,7 +62,7 @@
             </td>
         </tr>
         <tr>
-          <th>Guru'd</th>
+          <th>Learned</th>
           <td>{$srsCounts.guru}<span class="secondary">g</span>
             {$srsCounts.master}<span class="secondary">m</span>
             {$srsCounts.enlightened}<span class="secondary">e</span>

@@ -25,6 +25,6 @@ describe("Gauge", () => {
     const fill = document.querySelector(".gauge__fill");
     const computedStyles = window.getComputedStyle(fill);
     const rotation = computedStyles.getPropertyValue("transform");
-    expect(rotation).toBe("rotate(0.4turn)");
+    expect(rotation).toBe("rotate(0.4000turn)");
   });
 });

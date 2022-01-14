@@ -10,8 +10,8 @@
     return (sess.end - sess.start) / 1000;
   };
 
-  let totalDuration: number;
-  $: totalDuration = $sessionSummaries.reduce((acc, s) => acc += durationS(s), 0);
+  let totalDuration: number; // seconds
+  $: totalDuration = ($sessionSummaries.reduce((acc, s) => acc += s.duration, 0)) / 1000;
 
   $: secondsPerQ = (totalQuestions > 0)
     ? (totalDuration / totalQuestions)
@@ -20,7 +20,12 @@
   $: qPerMinute = 60 / secondsPerQ;
   
   $: gauge_label = `${qPerMinute.toFixed(1)}`;
-  $: gauge_value = qPerMinute / (2 * $gbSettings.targetQPM);
+
+  // 0.5 is needle straight up, want needle to be 2/3rds of the way to vertical
+  // at low target
+  const lowTurns = 2/3 * 0.5;
+  $: scaling = lowTurns / ($gbSettings.maxQPM - $gbSettings.minQPM);
+  $: gauge_value = lowTurns + (qPerMinute - $gbSettings.minQPM) * scaling;
 
   const fmtDayTime = (date) => Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"}).format(date);
   const fmtTime = (date) => Intl.DateTimeFormat('en-US', {timeStyle: "short"}).format(date);
@@ -30,30 +35,28 @@
     return percent.toFixed(1);
   };
 
-  $: dialColor = (qPerMinute < $gbSettings.minQPM || secondsPerQ > $gbSettings.maxQPM) ? $gbSettings.warnColor : $gbSettings.fillColor;
-
   const spq = (duration: number, count: number): string => (duration/count).toFixed(1);
   const qpm = (duration: number, count: number): string => (60*count/duration).toFixed(1);
 
 </script>
 
-<div class="gbWidget" data-testid="speedWidget" style="--fillColor: {dialColor}; ">
+<div class="gbWidget" data-testid="speedWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
-    <Gauge value={gauge_value} label={gauge_label} />
-    <div class="units">questions/min</div>
+    <Gauge value={gauge_value} label={gauge_label} needle lowZone hiZone />
+    <div class="units">qpm</div>
   {:else}
-    <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} s/q • {qPerMinute.toFixed(1)} q/m</h1>
+    <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} spq • {qPerMinute.toFixed(1)} qpm</h1>
     <div data-testid="speed-table" in:fade>
       <div class="gbContent scrollbox">
         <h4>{$sessionSummaries.length} sessions • {totalReviews} items • {totalQuestions} questions</h4>
-        {#each $sessionSummaries as summary, i}
+        {#each $sessionSummaries.reverse() as summary, i}
           <article>
             <h5>{i+1}: {fmtDayTime(summary.start)} &ndash; {fmtTime(summary.end)}
-            ({(durationS(summary) / 60).toFixed()}m)</h5>
+            ({(summary.duration / 60000).toFixed(2)}m)</h5>
             <p>{summary.reviewCount} items • {summary.questionCount} questions •
-            {spq(durationS(summary), summary.questionCount)} s/q •
-            {qpm(durationS(summary), summary.questionCount)} q/m<br>
+            {spq(summary.duration / 1000, summary.questionCount)} spq •
+            {qpm(summary.duration / 1000, summary.questionCount)} qpm<br>
             {summary.correctAnswerCount}/{summary.questionCount} =
             {percentCorrect(summary)}% correct </p>
           </article>
@@ -85,8 +88,8 @@
 
 
 .gbWidget {
-  --scrollbarBG: var(--trackColor);
-  --thumbBG: var(--fillColor);
+  --scrollbarBG: var(--hlTrackColor);
+  --thumbBG: var(--textColor);
 }
 
 .scrollbox::-webkit-scrollbar {
