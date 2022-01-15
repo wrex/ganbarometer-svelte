@@ -42,7 +42,7 @@
   <div class="gbWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
     {#if $display === "chart" }
       <h1 class="gbHeader">GanbarOmeter</h1>
-      <Gauge value={rotValue} {label} needle lowZone hiZone />
+      <Gauge value={rotValue} {label} indicator="needle" lowZone hiZone />
       <div class="units"><span class="left-aligned">少</span><span class=right-aligned>多</span></div>
     {:else}
       <h1 class="gbHeader" in:fade >GanbarOmeter: {numericLabel}</h1>

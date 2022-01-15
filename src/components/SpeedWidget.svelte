@@ -43,7 +43,7 @@
 <div class="gbWidget" data-testid="speedWidget" style="--trackColor: {$gbSettings.hlTrackColor}; --hlTrackColor: {$gbSettings.trackColor};">
   {#if $display === "chart"}
     <h1 class="gbHeader">Speed</h1>
-    <Gauge value={gauge_value} label={gauge_label} needle lowZone hiZone />
+    <Gauge value={gauge_value} label={gauge_label} indicator="needle" lowZone hiZone />
     <div class="units">qpm</div>
   {:else}
     <h1 class="gbHeader" in:fade>Speed: {secondsPerQ.toFixed(1)} spq • {qPerMinute.toFixed(1)} qpm</h1>
