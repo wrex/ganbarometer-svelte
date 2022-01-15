@@ -1,5 +1,6 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import metablock from "rollup-plugin-userscript-metablock";
@@ -20,6 +21,7 @@ export default {
     file: "dist/bundle.user.js",
   },
   plugins: [
+    json(),
     svelte({
       extensions: [".svelte", ".svx"],
       preprocess: [

@@ -3,6 +3,7 @@ import Ganbarometer from "./GbWidget.svelte";
 import Speed from "./SpeedWidget.svelte";
 import Reviews from "./ReviewsWidget.svelte";
 import {gbSettings} from "../store/stores";
+import pkg from "../../package.json";
 </script>
 
 <div class="helpWindow" data-testid="help-window" style={` 
@@ -28,6 +29,8 @@ import {gbSettings} from "../store/stores";
 - [The Reviews chart](#Reviews)
 - [Wanikani's Spaced Repetition System](#SRS)
 - [How the author uses this](#Howto)
+
+(This documentation is for package '{pkg.name}' version '{pkg.version}'.)
 
 ---
 
