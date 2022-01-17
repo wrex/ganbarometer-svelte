@@ -1,5 +1,6 @@
+const { mdsvex } = require("mdsvex");
 const sveltePreprocess = require("svelte-preprocess");
 
 module.exports = {
-  preprocess: sveltePreprocess(),
+  preprocess: [mdsvex(), sveltePreprocess()],
 };

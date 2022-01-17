@@ -1,5 +1,5 @@
 {
-  "name": "ganbarometer-beta",
+  "name": "ganbarometer-svelte",
   "version": "4.0.9",
   "description": "The GanbarOmeter (Wanikani dashboard widgets)",
   "author": "Rex Walters -- rw [at] pobox.com",
@@ -51,7 +51,7 @@
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest",
-      "^.+\\.svelte$": [
+      "^.+\\.(svelte|svx)$": [
         "svelte-jester",
         {
           "preprocess": true
@@ -61,6 +61,7 @@
     "moduleFileExtensions": [
       "js",
       "ts",
+      "svx",
       "svelte"
     ],
     "setupFilesAfterEnv": [

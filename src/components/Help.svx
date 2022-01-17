@@ -30,6 +30,7 @@ import pkg from "../../package.json";
 - [Wanikani's Spaced Repetition System](#SRS)
 - [How the author uses this](#Howto)
 
+<!-- NOTE: FOLLOWING LINE BREAKS THE TESTS!! -->
 (This documentation is for package '{pkg.name}' version '{pkg.version}'.)
 
 ---

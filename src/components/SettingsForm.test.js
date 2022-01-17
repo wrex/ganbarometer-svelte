@@ -86,7 +86,7 @@ describe("Settings Form", () => {
         });
 
         // This doesn't work. Why not?!!
-        xit("Pulls up the info modal when clicked", async () => {
+        it("Pulls up the info modal when clicked", async () => {
           renderIt();
           const btn = screen.getByTestId("gbRangeInfo");
           userEvent.click(btn);

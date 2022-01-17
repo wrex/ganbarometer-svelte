@@ -1,7 +1,7 @@
 <script lang= "ts">
   import RangeSlider from "./RangeSlider.svelte";
   import Info from "./Info.svelte";
-  import NumberSpinner from "svelte-number-spinner";
+  import NumberSpinner from "./NumberSpinner.svelte";
 
   export let values;
 

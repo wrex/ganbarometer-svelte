@@ -37,7 +37,7 @@
       --hlTrackColor: ${values.trackColor};` 
     }>
     <div class="warnBox">Warning Color</div>
-    <Gauge value={0.4} label="Sample" needle lowZone hiZone />
+    <Gauge value={0.4} label="Sample" indicator="needle" lowZone hiZone />
     <BarChart 
       values={[7, 10, 8]} 
       labels={["Mon", "Tue", "Wed"]}
