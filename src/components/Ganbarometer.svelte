@@ -129,6 +129,8 @@
     background-color: var(--bgColor);
     border-radius: 0 0 5px 5px;
     padding: 2em 0 0.5em;
+
+    z-index: 0;
   }
 
   :global(.gbHeader) {
