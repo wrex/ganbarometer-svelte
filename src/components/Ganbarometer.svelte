@@ -130,6 +130,7 @@
     border-radius: 0 0 5px 5px;
     padding: 2em 0 0.5em;
 
+    position: relative;
     z-index: 0;
   }
 
