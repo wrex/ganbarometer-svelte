@@ -7,3 +7,5 @@ coverage/
 !*.test.js
 !src/mocks/*.js
 !published/**/*.js
+!*.config.js
+!meta.js
