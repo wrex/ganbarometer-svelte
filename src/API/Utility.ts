@@ -22,6 +22,8 @@ export const nDaysAgo = (n: number = 0): Date => {
 };
 
 export const inSameDay = (x: Date, ref: Date): boolean => {
+  // const adjHours = 11; // how many hours to adjust
+  // let adjustedRef = new Date(ref.getTime() + (11 * 60 * 60000));
   return (
     x.getDate() === ref.getDate() &&
     x.getMonth() === ref.getMonth() &&

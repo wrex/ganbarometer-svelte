@@ -1,4 +1,4 @@
-# The GanbarOmeter v4.0
+# The GanbarOmeter v5.0
 
 At long last, I'm happy to release this thing to the wild. It's ... grown. It
 dances, it sings, it names your offspring, it predicts the weather, it knows
@@ -170,7 +170,7 @@ and your prefered colors).
 
 5. At the very bottom you will see "Install from URL". Cut and
    paste this URL into the box, and click "Install":
-   `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v4/bundle.user.js`
+   `https://raw.githubusercontent.com/wrex/ganbarometer-svelte/main/published/v5/bundle.user.js`
 
 6. Click "Install" on the next page to actually add the script. Then navigate back to your dashboard and
    refresh the page. You should now see the Ganbarometer!

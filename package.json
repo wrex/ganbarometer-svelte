@@ -1,6 +1,6 @@
 {
   "name": "ganbarometer-svelte",
-  "version": "4.0.10",
+  "version": "5.0.1",
   "description": "The GanbarOmeter (Wanikani dashboard widgets)",
   "author": "Rex Walters -- rw [at] pobox.com",
   "homepage": "https://github.com/wrex/ganbarometer-svelte#readme",
@@ -10,9 +10,9 @@
     "test": "jest src",
     "test:watch": "npm run test -- --watch",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "publish": "tsc && rollup -c && cp ./dist/bundle.user.js ./published/v4/ && cp ./dist/bundle.css ./published/v4/",
-    "publishdev": "tsc && rollup -c && cp ./dist/bundle.css ./published/dev/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/dev/:' > ./published/dev/bundle.user.js",
-    "publishbeta": "tsc && rollup -c && cp ./dist/bundle.css ./published/v4beta/ && cat ./dist/bundle.user.js | sed 's:/published/v4/:/published/v4beta/:' > ./published/v4beta/bundle.user.js"
+    "publish": "tsc && rollup -c && cp ./dist/bundle.user.js ./published/v5/ && cp ./dist/bundle.css ./published/v5/",
+    "publishdev": "tsc && rollup -c && cp ./dist/bundle.css ./published/dev/ && cat ./dist/bundle.user.js | sed 's:/published/v5/:/published/dev/:' > ./published/dev/bundle.user.js",
+    "publishbeta": "tsc && rollup -c && cp ./dist/bundle.css ./published/v5beta/ && cat ./dist/bundle.user.js | sed 's:/published/v5/:/published/v5beta/:' > ./published/v5beta/bundle.user.js"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
